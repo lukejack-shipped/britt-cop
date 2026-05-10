@@ -1,0 +1,1987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDD — Wellness Architect CRM</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f5f5f3;--bg3:#eeede8;
+  --text:#1a1a18;--text2:#6b6b66;--text3:#9b9a94;
+  --border:rgba(0,0,0,.12);--border2:rgba(0,0,0,.22);
+  --radius:8px;--radius-lg:12px;
+  --blue-fill:#E6F1FB;--blue-text:#0C447C;--blue:#378ADD;
+  --green-fill:#EAF3DE;--green-text:#27500A;--green:#1D9E75;
+  --purple-fill:#EEEDFE;--purple-text:#3C3489;--purple:#7F77DD;
+  --amber-fill:#FAEEDA;--amber-text:#633806;--amber:#BA7517;
+  --coral-fill:#FAECE7;--coral-text:#993C1D;--coral:#D85A30;
+  --red-fill:#FCEBEB;--red-text:#A32D2D;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#252522;--bg3:#2e2e2b;
+  --text:#e8e6de;--text2:#9b9a94;--text3:#6b6b66;
+  --border:rgba(255,255,255,.1);--border2:rgba(255,255,255,.2);
+  --blue-fill:#0c2a42;--blue-text:#85B7EB;
+  --green-fill:#0f2a12;--green-text:#97C459;
+  --purple-fill:#1a1840;--purple-text:#AFA9EC;
+  --amber-fill:#2a1e08;--amber-text:#FAC775;
+  --coral-fill:#2a1008;--coral-text:#F0997B;
+  --red-fill:#2a0808;--red-text:#F09595;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5;min-height:100vh}
+.app{max-width:1020px;margin:0 auto;padding:1.25rem 1rem 4rem}
+
+/* Header */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:0.5px solid var(--border)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:36px;height:36px;border-radius:50%;background:var(--text);color:var(--bg);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.brand-name{font-size:15px;font-weight:500}
+.brand-sub{font-size:11px;color:var(--text3)}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:13px;cursor:pointer;transition:background .12s;white-space:nowrap;font-family:inherit}
+.btn:hover{background:var(--bg2)}
+.btn.primary{background:var(--text);color:var(--bg);border-color:var(--text)}
+.btn.primary:hover{opacity:.85}
+.btn.sm{padding:4px 10px;font-size:12px}
+.btn.danger{color:#c0392b}
+.btn.success{background:var(--green-fill);color:var(--green-text);border-color:transparent}
+
+/* Stats */
+.stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1.25rem}
+.stat{background:var(--bg2);border-radius:var(--radius);padding:10px 14px}
+.stat-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.04em}
+.stat-val{font-size:20px;font-weight:500;margin-top:3px}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:1px}
+
+/* Tabs */
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--border);margin-bottom:1.25rem;overflow-x:auto}
+.tab{padding:8px 14px;font-size:13px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap;font-family:inherit}
+.tab.active{color:var(--text);border-bottom-color:var(--text);font-weight:500}
+.tab:hover:not(.active){color:var(--text)}
+.panel{display:none}.panel.active{display:block}
+
+/* Toolbar */
+.toolbar{display:flex;gap:8px;margin-bottom:1rem;align-items:center;flex-wrap:wrap}
+.toolbar input{flex:1;min-width:160px;padding:8px 12px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:14px;font-family:inherit;outline:none}
+.toolbar input:focus{border-color:var(--blue)}
+.toolbar select{padding:7px 10px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;outline:none;cursor:pointer}
+
+/* Cards & tables */
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg)}
+.card.padded{padding:1rem 1.25rem;margin-bottom:12px}
+.tbl-wrap{overflow:hidden;border-radius:var(--radius-lg)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:9px 12px;font-weight:500;font-size:11px;color:var(--text2);border-bottom:0.5px solid var(--border);text-transform:uppercase;letter-spacing:.04em;background:var(--bg2)}
+td{padding:10px 12px;border-bottom:0.5px solid var(--border);vertical-align:middle;color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg2)}
+
+/* Badges */
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.b-corp{background:var(--blue-fill);color:var(--blue-text)}
+.b-speak{background:var(--purple-fill);color:var(--purple-text)}
+.b-brand{background:var(--amber-fill);color:var(--amber-text)}
+.b-event{background:var(--coral-fill);color:var(--coral-text)}
+.b-coach{background:var(--green-fill);color:var(--green-text)}
+.b-lead{background:var(--bg3);color:var(--text2)}
+.b-hired{background:var(--green-fill);color:var(--green-text)}
+.b-won{background:var(--green-fill);color:var(--green-text)}
+.b-lost{background:var(--red-fill);color:var(--red-text)}
+
+/* Pipeline stage pills */
+.stage{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:500;border:0.5px solid var(--border2)}
+.s-inquiry{background:var(--bg2);color:var(--text2)}
+.s-proposal{background:var(--blue-fill);color:var(--blue-text)}
+.s-negotiation{background:var(--amber-fill);color:var(--amber-text)}
+.s-confirmed{background:var(--purple-fill);color:var(--purple-text)}
+.s-delivered{background:var(--green-fill);color:var(--green-text)}
+.s-invoiced{background:var(--coral-fill);color:var(--coral-text)}
+.s-paid{background:var(--green-fill);color:var(--green-text)}
+
+/* Avatar */
+.avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+.av-blue{background:var(--blue-fill);color:var(--blue-text)}
+.av-green{background:var(--green-fill);color:var(--green-text)}
+.av-purple{background:var(--purple-fill);color:var(--purple-text)}
+.av-amber{background:var(--amber-fill);color:var(--amber-text)}
+.av-coral{background:var(--coral-fill);color:var(--coral-text)}
+.av-gray{background:var(--bg3);color:var(--text2)}
+.name-cell{display:flex;align-items:center;gap:8px}
+.name-cell span{font-weight:500}
+.tags{display:flex;gap:4px;flex-wrap:wrap}
+.tag{font-size:11px;padding:1px 7px;border-radius:20px;background:var(--bg2);color:var(--text2);border:0.5px solid var(--border)}
+.empty{text-align:center;padding:3rem;color:var(--text3);font-size:14px}
+
+/* Org badge */
+.org-tag{font-size:11px;color:var(--blue-text);background:var(--blue-fill);padding:1px 7px;border-radius:4px;font-weight:500}
+
+/* Overdue */
+.overdue{color:var(--coral-text);font-weight:500}
+.due-soon{color:var(--amber-text);font-weight:500}
+
+/* Priority */
+.p-high{color:var(--coral-text)}
+.p-med{color:var(--amber-text)}
+.p-low{color:var(--text3)}
+
+/* Task checkbox */
+.task-check{width:16px;height:16px;border:0.5px solid var(--border2);border-radius:3px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.task-check.done{background:var(--green);border-color:var(--green);color:#fff}
+.task-row.done td{opacity:.5;text-decoration:line-through}
+
+/* Pipeline kanban */
+.kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;overflow-x:auto}
+.kanban-col{background:var(--bg2);border-radius:var(--radius-lg);padding:10px}
+.kanban-col-header{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--text2);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.kanban-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:8px;cursor:pointer;transition:border-color .12s}
+.kanban-card:hover{border-color:var(--border2)}
+.kanban-card-name{font-size:13px;font-weight:500;margin-bottom:4px}
+.kanban-card-meta{font-size:11px;color:var(--text2)}
+.kanban-card-val{font-size:12px;font-weight:500;color:var(--green-text);margin-top:4px}
+
+/* Revenue chart */
+.chart-bar-wrap{display:flex;align-items:flex-end;gap:8px;height:140px;padding-bottom:24px;position:relative}
+.chart-bar-group{display:flex;flex-direction:column;align-items:center;flex:1;gap:2px}
+.chart-bar{width:100%;border-radius:3px 3px 0 0;min-height:4px;transition:opacity .15s;cursor:pointer}
+.chart-bar:hover{opacity:.8}
+.chart-label{font-size:10px;color:var(--text3);margin-top:4px;text-align:center}
+.chart-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px}
+.chart-legend span{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text2)}
+.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* Events */
+.event-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:12px}
+.event-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+.event-title{font-size:15px;font-weight:500}
+.event-meta{font-size:12px;color:var(--text2);margin-top:2px}
+.event-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.event-stat{background:var(--bg2);border-radius:var(--radius);padding:8px 10px}
+.event-stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em}
+.event-stat-val{font-size:16px;font-weight:500;margin-top:2px}
+.attendee-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:10px}
+
+/* Graph */
+#graph-canvas{width:100%;height:400px;border:0.5px solid var(--border);border-radius:var(--radius-lg);background:var(--bg2);cursor:grab;display:block}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--text2);margin-top:8px}
+.legend span{display:flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%}
+
+/* AI */
+.ai-box{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:12px 16px;margin-bottom:1rem}
+.ai-box textarea{width:100%;background:transparent;border:none;outline:none;font-size:14px;color:var(--text);font-family:inherit;resize:none;min-height:52px}
+.ai-response{font-size:13px;color:var(--text2);margin-top:10px;line-height:1.7;white-space:pre-wrap;border-top:0.5px solid var(--border);padding-top:10px;display:none}
+
+/* Strategy */
+.strategy-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:12px;display:flex;gap:14px;align-items:flex-start}
+.strategy-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.strategy-steps{font-size:13px;display:grid;gap:6px;margin-top:8px}
+.strategy-step{display:flex;gap:8px}
+.step-num{color:var(--text3);min-width:18px;font-size:13px}
+.strategy-note{margin-top:10px;padding:8px 12px;background:var(--bg2);border-radius:var(--radius);font-size:12px;color:var(--text2)}
+
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:200}
+.modal{background:var(--bg);border-radius:var(--radius-lg);border:0.5px solid var(--border2);padding:1.5rem;width:520px;max-width:96vw;max-height:85vh;overflow-y:auto}
+.modal h2{font-size:16px;font-weight:500;margin-bottom:1rem}
+.form-row{margin-bottom:12px}
+.form-row label{display:block;font-size:12px;color:var(--text2);margin-bottom:4px}
+.form-row input,.form-row select,.form-row textarea{width:100%;padding:8px 10px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:14px;font-family:inherit;outline:none}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:var(--blue)}
+.form-row textarea{min-height:70px;resize:vertical}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:1rem}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--text);border-radius:50%;animation:spin .7s linear infinite}
+
+/* Contracts */
+.contract-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:12px}
+.contract-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.contract-title{font-size:15px;font-weight:500}
+.contract-org{font-size:12px;color:var(--text2);margin-top:2px}
+.contract-meta-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}
+.contract-meta{background:var(--bg2);border-radius:var(--radius);padding:8px 10px}
+.contract-meta-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.04em}
+.contract-meta-val{font-size:15px;font-weight:500;margin-top:2px}
+.progress-bar{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-top:6px}
+.progress-fill{height:100%;border-radius:3px;transition:width .3s}
+.session-list{margin-top:12px}
+.session-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:13px}
+.session-row:last-child{border-bottom:none}
+.session-status{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ss-done{background:var(--green)}
+.ss-upcoming{background:var(--blue)}
+.ss-overdue{background:var(--coral)}
+.backup-badge{font-size:11px;background:var(--amber-fill);color:var(--amber-text);padding:1px 7px;border-radius:20px}
+
+/* DC Gov / Schedule */
+.schedule-grid{display:grid;gap:10px}
+.sched-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:12px 16px;display:flex;align-items:center;gap:14px}
+.sched-date{min-width:64px;text-align:center;background:var(--bg2);border-radius:var(--radius);padding:8px 6px}
+.sched-date-day{font-size:20px;font-weight:500;line-height:1}
+.sched-date-mo{font-size:11px;color:var(--text2);text-transform:uppercase}
+.sched-info{flex:1}
+.sched-title{font-size:14px;font-weight:500}
+.sched-meta{font-size:12px;color:var(--text2);margin-top:2px}
+.sched-instructor{display:flex;align-items:center;gap:6px;margin-top:6px}
+.checkin-stat{display:inline-flex;align-items:center;gap:4px;font-size:12px;background:var(--green-fill);color:var(--green-text);padding:2px 8px;border-radius:20px}
+.rating-stars{color:var(--amber);font-size:13px}
+
+/* Check-in page pill */
+.checkin-pill{display:inline-flex;align-items:center;gap:6px;background:var(--green-fill);color:var(--green-text);border:0.5px solid var(--green-text);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">BDD</div>
+      <div>
+        <div class="brand-name">Britt Dupree Daniels</div>
+        <div class="brand-sub">Wellness Architect · Washington D.C.</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" onclick="switchTab('tasks')"><i class="ti ti-checklist"></i> Tasks <span id="task-badge" style="background:var(--coral);color:#fff;border-radius:20px;padding:0 6px;font-size:11px;margin-left:2px"></span></button>
+      <button class="btn primary" onclick="openAddContact()"><i class="ti ti-plus"></i> Add contact</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="stat-label">Pipeline value</div>
+      <div class="stat-val" id="s-pipeline">$0</div>
+      <div class="stat-sub">open deals</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Confirmed revenue</div>
+      <div class="stat-val" id="s-revenue">$0</div>
+      <div class="stat-sub">this month</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Contacts</div>
+      <div class="stat-val" id="s-contacts">0</div>
+      <div class="stat-sub" id="s-orgs">0 orgs</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Trap Yoga</div>
+      <div class="stat-val" id="s-ty">0</div>
+      <div class="stat-sub">attendees last event</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Tasks due</div>
+      <div class="stat-val" id="s-tasks">0</div>
+      <div class="stat-sub">today & overdue</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('contacts')">Contacts</button>
+    <button class="tab" onclick="switchTab('orgs')">Organizations</button>
+    <button class="tab" onclick="switchTab('pipeline')">Pipeline</button>
+    <button class="tab" onclick="switchTab('contracts')">Contracts</button>
+    <button class="tab" onclick="switchTab('dcgov')">DC Gov / Franklin Park</button>
+    <button class="tab" onclick="switchTab('events')">Trap Yoga</button>
+    <button class="tab" onclick="switchTab('classes')">Classes & Check-in</button>
+    <button class="tab" onclick="switchTab('tasks')">Tasks</button>
+    <button class="tab" onclick="switchTab('revenue')">Revenue</button>
+    <button class="tab" onclick="switchTab('pnl')">P&amp;L</button>
+    <button class="tab" onclick="switchTab('renewal')">Renewal Radar</button>
+    <button class="tab" onclick="switchTab('proposals')">Proposals</button>
+    <button class="tab" onclick="switchTab('ambassador')">Ambassadors</button>
+    <button class="tab" onclick="switchTab('waitlist')">Waitlist</button>
+    <button class="tab" onclick="switchTab('campaigns')">Campaigns</button>
+    <button class="tab" onclick="switchTab('speakerkit')">Speaker Kit</button>
+    <button class="tab" onclick="switchTab('press')">Press</button>
+    <button class="tab" onclick="switchTab('sponsorship')">Sponsorships</button>
+    <button class="tab" onclick="switchTab('expansion')">Expansion</button>
+    <button class="tab" onclick="switchTab('network')">Network</button>
+    <button class="tab" onclick="switchTab('ai')">AI assistant</button>
+    <button class="tab" onclick="switchTab('strategy')">Data strategy</button>
+  </div>
+
+  <!-- CONTACTS -->
+  <div id="panel-contacts" class="panel active">
+    <div class="toolbar">
+      <input id="search-contacts" type="text" placeholder="Search name, org, tags, email..." oninput="renderContacts()">
+      <select id="filter-ctype" onchange="renderContacts()">
+        <option value="">All types</option>
+        <option value="corporate">Corporate client</option>
+        <option value="brand">Brand partner</option>
+        <option value="coach">Private client</option>
+        <option value="hired">Contractor</option>
+        <option value="speaker">Speaking contact</option>
+        <option value="event">Event collaborator</option>
+        <option value="community">TY Community</option>
+        <option value="lead">Lead</option>
+      </select>
+      <button class="btn" onclick="exportCSV()"><i class="ti ti-download"></i> Export</button>
+    </div>
+    <div class="tbl-wrap card">
+      <table><thead><tr><th>Name</th><th>Type</th><th>Organization</th><th>Email</th><th>Tags</th><th>Last contact</th><th></th></tr></thead>
+      <tbody id="tbl-contacts"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ORGANIZATIONS -->
+  <div id="panel-orgs" class="panel">
+    <div class="toolbar">
+      <input id="search-orgs" type="text" placeholder="Search organization..." oninput="renderOrgs()">
+      <select id="filter-otype" onchange="renderOrgs()">
+        <option value="">All types</option>
+        <option value="corporate">Corporate</option>
+        <option value="brand">Brand</option>
+        <option value="venue">Venue</option>
+        <option value="media">Media</option>
+        <option value="nonprofit">Nonprofit / Gov</option>
+      </select>
+      <button class="btn primary" onclick="openAddOrg()"><i class="ti ti-plus"></i> Add org</button>
+    </div>
+    <div class="tbl-wrap card">
+      <table><thead><tr><th>Organization</th><th>Type</th><th>Contacts</th><th>Contract value</th><th>Status</th><th>Renewal</th><th></th></tr></thead>
+      <tbody id="tbl-orgs"></tbody></table>
+    </div>
+  </div>
+
+  <!-- PIPELINE -->
+  <div id="panel-pipeline" class="panel">
+    <div class="toolbar">
+      <select id="filter-stream" onchange="renderPipeline()">
+        <option value="">All streams</option>
+        <option value="corporate">Corporate wellness</option>
+        <option value="speaking">Keynote speaking</option>
+        <option value="brand">Brand partnerships</option>
+        <option value="event">Events & retreats</option>
+        <option value="coaching">Private coaching</option>
+      </select>
+      <button class="btn primary" onclick="openAddDeal()"><i class="ti ti-plus"></i> Add deal</button>
+      <div style="margin-left:auto;font-size:13px;color:var(--text2)">Open pipeline: <strong id="pipeline-total" style="color:var(--text)">$0</strong></div>
+    </div>
+    <div class="kanban" id="kanban-board"></div>
+    <div style="margin-top:1.5rem">
+      <div style="font-size:13px;font-weight:500;margin-bottom:10px;color:var(--text2)">All deals</div>
+      <div class="tbl-wrap card">
+        <table><thead><tr><th>Deal</th><th>Stream</th><th>Org / Contact</th><th>Value</th><th>Stage</th><th>Close date</th><th></th></tr></thead>
+        <tbody id="tbl-deals"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRAP YOGA EVENTS -->
+  <div id="panel-events" class="panel">
+    <div class="toolbar">
+      <div style="font-size:13px;color:var(--text2)">Monthly Trap Yoga event series — tracking community, venue, and revenue growth</div>
+      <button class="btn primary" style="margin-left:auto" onclick="openAddEvent()"><i class="ti ti-plus"></i> Add event</button>
+    </div>
+    <div id="events-list"></div>
+  </div>
+
+  <!-- TASKS -->
+  <div id="panel-tasks" class="panel">
+    <div class="toolbar">
+      <select id="filter-owner" onchange="renderTasks()">
+        <option value="">All owners</option>
+        <option value="britt">Britt</option>
+        <option value="assistant">Assistant</option>
+      </select>
+      <select id="filter-tpriority" onchange="renderTasks()">
+        <option value="">All priorities</option>
+        <option value="high">High</option>
+        <option value="med">Medium</option>
+        <option value="low">Low</option>
+      </select>
+      <button class="btn primary" onclick="openAddTask()"><i class="ti ti-plus"></i> Add task</button>
+    </div>
+    <div style="font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Today & overdue</div>
+    <div class="tbl-wrap card" style="margin-bottom:1.25rem">
+      <table><thead><tr><th style="width:32px"></th><th>Task</th><th>Linked to</th><th>Owner</th><th>Priority</th><th>Due</th></tr></thead>
+      <tbody id="tbl-tasks-urgent"></tbody></table>
+    </div>
+    <div style="font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Upcoming</div>
+    <div class="tbl-wrap card">
+      <table><thead><tr><th style="width:32px"></th><th>Task</th><th>Linked to</th><th>Owner</th><th>Priority</th><th>Due</th></tr></thead>
+      <tbody id="tbl-tasks-upcoming"></tbody></table>
+    </div>
+  </div>
+
+  <!-- REVENUE -->
+  <div id="panel-revenue" class="panel">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem">
+      <div class="stat" style="background:var(--green-fill)"><div class="stat-label" style="color:var(--green-text)">Confirmed this month</div><div class="stat-val" style="color:var(--green-text)">$38,500</div><div class="stat-sub" style="color:var(--green-text)">across all streams</div></div>
+      <div class="stat"><div class="stat-label">Open pipeline</div><div class="stat-val">$127,000</div><div class="stat-sub">if all deals close</div></div>
+      <div class="stat"><div class="stat-label">Trap Yoga YTD</div><div class="stat-val">$24,800</div><div class="stat-sub">6 events · avg $4,133</div></div>
+    </div>
+    <div class="card padded" style="margin-bottom:1.25rem">
+      <div style="font-size:13px;font-weight:500;margin-bottom:1rem">Monthly revenue by stream (2026)</div>
+      <div class="chart-bar-wrap" id="rev-chart"></div>
+      <div class="chart-legend">
+        <span><span class="legend-dot" style="background:var(--blue)"></span>Corporate</span>
+        <span><span class="legend-dot" style="background:var(--purple)"></span>Speaking</span>
+        <span><span class="legend-dot" style="background:var(--amber)"></span>Brand</span>
+        <span><span class="legend-dot" style="background:var(--coral)"></span>Trap Yoga</span>
+        <span><span class="legend-dot" style="background:var(--green)"></span>Coaching</span>
+      </div>
+    </div>
+    <div class="tbl-wrap card">
+      <table><thead><tr><th>Stream</th><th>Confirmed</th><th>Pipeline</th><th>Top client</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge b-corp">Corporate wellness</span></td><td style="font-weight:500;color:var(--green-text)">$18,000</td><td>$72,000</td><td>Salesforce</td><td style="color:var(--text2)">3 active contracts; Cigna renewal due Aug</td></tr>
+        <tr><td><span class="badge b-speak">Keynote speaking</span></td><td style="font-weight:500;color:var(--green-text)">$9,500</td><td>$28,000</td><td>Ebony Fit Weekend</td><td style="color:var(--text2)">2 confirmed; Georgetown in negotiation</td></tr>
+        <tr><td><span class="badge b-brand">Brand partnerships</span></td><td style="font-weight:500;color:var(--green-text)">$4,800</td><td>$15,000</td><td>lululemon</td><td style="color:var(--text2)">Ambassador retainer + 2 campaign deals</td></tr>
+        <tr><td><span class="badge b-event">Trap Yoga</span></td><td style="font-weight:500;color:var(--green-text)">$4,200</td><td>$12,000</td><td>—</td><td style="color:var(--text2)">Monthly event; Gathering Spot sold out</td></tr>
+        <tr><td><span class="badge b-coach">Private coaching</span></td><td style="font-weight:500;color:var(--green-text)">$2,000</td><td>—</td><td>Marcus Rivera</td><td style="color:var(--text2)">6 active 1:1 clients</td></tr>
+      </tbody>
+    </div>
+  </div>
+
+  <!-- NETWORK GRAPH -->
+  <div id="panel-network" class="panel">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:8px">Drag nodes · Click for details · Node size = deal value / engagement</p>
+    <canvas id="graph-canvas"></canvas>
+    <div class="legend">
+      <span><span class="dot" style="background:#1a1a18"></span>Britt (hub)</span>
+      <span><span class="dot" style="background:#378ADD"></span>Corporate</span>
+      <span><span class="dot" style="background:#7F77DD"></span>Speaking</span>
+      <span><span class="dot" style="background:#BA7517"></span>Brand</span>
+      <span><span class="dot" style="background:#D85A30"></span>Trap Yoga</span>
+      <span><span class="dot" style="background:#1D9E75"></span>Coaching / Contractor</span>
+    </div>
+    <div id="graph-info" style="font-size:13px;color:var(--text2);margin-top:8px;min-height:18px"></div>
+  </div>
+
+  <!-- AI ASSISTANT -->
+  <div id="panel-ai" class="panel">
+    <div class="ai-box">
+      <textarea id="ai-prompt" placeholder="Ask anything... 'What are my biggest open deals?' / 'Draft a follow-up to the Salesforce contact' / 'Who should I reach out to this week?'" rows="2"></textarea>
+      <div style="display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:6px">
+        <span style="font-size:12px;color:var(--text3)">Cmd+Enter</span>
+        <button class="btn primary sm" id="ai-btn" onclick="askAI()"><i class="ti ti-sparkles"></i> Ask Claude</button>
+      </div>
+      <div id="ai-response" class="ai-response"></div>
+    </div>
+    <div style="font-size:13px;color:var(--text2);font-weight:500;margin-bottom:8px">Quick prompts</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      <button class="btn sm" onclick="setPrompt('What are my top 3 open pipeline deals and what should I do next with each?')">Top open deals ↗</button>
+      <button class="btn sm" onclick="setPrompt('Which contacts haven\'t been reached out to in over 30 days?')">Cold contacts ↗</button>
+      <button class="btn sm" onclick="setPrompt('Summarize the Trap Yoga community — who are the superfans and potential ambassadors?')">TY community ↗</button>
+      <button class="btn sm" onclick="setPrompt('Draft a follow-up email to the Microsoft corporate wellness contact after sending a proposal.')">Draft follow-up ↗</button>
+      <button class="btn sm" onclick="setPrompt('What does my revenue look like this month vs last month?')">Revenue snapshot ↗</button>
+      <button class="btn sm" onclick="setPrompt('Who in my network could I cross-refer to each other?')">Cross-referrals ↗</button>
+    </div>
+  </div>
+
+  <!-- CONTRACTS -->
+  <div id="panel-contracts" class="panel">
+    <div class="toolbar">
+      <select id="filter-cstatus" onchange="renderContracts()">
+        <option value="">All statuses</option>
+        <option value="active">Active</option>
+        <option value="negotiation">Negotiation</option>
+        <option value="completed">Completed</option>
+      </select>
+      <button class="btn primary" onclick="alert('Add contract — Phase 2 build')"><i class="ti ti-plus"></i> New contract</button>
+      <div style="margin-left:auto;font-size:13px;color:var(--text2)">Active contract value: <strong id="contract-total" style="color:var(--text)">$0</strong></div>
+    </div>
+    <div id="contracts-list"></div>
+  </div>
+
+  <!-- DC GOV / FRANKLIN PARK -->
+  <div id="panel-dcgov" class="panel">
+    <div style="background:var(--blue-fill);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:flex-start;gap:14px">
+      <div style="font-size:28px">🏛️</div>
+      <div>
+        <div style="font-weight:500;font-size:15px">DC Government Grant — Trap Yoga at Franklin Park</div>
+        <div style="font-size:13px;color:var(--blue-text);margin-top:2px">$20,000 awarded · Summer 2026 · 8 sessions · Franklin Park, NW DC</div>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <span class="badge b-corp">Grant confirmed</span>
+          <span class="badge b-coach">Contact: Marcus Reid, DPRW</span>
+          <span style="font-size:12px;color:var(--blue-text)">Contract ref: DPRW-2026-WEL-0042</span>
+        </div>
+      </div>
+      <div style="margin-left:auto;text-align:right;flex-shrink:0">
+        <div style="font-size:22px;font-weight:500;color:var(--green-text)">$20,000</div>
+        <div style="font-size:12px;color:var(--text2)">total grant</div>
+        <div style="font-size:12px;color:var(--text2);margin-top:2px">$2,500/session</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem">
+      <div class="stat"><div class="stat-label">Sessions scheduled</div><div class="stat-val">8</div><div class="stat-sub">Jun–Aug 2026</div></div>
+      <div class="stat"><div class="stat-label">Sessions completed</div><div class="stat-val" id="dcg-done">0</div><div class="stat-sub">confirmed & filed</div></div>
+      <div class="stat"><div class="stat-label">Total check-ins</div><div class="stat-val" id="dcg-checkins">0</div><div class="stat-sub">across all sessions</div></div>
+      <div class="stat"><div class="stat-label">Avg rating</div><div class="stat-val" id="dcg-rating">—</div><div class="stat-sub">attendee feedback</div></div>
+    </div>
+
+    <div style="margin-bottom:12px">
+      <div style="font-size:13px;font-weight:500;margin-bottom:4px">Grant delivery progress</div>
+      <div class="progress-bar"><div class="progress-fill" id="dcg-progress" style="background:var(--green);width:0%"></div></div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px"><span id="dcg-pct">0%</span> delivered · <span id="dcg-remaining">$0</span> remaining to invoice</div>
+    </div>
+
+    <div style="font-size:13px;font-weight:500;margin-bottom:10px;color:var(--text2)">Summer 2026 Schedule — Franklin Park</div>
+    <div class="schedule-grid" id="dcgov-schedule"></div>
+
+    <div style="margin-top:1.5rem">
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px">Instructor roster & availability</div>
+      <div class="tbl-wrap card">
+        <table><thead><tr><th>Instructor</th><th>Speciality</th><th>Rate/session</th><th>Sessions assigned</th><th>Contact</th><th>Status</th></tr></thead>
+        <tbody id="tbl-instructors"></tbody></table>
+      </div>
+    </div>
+
+    <div style="margin-top:1.5rem;padding:1rem 1.25rem;background:var(--amber-fill);border-radius:var(--radius-lg)">
+      <div style="font-size:13px;font-weight:500;color:var(--amber-text);margin-bottom:6px"><i class="ti ti-file-invoice" style="font-size:14px;vertical-align:-2px;margin-right:5px"></i>Backup & documentation requirements</div>
+      <div style="font-size:13px;color:var(--amber-text);display:grid;gap:4px">
+        <div>✓ Instructor confirms attendance & logs headcount after each session</div>
+        <div>✓ Check-in data (name + email) captured for every attendee — required for grant reporting</div>
+        <div>✓ Photos taken at each session (minimum 3) — stored for DC Govt reporting</div>
+        <div>✓ Invoice submitted within 5 business days of each session completion</div>
+        <div>⚠ Final grant report due September 30, 2026 — assistant to compile attendance data</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLASSES & CHECK-IN -->
+  <div id="panel-classes" class="panel">
+    <div class="toolbar">
+      <select id="filter-class-type" onchange="renderClasses()">
+        <option value="">All class types</option>
+        <option value="corporate">Corporate wellness</option>
+        <option value="trapyoga">Trap Yoga</option>
+        <option value="dcgov">DC Gov / Franklin Park</option>
+        <option value="private">Private coaching</option>
+      </select>
+      <select id="filter-class-status" onchange="renderClasses()">
+        <option value="">All statuses</option>
+        <option value="upcoming">Upcoming</option>
+        <option value="completed">Completed</option>
+      </select>
+      <button class="btn primary" onclick="alert('Add class — Phase 2 build')"><i class="ti ti-plus"></i> Schedule class</button>
+      <div style="margin-left:auto">
+        <span style="font-size:12px;color:var(--text2)">Share check-in link: </span>
+        <span class="checkin-pill"><i class="ti ti-link"></i> bdd.link/checkin</span>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem">
+      <div class="stat"><div class="stat-label">Classes this month</div><div class="stat-val">14</div></div>
+      <div class="stat"><div class="stat-label">Total check-ins</div><div class="stat-val">312</div></div>
+      <div class="stat"><div class="stat-label">Avg rating</div><div class="stat-val">4.7 ⭐</div></div>
+      <div class="stat"><div class="stat-label">New emails captured</div><div class="stat-val">87</div><div class="stat-sub">this month via check-in</div></div>
+    </div>
+
+    <div class="tbl-wrap card" style="margin-bottom:1.25rem">
+      <table><thead><tr><th>Class / Session</th><th>Type</th><th>Date</th><th>Instructor</th><th>Location</th><th>Check-ins</th><th>Avg rating</th><th>Status</th><th></th></tr></thead>
+      <tbody id="tbl-classes"></tbody></table>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="card padded">
+        <div style="font-size:13px;font-weight:500;margin-bottom:10px">Recent attendee feedback</div>
+        <div id="feedback-list"></div>
+      </div>
+      <div class="card padded">
+        <div style="font-size:13px;font-weight:500;margin-bottom:10px">What's working — top rated class types</div>
+        <div id="ratings-breakdown"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.25rem;padding:1rem 1.25rem;background:var(--bg2);border-radius:var(--radius-lg)">
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px"><i class="ti ti-qrcode" style="font-size:14px;vertical-align:-2px;margin-right:5px"></i>Attendee check-in page</div>
+      <p style="font-size:13px;color:var(--text2);margin-bottom:10px">Attendees scan a QR code or follow a link to check in, rate the class, and see upcoming sessions. Requires name + email — automatically builds the contact database.</p>
+      <div style="display:flex;gap:8px">
+        <button class="btn primary" onclick="openCheckinPreview()"><i class="ti ti-external-link"></i> Preview check-in page</button>
+        <button class="btn" onclick="alert('QR code download — Phase 2 build')"><i class="ti ti-qrcode"></i> Download QR code</button>
+        <button class="btn" onclick="exportCheckinData()"><i class="ti ti-download"></i> Export check-in data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA STRATEGY -->
+  <div id="panel-strategy" class="panel">
+    <p style="font-size:13px;color:var(--text2);margin-bottom:1.25rem">A practical plan for building and maintaining this database from all available sources.</p>
+    <div class="strategy-card">
+      <div class="strategy-icon" style="background:var(--blue-fill);color:var(--blue-text)"><i class="ti ti-mail"></i></div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span style="font-weight:500">Gmail — Google Contacts export</span>
+          <span class="badge b-corp">Best source</span>
+          <span class="badge b-coach">Do first</span>
+        </div>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:10px">Everyone Britt has ever emailed is in Google Contacts. Fastest way to seed the database with real names and emails.</p>
+        <div class="strategy-steps">
+          <div class="strategy-step"><span class="step-num">1.</span><span>Go to <strong>contacts.google.com</strong> → Export → Google CSV</span></div>
+          <div class="strategy-step"><span class="step-num">2.</span><span>Open in Excel/Sheets, delete noise (newsletters, randoms)</span></div>
+          <div class="strategy-step"><span class="step-num">3.</span><span>Import cleaned file into this CRM using the CSV import button</span></div>
+        </div>
+        <div class="strategy-note"><i class="ti ti-clock" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>~30 min one-time · Can repeat any time</div>
+      </div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-icon" style="background:var(--purple-fill);color:var(--purple-text)"><i class="ti ti-brand-instagram"></i></div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span style="font-weight:500">Instagram — data export + manual enrichment</span>
+          <span class="badge b-lead">Partial</span>
+        </div>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:10px">IG gives usernames only — no emails or real names. Useful for identifying engaged followers, but requires manual follow-up. API shut down in late 2024.</p>
+        <div class="strategy-steps">
+          <div class="strategy-step"><span class="step-num">1.</span><span>Settings → Your activity → Download your information (JSON)</span></div>
+          <div class="strategy-step"><span class="step-num">2.</span><span>Scan <strong>messages/inbox/</strong> for anyone who DM'd about training or events</span></div>
+          <div class="strategy-step"><span class="step-num">3.</span><span>Add as Leads — reply asking for their email to capture real contact info</span></div>
+        </div>
+        <div class="strategy-note"><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>Export takes up to 48 hrs · Usernames only · No API access</div>
+      </div>
+    </div>
+    <div class="strategy-card">
+      <div class="strategy-icon" style="background:var(--green-fill);color:var(--green-text)"><i class="ti ti-message"></i></div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <span style="font-weight:500">iMessage & WhatsApp — historical recovery</span>
+          <span class="badge b-hired">Manual</span>
+        </div>
+        <div class="strategy-steps">
+          <div class="strategy-step"><span class="step-num">iMessage:</span><span>Use iMazing (~$45) on Mac to export conversation history</span></div>
+          <div class="strategy-step"><span class="step-num">WhatsApp:</span><span>Open each chat → three dots → Export chat → email to self</span></div>
+        </div>
+        <div class="strategy-note"><i class="ti ti-clock" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>One-time recovery effort · No ongoing API for either</div>
+      </div>
+    </div>
+    <div class="strategy-card" style="border-color:var(--border2)">
+      <div class="strategy-icon" style="background:var(--amber-fill);color:var(--amber-text)"><i class="ti ti-refresh"></i></div>
+      <div style="flex:1">
+        <div style="font-weight:500;margin-bottom:6px">The email-first habit — most important long-term</div>
+        <div class="strategy-steps">
+          <div class="strategy-step"><span class="step-num">→</span><span><strong>IG bio:</strong> "DM me your email for my free training guide" — converts followers to owned contacts</span></div>
+          <div class="strategy-step"><span class="step-num">→</span><span><strong>Trap Yoga:</strong> Collect emails at registration — this is a goldmine of superfans</span></div>
+          <div class="strategy-step"><span class="step-num">→</span><span><strong>Corporate:</strong> Always get the direct email of every stakeholder in a deal, not just the main contact</span></div>
+          <div class="strategy-step"><span class="step-num">→</span><span><strong>Every inquiry:</strong> Log immediately — Britt from phone, assistant from desktop</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card padded" style="border-color:var(--border2)">
+      <div style="font-weight:500;font-size:14px;margin-bottom:10px">Priority order</div>
+      <div style="display:grid;grid-template-columns:auto 1fr auto;gap:8px 14px;font-size:13px;align-items:center">
+        <span style="font-weight:500;color:var(--blue-text)">1</span><span>Export Google Contacts CSV → clean → import here</span><span style="color:var(--text3)">This week</span>
+        <span style="font-weight:500;color:var(--blue-text)">2</span><span>Request Instagram data export → scan DMs for leads</span><span style="color:var(--text3)">This week</span>
+        <span style="font-weight:500;color:var(--blue-text)">3</span><span>Export WhatsApp chats for active clients</span><span style="color:var(--text3)">Weekend</span>
+        <span style="font-weight:500;color:var(--blue-text)">4</span><span>Add email capture to Trap Yoga event registration</span><span style="color:var(--text3)">Before next event</span>
+        <span style="font-weight:500;color:var(--blue-text)">5</span><span>Log every new inquiry immediately as a lead</span><span style="color:var(--text3)">Ongoing habit</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- P&L -->
+  <div id="panel-pnl" class="panel">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem">
+      <div class="stat" style="background:var(--green-fill)"><div class="stat-label" style="color:var(--green-text)">Net income this month</div><div class="stat-val" style="color:var(--green-text)">$31,850</div><div class="stat-sub" style="color:var(--green-text)">after all costs</div></div>
+      <div class="stat"><div class="stat-label">Instructor costs</div><div class="stat-val" style="color:var(--coral-text)">−$6,650</div><div class="stat-sub">Shalynn, Jake, Jordan</div></div>
+      <div class="stat"><div class="stat-label">Most profitable / hr</div><div class="stat-val">Corporate</div><div class="stat-sub">$750/hr avg effective rate</div></div>
+    </div>
+    <div class="card padded" style="margin-bottom:1.25rem">
+      <div style="font-size:13px;font-weight:500;margin-bottom:1rem">Profitability by stream — gross vs net</div>
+      <div class="tbl-wrap">
+        <table><thead><tr><th>Stream</th><th>Gross revenue</th><th>Instructor costs</th><th>Venue / other</th><th>Net</th><th>Hrs / mo</th><th>Net / hr</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge b-corp">Corporate wellness</span></td><td>$18,000</td><td style="color:var(--coral-text)">−$3,600</td><td style="color:var(--coral-text)">−$0</td><td style="font-weight:500;color:var(--green-text)">$14,400</td><td>19</td><td style="font-weight:500;color:var(--green-text)">$758/hr</td></tr>
+          <tr><td><span class="badge b-speak">Keynote speaking</span></td><td>$9,500</td><td style="color:var(--coral-text)">−$0</td><td style="color:var(--coral-text)">−$400</td><td style="font-weight:500;color:var(--green-text)">$9,100</td><td>14</td><td style="font-weight:500;color:var(--green-text)">$650/hr</td></tr>
+          <tr><td><span class="badge b-brand">Brand partnerships</span></td><td>$4,800</td><td style="color:var(--coral-text)">−$0</td><td style="color:var(--coral-text)">−$0</td><td style="font-weight:500;color:var(--green-text)">$4,800</td><td>8</td><td style="font-weight:500;color:var(--green-text)">$600/hr</td></tr>
+          <tr><td><span class="badge b-event">Trap Yoga</span></td><td>$4,200</td><td style="color:var(--coral-text)">−$1,850</td><td style="color:var(--coral-text)">−$600</td><td style="font-weight:500;color:var(--green-text)">$1,750</td><td>12</td><td style="font-weight:500;color:var(--amber-text)">$146/hr</td></tr>
+          <tr><td><span class="badge b-coach">Private coaching</span></td><td>$2,000</td><td style="color:var(--coral-text)">−$0</td><td style="color:var(--coral-text)">−$0</td><td style="font-weight:500;color:var(--green-text)">$2,000</td><td>8</td><td style="font-weight:500;color:var(--green-text)">$250/hr</td></tr>
+          <tr style="font-weight:500;background:var(--bg2)"><td>Total</td><td>$38,500</td><td style="color:var(--coral-text)">−$5,450</td><td style="color:var(--coral-text)">−$1,000</td><td style="color:var(--green-text)">$32,050</td><td>61</td><td style="color:var(--green-text)">$525/hr</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+    <div class="card padded" style="background:var(--amber-fill);border-color:var(--amber-text)">
+      <div style="font-size:13px;font-weight:500;color:var(--amber-text);margin-bottom:6px">💡 Key insight</div>
+      <div style="font-size:13px;color:var(--amber-text)">Trap Yoga generates the most buzz but only <strong>$146/hr net</strong> — corporate wellness generates <strong>$758/hr net</strong>. The DC Gov grant sessions at $2,500 each cost ~$800 in instructor fees, netting $1,700/session or about $283/hr for Britt's planning time. This doesn't mean Trap Yoga isn't valuable — its community value and brand building are off-balance-sheet — but it does mean corporate wellness should remain the revenue priority.</div>
+    </div>
+  </div>
+
+  <!-- RENEWAL RADAR -->
+  <div id="panel-renewal" class="panel">
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1.25rem">Contracts and relationships at risk of going cold. Sorted by urgency.</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem">
+      <div class="stat" style="background:var(--red-fill)"><div class="stat-label" style="color:var(--red-text)">Renewal due &lt;60 days</div><div class="stat-val" style="color:var(--red-text)">2</div></div>
+      <div class="stat" style="background:var(--amber-fill)"><div class="stat-label" style="color:var(--amber-text)">Contacts gone cold</div><div class="stat-val" style="color:var(--amber-text)">3</div><div class="stat-sub" style="color:var(--amber-text)">no contact 30+ days</div></div>
+      <div class="stat"><div class="stat-label">At-risk pipeline value</div><div class="stat-val">$47,000</div></div>
+    </div>
+    <div class="tbl-wrap card">
+      <table><thead><tr><th>Contact / Contract</th><th>Risk type</th><th>Urgency</th><th>Value at risk</th><th>Last contact</th><th>Recommended action</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Cigna — Dr. Janet Huang</strong></td><td><span class="badge" style="background:var(--red-fill);color:var(--red-text)">Contract renewal</span></td><td><span class="overdue">Aug 15 — 97 days</span></td><td style="font-weight:500">$18,000</td><td><span class="overdue">25d ago</span></td><td style="font-size:12px;color:var(--text2)">Schedule renewal call before June 15 — 60-day lead time needed</td></tr>
+        <tr><td><strong>Microsoft — Alicia Fontaine</strong></td><td><span class="badge b-brand">Proposal pending</span></td><td><span class="overdue">2 weeks no reply</span></td><td style="font-weight:500">$20,000</td><td><span class="overdue">19d ago</span></td><td style="font-size:12px;color:var(--text2)">Follow up this week — proposal sent April 20, no response</td></tr>
+        <tr><td><strong>Amazon — Devon Park</strong></td><td><span class="badge b-lead">Budget pending</span></td><td><span class="due-soon">29d waiting</span></td><td style="font-weight:500">$12,000</td><td><span class="due-soon">29d ago</span></td><td style="font-size:12px;color:var(--text2)">Check in on budget approval — warm touch, not pushy</td></tr>
+        <tr><td><strong>Adidas — Kenji Osei</strong></td><td><span class="badge b-brand">Contract unsigned</span></td><td><span class="overdue">Rates agreed, stalled</span></td><td style="font-weight:500">$15,000</td><td><span class="due-soon">15d ago</span></td><td style="font-size:12px;color:var(--text2)">Send contract for signature — verbal agreement in place</td></tr>
+        <tr><td><strong>Georgetown — Dr. Rachel Kim</strong></td><td><span class="badge b-speak">Fee negotiation</span></td><td><span class="due-soon">21d stalled</span></td><td style="font-weight:500">$8,000</td><td><span class="due-soon">21d ago</span></td><td style="font-size:12px;color:var(--text2)">Hold at $8K — send speaker kit to reinforce value</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- PROPOSALS -->
+  <div id="panel-proposals" class="panel">
+    <div class="toolbar">
+      <div style="font-size:13px;color:var(--text2)">Generate polished proposals in Britt's voice using CRM data — sent in minutes, not hours.</div>
+      <button class="btn primary" onclick="openProposalGen()"><i class="ti ti-sparkles"></i> Generate proposal</button>
+    </div>
+    <div id="proposal-gen" style="display:none" class="card padded" style="margin-bottom:1.25rem">
+      <div style="font-size:14px;font-weight:500;margin-bottom:12px">Generate a new proposal</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div class="form-row"><label>Organization</label>
+          <select id="pg-org"><option>Microsoft</option><option>Aetna</option><option>Amazon HQ2</option><option>Georgetown University</option><option>Custom</option></select>
+        </div>
+        <div class="form-row"><label>Proposal type</label>
+          <select id="pg-type"><option>Corporate wellness program</option><option>Keynote speaking</option><option>Brand partnership</option><option>Retreat / event</option></select>
+        </div>
+      </div>
+      <div class="form-row"><label>Key notes for Claude</label><textarea id="pg-notes" style="min-height:60px" placeholder="Discovery call highlights, their goals, specific requests..."></textarea></div>
+      <button class="btn primary" onclick="generateProposal()"><i class="ti ti-sparkles"></i> Generate with Claude</button>
+      <div id="pg-output" style="margin-top:14px;font-size:13px;line-height:1.7;color:var(--text2);white-space:pre-wrap;display:none"></div>
+    </div>
+    <div class="tbl-wrap card">
+      <table><thead><tr><th>Proposal</th><th>Type</th><th>Sent to</th><th>Value</th><th>Status</th><th>Sent</th><th></th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">Microsoft Annual Wellness Program</td><td><span class="badge b-corp">Corporate</span></td><td>Alicia Fontaine</td><td>$20,000</td><td><span class="badge b-brand">Awaiting reply</span></td><td>Apr 20</td><td><button class="btn sm">View</button></td></tr>
+        <tr><td style="font-weight:500">Aetna Mindful Movement Series</td><td><span class="badge b-corp">Corporate</span></td><td>Nadia Russo</td><td>$12,000</td><td><span class="badge b-lead">Draft</span></td><td>—</td><td><button class="btn sm">Edit</button></td></tr>
+        <tr><td style="font-weight:500">Georgetown Wellness Keynote</td><td><span class="badge b-speak">Speaking</span></td><td>Dr. Rachel Kim</td><td>$8,000</td><td><span class="badge b-brand">Negotiating</span></td><td>Apr 10</td><td><button class="btn sm">View</button></td></tr>
+        <tr><td style="font-weight:500">Adidas 3-Post Campaign</td><td><span class="badge b-brand">Brand</span></td><td>Kenji Osei</td><td>$15,000</td><td><span class="badge b-coach">Agreed verbally</span></td><td>Apr 18</td><td><button class="btn sm">Send contract</button></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- AMBASSADOR -->
+  <div id="panel-ambassador" class="panel">
+    <div class="toolbar">
+      <div style="font-size:13px;color:var(--text2)">Turn Trap Yoga superfans into a street team. Track referrals, perks, and ambassador activity.</div>
+      <button class="btn primary"><i class="ti ti-plus"></i> Add ambassador</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem">
+      <div class="stat"><div class="stat-label">Active ambassadors</div><div class="stat-val">3</div></div>
+      <div class="stat"><div class="stat-label">Referrals this month</div><div class="stat-val">12</div></div>
+      <div class="stat"><div class="stat-label">New check-ins from referrals</div><div class="stat-val">9</div></div>
+      <div class="stat"><div class="stat-label">Candidates to activate</div><div class="stat-val">4</div></div>
+    </div>
+    <div class="tbl-wrap card" style="margin-bottom:1.25rem">
+      <table><thead><tr><th>Ambassador</th><th>Events attended</th><th>Referrals</th><th>Referral code</th><th>Perk level</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><div class="name-cell"><div class="avatar av-coral">DW</div><span>Destiny Williams</span></div></td><td>8 events</td><td style="font-weight:500;color:var(--green-text)">6 this month</td><td><code style="font-size:12px;background:var(--bg2);padding:2px 6px;border-radius:4px">DESTINY10</code></td><td><span class="badge b-corp">Gold — free admission</span></td><td style="font-size:12px;color:var(--text2)">Always brings a crew. Huge energy.</td></tr>
+        <tr><td><div class="name-cell"><div class="avatar av-amber">JH</div><span>Jordan Hicks</span></div></td><td>5 events</td><td style="font-weight:500;color:var(--green-text)">4 this month</td><td><code style="font-size:12px;background:var(--bg2);padding:2px 6px;border-radius:4px">JORDAN10</code></td><td><span class="badge b-brand">Silver — 50% off</span></td><td style="font-size:12px;color:var(--text2)">Personal trainer — potential collab instructor</td></tr>
+        <tr><td><div class="name-cell"><div class="avatar av-purple">DR</div><span>Dani Reeves</span></div></td><td>4 events</td><td style="font-weight:500;color:var(--green-text)">2 this month</td><td><code style="font-size:12px;background:var(--bg2);padding:2px 6px;border-radius:4px">DANI10</code></td><td><span class="badge b-lead">Bronze — 25% off</span></td><td style="font-size:12px;color:var(--text2)">Active on IG, good content creator</td></tr>
+      </tbody></table>
+    </div>
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:var(--text2)">Candidates to activate</div>
+    <div class="tbl-wrap card">
+      <table><thead><tr><th>Person</th><th>Events attended</th><th>Why they're a candidate</th><th></th></tr></thead>
+      <tbody>
+        <tr><td><div class="name-cell"><div class="avatar av-blue">AM</div><span>Aaliyah Moore</span></div></td><td>3</td><td style="font-size:12px;color:var(--text2)">Always comments on IG posts, brought 2 friends to last event</td><td><button class="btn sm primary">Activate</button></td></tr>
+        <tr><td><div class="name-cell"><div class="avatar av-green">CO</div><span>Chris Obi</span></div></td><td>3</td><td style="font-size:12px;color:var(--text2)">Fitness influencer, 8K IG followers, tagged Britt twice</td><td><button class="btn sm primary">Activate</button></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- WAITLIST -->
+  <div id="panel-waitlist" class="panel">
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1.25rem">Capture demand that exceeds capacity. Use this data to negotiate bigger venues and pitch sponsors.</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem">
+      <div class="stat"><div class="stat-label">Total waitlisted</div><div class="stat-val">143</div><div class="stat-sub">across all events</div></div>
+      <div class="stat"><div class="stat-label">Last event overflow</div><div class="stat-val">47</div><div class="stat-sub">couldn't get in</div></div>
+      <div class="stat"><div class="stat-label">Avg demand vs capacity</div><div class="stat-val">126%</div></div>
+      <div class="stat" style="background:var(--green-fill)"><div class="stat-label" style="color:var(--green-text)">Emails captured</div><div class="stat-val" style="color:var(--green-text)">143</div><div class="stat-sub" style="color:var(--green-text)">all verified</div></div>
+    </div>
+    <div class="tbl-wrap card" style="margin-bottom:1.25rem">
+      <table><thead><tr><th>Event</th><th>Capacity</th><th>Attended</th><th>Waitlisted</th><th>Overflow %</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td>Trap Yoga — Birthday Edition (May)</td><td>180</td><td style="font-weight:500">176</td><td style="font-weight:500;color:var(--coral-text)">47</td><td><span class="overdue">126%</span></td><td><button class="btn sm">Email waitlist</button></td></tr>
+        <tr><td>Trap Yoga — Sycamore & Oak (Apr)</td><td>150</td><td style="font-weight:500">148</td><td style="font-weight:500;color:var(--coral-text)">38</td><td><span class="overdue">125%</span></td><td><button class="btn sm">Email waitlist</button></td></tr>
+        <tr><td>Trap Yoga — WeFit (Mar)</td><td>120</td><td style="font-weight:500">110</td><td style="font-weight:500;color:var(--amber-text)">22</td><td><span class="due-soon">118%</span></td><td><button class="btn sm">Email waitlist</button></td></tr>
+      </tbody></table>
+    </div>
+    <div class="card padded" style="background:var(--blue-fill);border-color:var(--blue-text)">
+      <div style="font-size:13px;font-weight:500;color:var(--blue-text);margin-bottom:6px">💡 Venue pitch insight</div>
+      <div style="font-size:13px;color:var(--blue-text)">143 confirmed waitlisted attendees across 3 events. Average demand is 126% of capacity. <strong>This is the data needed to negotiate a venue that holds 300+.</strong> At $30/ticket that's $9,000/event vs the current ~$5,000. Share this with The Gathering Spot and any new venue in conversations.</div>
+    </div>
+  </div>
+
+  <!-- CAMPAIGNS -->
+  <div id="panel-campaigns" class="panel">
+    <div class="toolbar">
+      <select id="filter-seg">
+        <option>All lists</option><option>Trap Yoga community</option><option>Corporate contacts</option><option>Private clients</option><option>Leads</option>
+      </select>
+      <button class="btn primary" onclick="openCampaignGen()"><i class="ti ti-sparkles"></i> Draft campaign</button>
+    </div>
+    <div id="campaign-gen" style="display:none" class="card padded" style="margin-bottom:1.25rem">
+      <div style="font-size:14px;font-weight:500;margin-bottom:12px">Draft a new email campaign</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
+        <div class="form-row"><label>Audience</label>
+          <select id="cg-seg"><option>Trap Yoga community (312)</option><option>All contacts (487)</option><option>Corporate contacts (47)</option><option>Leads (23)</option></select>
+        </div>
+        <div class="form-row"><label>Campaign type</label>
+          <select id="cg-type"><option>Event announcement</option><option>Post-event recap</option><option>Monthly newsletter</option><option>New offering</option></select>
+        </div>
+        <div class="form-row"><label>Subject</label><input id="cg-subject" type="text" placeholder="Trap Yoga is back — June 7 at Franklin Park"></div>
+      </div>
+      <div class="form-row"><label>Key points to include</label><textarea id="cg-notes" style="min-height:60px" placeholder="Date, venue, what's new, call to action..."></textarea></div>
+      <button class="btn primary" onclick="generateCampaign()"><i class="ti ti-sparkles"></i> Draft with Claude</button>
+      <div id="cg-output" style="margin-top:14px;font-size:13px;line-height:1.7;color:var(--text2);white-space:pre-wrap;display:none;background:var(--bg2);border-radius:var(--radius);padding:1rem"></div>
+    </div>
+    <div style="font-size:13px;font-weight:500;margin-bottom:8px;color:var(--text2)">Past campaigns</div>
+    <div class="tbl-wrap card">
+      <table><thead><tr><th>Campaign</th><th>Audience</th><th>Sent</th><th>Open rate</th><th>Clicks</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">May Trap Yoga Recap + June Preview</td><td>TY Community (289)</td><td>May 3</td><td style="font-weight:500;color:var(--green-text)">61%</td><td>47</td><td><span class="badge b-coach">Sent</span></td></tr>
+        <tr><td style="font-weight:500">DC Gov Franklin Park — Free Summer Series</td><td>All contacts (441)</td><td>Apr 28</td><td style="font-weight:500;color:var(--green-text)">54%</td><td>83</td><td><span class="badge b-coach">Sent</span></td></tr>
+        <tr><td style="font-weight:500">Corporate Wellness — Q3 Availability</td><td>Corporate (44)</td><td>Apr 15</td><td style="font-weight:500;color:var(--green-text)">72%</td><td>11</td><td><span class="badge b-coach">Sent</span></td></tr>
+        <tr><td style="font-weight:500">June Trap Yoga — Birthday Edition announcement</td><td>TY Community (312)</td><td>—</td><td>—</td><td>—</td><td><span class="badge b-lead">Draft</span></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- SPEAKER KIT -->
+  <div id="panel-speakerkit" class="panel">
+    <div class="toolbar">
+      <div style="font-size:13px;color:var(--text2)">One-click PDF speaker kit — bio, topics, fees, and media. Ready to send to any booker in seconds.</div>
+      <button class="btn primary" onclick="alert('PDF generation — downloads bdd_speaker_kit.pdf')"><i class="ti ti-download"></i> Download speaker kit PDF</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div class="card padded">
+        <div style="font-size:13px;font-weight:500;margin-bottom:12px">Speaker profile</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+          <div class="avatar av-blue" style="width:52px;height:52px;font-size:18px">BDD</div>
+          <div>
+            <div style="font-size:15px;font-weight:500">Britt Dupree Daniels</div>
+            <div style="font-size:12px;color:var(--text2)">Wellness Architect · Washington D.C.</div>
+            <div style="font-size:12px;color:var(--text2)">Georgetown University · NASM · 200-hr Yoga Alliance</div>
+          </div>
+        </div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">Award-winning wellness architect who lost 60+ lbs and built a thriving practice on the belief that sustainable health starts from the inside out. Corporate clients include Google, Salesforce, Cigna, Microsoft, and Amazon. Creator of Trap Yoga — DC's fastest-growing wellness event series, viral with 80K+ views.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge b-corp">DC Magazine Best Personal Trainer</span>
+          <span class="badge b-brand">lululemon Ambassador</span>
+          <span class="badge b-speak">Fox 5 DC Featured</span>
+          <span class="badge b-coach">DC Gov Ambassador</span>
+        </div>
+      </div>
+      <div class="card padded">
+        <div style="font-size:13px;font-weight:500;margin-bottom:12px">Keynote topics</div>
+        <div style="display:grid;gap:10px">
+          <div style="padding:10px 12px;background:var(--bg2);border-radius:var(--radius)">
+            <div style="font-size:13px;font-weight:500;margin-bottom:4px">The Wellness Blueprint</div>
+            <div style="font-size:12px;color:var(--text2)">How to build sustainable health habits that compound — for individuals and teams. 45–60 min keynote or workshop.</div>
+          </div>
+          <div style="padding:10px 12px;background:var(--bg2);border-radius:var(--radius)">
+            <div style="font-size:13px;font-weight:500;margin-bottom:4px">Movement as Medicine</div>
+            <div style="font-size:12px;color:var(--text2)">Mindfulness, movement, and mental health — the science and the practice. Popular with corporate and healthcare audiences.</div>
+          </div>
+          <div style="padding:10px 12px;background:var(--bg2);border-radius:var(--radius)">
+            <div style="font-size:13px;font-weight:500;margin-bottom:4px">From Breakdown to Blueprint</div>
+            <div style="font-size:12px;color:var(--text2)">Britt's personal story — 60-lb weight loss, Japan, and building Prophet Fitness. Motivational, personal, high-impact.</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding:10px 12px;background:var(--green-fill);border-radius:var(--radius)">
+          <div style="font-size:12px;font-weight:500;color:var(--green-text)">Keynote fee: $6,000–$12,000 · Workshop: $3,000–$6,000</div>
+          <div style="font-size:11px;color:var(--green-text);margin-top:2px">Travel + accommodation additional. Virtual available.</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:14px" class="card padded">
+      <div style="font-size:13px;font-weight:500;margin-bottom:10px">Speaking history</div>
+      <div class="tbl-wrap"><table><thead><tr><th>Event</th><th>Organizer</th><th>Date</th><th>Fee</th><th>Format</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">Ebony Fit Weekend</td><td>Ebony Media</td><td>Sep 2026</td><td>$6,000</td><td>Keynote — confirmed</td></tr>
+        <tr><td style="font-weight:500">Georgetown Wellness Summit</td><td>Georgetown University</td><td>Nov 2026</td><td>$8,000</td><td>Keynote — negotiating</td></tr>
+        <tr><td style="font-weight:500">NBMBAA DC Chapter</td><td>Nat'l Black MBA Assoc.</td><td>Oct 2026</td><td>$5,000</td><td>Keynote — inquiry</td></tr>
+        <tr><td style="font-weight:500">Fox 5 DC Good Day</td><td>Fox 5 DC</td><td>Mar 2026</td><td>Media</td><td>TV segment</td></tr>
+      </tbody></table></div>
+    </div>
+  </div>
+
+  <!-- PRESS -->
+  <div id="panel-press" class="panel">
+    <div class="toolbar">
+      <div style="font-size:13px;color:var(--text2)">Every media appearance, feature, and quote in one place. Pull a media kit in minutes.</div>
+      <button class="btn primary"><i class="ti ti-plus"></i> Log appearance</button>
+      <button class="btn" onclick="alert('Media kit PDF download — Phase 2')"><i class="ti ti-download"></i> Download media kit</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem">
+      <div class="stat"><div class="stat-label">Total appearances</div><div class="stat-val">14</div></div>
+      <div class="stat"><div class="stat-label">Publications / outlets</div><div class="stat-val">8</div></div>
+      <div class="stat"><div class="stat-label">Estimated reach</div><div class="stat-val">2.4M</div></div>
+      <div class="stat"><div class="stat-label">This year</div><div class="stat-val">6</div></div>
+    </div>
+    <div class="tbl-wrap card">
+      <table><thead><tr><th>Outlet</th><th>Type</th><th>Title / Topic</th><th>Date</th><th>Reach</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">Fox 5 DC</td><td><span class="badge b-speak">TV segment</span></td><td>Good Day DC — Wellness in the workplace</td><td>Mar 2026</td><td>180K viewers</td><td><button class="btn sm">View</button></td></tr>
+        <tr><td style="font-weight:500">Ebony Magazine</td><td><span class="badge b-brand">Feature</span></td><td>The New Face of Black Wellness</td><td>Feb 2026</td><td>1.2M readers</td><td><button class="btn sm">View</button></td></tr>
+        <tr><td style="font-weight:500">DC Magazine</td><td><span class="badge b-corp">Award</span></td><td>Best Personal Trainer 2025</td><td>Dec 2025</td><td>320K readers</td><td><button class="btn sm">View</button></td></tr>
+        <tr><td style="font-weight:500">Washington Post</td><td><span class="badge b-event">Feature</span></td><td>Trap Yoga goes viral in DC — the story behind it</td><td>May 2026</td><td>680K readers</td><td><button class="btn sm">View</button></td></tr>
+        <tr><td style="font-weight:500">WTOP Radio</td><td><span class="badge b-speak">Interview</span></td><td>DC's wellness renaissance</td><td>Jan 2026</td><td>210K listeners</td><td><button class="btn sm">View</button></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- SPONSORSHIP -->
+  <div id="panel-sponsorship" class="panel">
+    <div class="toolbar">
+      <div style="font-size:13px;color:var(--text2)">Trap Yoga event sponsorships — separate from brand partnerships. Track packages, deliverables, and revenue per event.</div>
+      <button class="btn primary"><i class="ti ti-plus"></i> Add sponsor</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem">
+      <div class="stat"><div class="stat-label">Active sponsors</div><div class="stat-val">3</div></div>
+      <div class="stat"><div class="stat-label">Sponsorship revenue / event</div><div class="stat-val">$3,200</div></div>
+      <div class="stat"><div class="stat-label">Inbound inquiries</div><div class="stat-val">2</div></div>
+      <div class="stat" style="background:var(--green-fill)"><div class="stat-label" style="color:var(--green-text)">Summer series total</div><div class="stat-val" style="color:var(--green-text)">$25,600</div><div class="stat-sub" style="color:var(--green-text)">8 events × $3,200</div></div>
+    </div>
+    <div class="tbl-wrap card" style="margin-bottom:1.25rem">
+      <table><thead><tr><th>Sponsor</th><th>Package</th><th>Deliverables</th><th>Per-event value</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">Vita Coco</td><td><span class="badge b-corp">Title sponsor</span></td><td>Logo on mat, 2 IG posts, product sampling</td><td style="font-weight:500">$1,500</td><td><span class="badge b-coach">Active</span></td></tr>
+        <tr><td style="font-weight:500">Lululemon DC</td><td><span class="badge b-brand">Community sponsor</span></td><td>Banner at event, IG story mention</td><td style="font-weight:500">$1,000</td><td><span class="badge b-coach">Active</span></td></tr>
+        <tr><td style="font-weight:500">Whole Foods Market</td><td><span class="badge b-event">Snack sponsor</span></td><td>Post-class snacks, logo on flyer</td><td style="font-weight:500">$700</td><td><span class="badge b-coach">Active</span></td></tr>
+        <tr><td style="font-weight:500">Nike DC</td><td><span class="badge b-lead">In conversation</span></td><td>TBD — discussing title sponsorship</td><td style="font-weight:500">$2,000+</td><td><span class="badge b-lead">Inquiry</span></td></tr>
+      </tbody></table>
+    </div>
+    <div class="card padded" style="background:var(--amber-fill);border-color:var(--amber-text)">
+      <div style="font-size:13px;font-weight:500;color:var(--amber-text);margin-bottom:6px">Pitch deck talking point</div>
+      <div style="font-size:13px;color:var(--amber-text)">Average 160+ attendees per event · 126% capacity demand · 80K+ viral video views · DC Government grant recipient · Washington Post and Fox 5 DC coverage. Trap Yoga is the highest-profile recurring wellness event in DC. Sponsorship packages start at $700/event for the summer series.</div>
+    </div>
+  </div>
+
+  <!-- EXPANSION -->
+  <div id="panel-expansion" class="panel">
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1.25rem">Track new market opportunities — cities, venues, promoters — and model the financial case before committing.</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.25rem">
+      <div class="stat"><div class="stat-label">Markets being tracked</div><div class="stat-val">4</div></div>
+      <div class="stat"><div class="stat-label">Inbound inquiries</div><div class="stat-val">2</div><div class="stat-sub">NYC + Atlanta</div></div>
+      <div class="stat"><div class="stat-label">Potential annual revenue</div><div class="stat-val">$96K</div><div class="stat-sub">if 4 markets × 6 events</div></div>
+    </div>
+    <div class="tbl-wrap card" style="margin-bottom:1.25rem">
+      <table><thead><tr><th>Market</th><th>Status</th><th>Promoter contact</th><th>Est. capacity</th><th>Est. revenue/event</th><th>Logistics cost</th><th>Net/event</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">New York City</td><td><span class="badge b-brand">Inbound inquiry</span></td><td>Marcus Okonjo (BrooklynFit)</td><td>300</td><td style="font-weight:500">$9,000</td><td style="color:var(--coral-text)">−$2,200</td><td style="font-weight:500;color:var(--green-text)">$6,800</td></tr>
+        <tr><td style="font-weight:500">Atlanta</td><td><span class="badge b-brand">Inbound inquiry</span></td><td>TBD via Ebony Fit Weekend</td><td>250</td><td style="font-weight:500">$7,500</td><td style="color:var(--coral-text)">−$1,800</td><td style="font-weight:500;color:var(--green-text)">$5,700</td></tr>
+        <tr><td style="font-weight:500">Philadelphia</td><td><span class="badge b-lead">Researching</span></td><td>No contact yet</td><td>200</td><td style="font-weight:500">$6,000</td><td style="color:var(--coral-text)">−$800</td><td style="font-weight:500;color:var(--green-text)">$5,200</td></tr>
+        <tr><td style="font-weight:500">Baltimore</td><td><span class="badge b-lead">Researching</span></td><td>No contact yet</td><td>150</td><td style="font-weight:500">$4,500</td><td style="color:var(--coral-text)">−$400</td><td style="font-weight:500;color:var(--green-text)">$4,100</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card padded" style="background:var(--blue-fill);border-color:var(--blue-text)">
+      <div style="font-size:13px;font-weight:500;color:var(--blue-text);margin-bottom:6px">📋 Expansion checklist — before committing to a new market</div>
+      <div style="font-size:13px;color:var(--blue-text);display:grid;gap:4px">
+        <div>□ Confirmed local promoter who handles venue + ticket sales</div>
+        <div>□ Venue scouted with min. 200 capacity and sound system</div>
+        <div>□ Financial model shows net ≥ $4,000 after all costs</div>
+        <div>□ Instructor identified who can run if Britt can't travel</div>
+        <div>□ At least 2 months marketing runway before the event</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<!-- ADD CONTACT MODAL -->
+<div id="modal-contact" class="overlay" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal">
+    <h2 id="modal-contact-title">Add contact</h2>
+    <div class="form-row"><label>Full name *</label><input id="fc-name" type="text" placeholder="Jane Smith"></div>
+    <div class="form-row-2">
+      <div class="form-row"><label>Email</label><input id="fc-email" type="email"></div>
+      <div class="form-row"><label>Phone</label><input id="fc-phone" type="tel"></div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-row"><label>Type *</label>
+        <select id="fc-type">
+          <option value="corporate">Corporate client contact</option>
+          <option value="brand">Brand partner</option>
+          <option value="coach">Private coaching client</option>
+          <option value="hired">Contractor</option>
+          <option value="speaker">Speaking contact</option>
+          <option value="event">Event collaborator</option>
+          <option value="community">TY Community member</option>
+          <option value="lead">Lead / prospect</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Organization</label><input id="fc-org" type="text" placeholder="Company name"></div>
+    </div>
+    <div class="form-row"><label>Role at org</label><input id="fc-role" type="text" placeholder="VP of Wellness, Event Coordinator..."></div>
+    <div class="form-row"><label>Referred by</label><input id="fc-ref" type="text" placeholder="Name of referrer"></div>
+    <div class="form-row"><label>Tags (comma separated)</label><input id="fc-tags" type="text" placeholder="ambassador, vip, repeat-attendee..."></div>
+    <div class="form-row"><label>Notes</label><textarea id="fc-notes" placeholder="Any context..."></textarea></div>
+    <input type="hidden" id="fc-id">
+    <div class="modal-footer">
+      <button class="btn" onclick="document.getElementById('modal-contact').style.display='none'">Cancel</button>
+      <button class="btn primary" onclick="saveContact()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD DEAL MODAL -->
+<div id="modal-deal" class="overlay" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal">
+    <h2>Add deal</h2>
+    <div class="form-row"><label>Deal name *</label><input id="fd-name" type="text" placeholder="Salesforce Q3 Wellness Day"></div>
+    <div class="form-row-2">
+      <div class="form-row"><label>Stream *</label>
+        <select id="fd-stream">
+          <option value="corporate">Corporate wellness</option>
+          <option value="speaking">Keynote speaking</option>
+          <option value="brand">Brand partnership</option>
+          <option value="event">Events & retreats</option>
+          <option value="coaching">Private coaching</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Stage</label>
+        <select id="fd-stage">
+          <option value="inquiry">Inquiry</option>
+          <option value="proposal">Proposal sent</option>
+          <option value="negotiation">Negotiation</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="delivered">Delivered</option>
+          <option value="invoiced">Invoiced</option>
+          <option value="paid">Paid</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-row"><label>Value ($)</label><input id="fd-value" type="number" placeholder="5000"></div>
+      <div class="form-row"><label>Expected close date</label><input id="fd-date" type="date"></div>
+    </div>
+    <div class="form-row"><label>Organization / Contact</label><input id="fd-org" type="text" placeholder="Salesforce — Marcus Webb"></div>
+    <div class="form-row"><label>Notes</label><textarea id="fd-notes" placeholder="Deal context, next steps..."></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="document.getElementById('modal-deal').style.display='none'">Cancel</button>
+      <button class="btn primary" onclick="saveDeal()">Save deal</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD TASK MODAL -->
+<div id="modal-task" class="overlay" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal">
+    <h2>Add task</h2>
+    <div class="form-row"><label>Task *</label><input id="ft-text" type="text" placeholder="Follow up with Cigna HR lead"></div>
+    <div class="form-row-2">
+      <div class="form-row"><label>Owner</label>
+        <select id="ft-owner"><option value="assistant">Assistant</option><option value="britt">Britt</option></select>
+      </div>
+      <div class="form-row"><label>Priority</label>
+        <select id="ft-priority"><option value="high">High</option><option value="med">Medium</option><option value="low">Low</option></select>
+      </div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-row"><label>Due date</label><input id="ft-due" type="date"></div>
+      <div class="form-row"><label>Linked to</label><input id="ft-link" type="text" placeholder="Contact or deal name"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="document.getElementById('modal-task').style.display='none'">Cancel</button>
+      <button class="btn primary" onclick="saveTask()">Save task</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// SEED DATA
+// ══════════════════════════════════════════════
+const orgs = [
+  {id:1,name:'Salesforce',type:'corporate',value:24000,status:'active',renewal:'2026-09-01',notes:'Annual wellness program + quarterly events'},
+  {id:2,name:'Cigna Health',type:'corporate',value:18000,status:'active',renewal:'2026-08-15',notes:'Employee wellness consulting'},
+  {id:3,name:'Google DC',type:'corporate',value:15000,status:'active',renewal:'2026-11-01',notes:'Monthly on-site sessions'},
+  {id:4,name:'Microsoft',type:'corporate',value:20000,status:'negotiation',renewal:'',notes:'Proposal sent for annual contract'},
+  {id:5,name:'Amazon HQ2',type:'corporate',value:12000,status:'lead',renewal:'',notes:'Initial discovery call completed'},
+  {id:6,name:'lululemon',type:'brand',value:36000,status:'active',renewal:'2026-12-31',notes:'Ambassador + campaign content deal'},
+  {id:7,name:'Adidas',type:'brand',value:15000,status:'negotiation',renewal:'',notes:'3-post campaign in negotiation'},
+  {id:8,name:'The Gathering Spot DC',type:'venue',value:0,status:'partner',renewal:'',notes:'Monthly Trap Yoga venue partner'},
+  {id:9,name:'Sycamore & Oak',type:'venue',value:0,status:'partner',renewal:'',notes:'Regular TY event venue'},
+  {id:10,name:'Georgetown University',type:'nonprofit',value:8000,status:'negotiation',renewal:'',notes:'Keynote for student wellness summit'},
+  {id:11,name:'Ebony Fit Weekend',type:'media',value:6000,status:'confirmed',renewal:'',notes:'Keynote speaker confirmed Sep 2026'},
+  {id:12,name:'Fox 5 DC',type:'media',value:0,status:'partner',renewal:'',notes:'Regular media appearances'},
+  {id:13,name:'WorkLife Wellness',type:'corporate',value:0,status:'partner',renewal:'',notes:'Co-owned business — partner org'},
+  {id:14,name:'Aetna',type:'corporate',value:10000,status:'lead',renewal:'',notes:'Warm intro from Cigna contact'},
+];
+
+const contacts = [
+  {id:1,name:'Marcus Webb',email:'m.webb@salesforce.com',phone:'202-555-0101',type:'corporate',org:'Salesforce',role:'VP of Employee Experience',ref:'Direct outreach',tags:['decision-maker','vip'],lastContact:'2026-04-28',notes:'Primary Salesforce contact. Very responsive. Renewal convo in August.'},
+  {id:2,name:'Priya Okonkwo',email:'p.okonkwo@salesforce.com',phone:'202-555-0102',type:'corporate',org:'Salesforce',role:'Wellness Program Manager',ref:'Marcus Webb',tags:['coordinator','day-of-contact'],lastContact:'2026-05-01',notes:'Handles logistics for all on-site sessions.'},
+  {id:3,name:'Dr. Janet Huang',email:'jhuang@cigna.com',phone:'202-555-0201',type:'corporate',org:'Cigna Health',role:'Director of Corporate Wellness',ref:'Referral from lululemon',tags:['decision-maker','renewal-due'],lastContact:'2026-04-15',notes:'Contract up in August. Schedule renewal call by June.'},
+  {id:4,name:'Tobias Greene',email:'t.greene@google.com',phone:'202-555-0301',type:'corporate',org:'Google DC',role:'People Operations Lead',ref:'Georgetown network',tags:['vip','corporate'],lastContact:'2026-05-02',notes:'Monthly on-site sessions going well. Exploring expanded contract.'},
+  {id:5,name:'Alicia Fontaine',email:'a.fontaine@microsoft.com',phone:'202-555-0401',type:'corporate',org:'Microsoft',role:'Head of HR',ref:'Salesforce referral',tags:['decision-maker','proposal-sent'],lastContact:'2026-04-20',notes:'Proposal sent April 20. Follow up this week.'},
+  {id:6,name:'Devon Park',email:'devon.park@amazon.com',phone:'202-555-0501',type:'corporate',org:'Amazon HQ2',role:'Workplace Wellbeing Manager',ref:'LinkedIn inbound',tags:['lead','warm'],lastContact:'2026-04-10',notes:'Discovery call went well. Waiting on budget approval.'},
+  {id:7,name:'Simone Adler',email:'simone@lululemon.com',phone:'202-555-0601',type:'brand',org:'lululemon',role:'Brand Ambassador Manager',ref:'Ambassador program',tags:['brand-partner','vip'],lastContact:'2026-05-01',notes:'Ambassador contract renewed through EOY. Q3 campaign brief coming.'},
+  {id:8,name:'Kenji Osei',email:'kenji.osei@adidas.com',phone:'212-555-0701',type:'brand',org:'Adidas',role:'Influencer Marketing Lead',ref:'Simone Adler referral',tags:['brand-deal','in-negotiation'],lastContact:'2026-04-25',notes:'3-post campaign. Rates agreed, contract not signed yet.'},
+  {id:9,name:'Imani Jackson',email:'imani@tgsdc.com',phone:'202-555-0801',type:'event',org:'The Gathering Spot DC',role:'Events Director',ref:'Community connection',tags:['venue-partner','vip'],lastContact:'2026-05-03',notes:'Monthly TY partner. Incredible energy. Could become bigger collab.'},
+  {id:10,name:'Dr. Rachel Kim',email:'rkim@georgetown.edu',phone:'202-555-0901',type:'speaker',org:'Georgetown University',role:'Director of Student Affairs',ref:'Alumni network',tags:['speaking-lead','university'],lastContact:'2026-04-18',notes:'Keynote for wellness summit in Nov. Still in negotiation on fee.'},
+  {id:11,name:'Kiera Davis',email:'kiera@ebonyfitweekend.com',phone:'404-555-1001',type:'speaker',org:'Ebony Fit Weekend',role:'Experience Director',ref:'Fox 5 DC appearance',tags:['confirmed','media'],lastContact:'2026-04-30',notes:'Confirmed keynote Sep 2026. Logistics call needed.'},
+  {id:12,name:'Shalynn Burrill',email:'shalynn@shalynnfit.com',phone:'202-555-1101',type:'event',org:'',role:'Co-instructor',ref:'Community',tags:['collaborator','trap-yoga','hired'],lastContact:'2026-04-27',notes:'Regular Trap Yoga co-instructor. $400/event.'},
+  {id:13,name:'Jake Morrison',email:'jake@yogaflow.com',phone:'484-555-1201',type:'hired',org:'',role:'Yoga & mobility coach',ref:'',tags:['contractor','hired'],lastContact:'2026-03-15',notes:'Available for recovery sessions. $90/hr.'},
+  {id:14,name:'Dr. Lena Hofer',email:'l.hofer@physioplus.com',phone:'610-555-1301',type:'hired',org:'',role:'Sports physio',ref:'',tags:['contractor','referral-partner'],lastContact:'2026-02-28',notes:'Refers clients post-injury. $120/hr.'},
+  {id:15,name:'Marcus Rivera',email:'mrivera@gmail.com',phone:'202-555-1401',type:'coach',org:'',role:'Private client',ref:'Instagram DM',tags:['private-client','athlete'],lastContact:'2026-05-02',notes:'3x/week. Muscle gain program. Month 14.'},
+  {id:16,name:'Sarah Chen',email:'sarah.chen@gmail.com',phone:'215-555-1501',type:'coach',org:'',role:'Private client',ref:'Referral — Marcus Rivera',tags:['private-client','marathon'],lastContact:'2026-05-01',notes:'Marathon prep. Running the Philly marathon in Nov.'},
+  {id:17,name:'Destiny Williams',email:'destiny.w@gmail.com',phone:'202-555-1601',type:'community',org:'',role:'Trap Yoga superfan',ref:'Instagram',tags:['superfan','trap-yoga','ambassador-potential'],lastContact:'2026-04-26',notes:'Attended 8 TY events. Always brings friends. Great candidate for ambassador program.'},
+  {id:18,name:'Jordan Hicks',email:'jordan.hicks@gmail.com',phone:'202-555-1701',type:'community',org:'',role:'Trap Yoga repeat',ref:'Word of mouth',tags:['repeat-attendee','trap-yoga'],lastContact:'2026-04-26',notes:'Attended 5 events. Personal trainer — potential collab.'},
+  {id:19,name:'Alex Kim',email:'',phone:'202-555-1801',type:'lead',org:'',role:'',ref:'Instagram DM',tags:['lead','ig-follower'],lastContact:'2026-04-05',notes:'DM about corporate wellness for their startup. No email yet.'},
+  {id:20,name:'Nadia Russo',email:'nadia.russo@aetna.com',phone:'860-555-1901',type:'lead',org:'Aetna',role:'Wellness Director',ref:'Dr. Janet Huang referral',tags:['lead','warm-referral'],lastContact:'2026-04-22',notes:'Warm intro from Cigna. Discovery call scheduled for May 14.'},
+];
+
+const deals = [
+  {id:1,name:'Salesforce Annual Wellness Contract',stream:'corporate',stage:'confirmed',value:24000,org:'Salesforce — Marcus Webb',date:'2026-09-01',notes:'Annual renewal. All sessions confirmed through Aug.'},
+  {id:2,name:'Cigna Q3 Wellness Consulting',stream:'corporate',stage:'invoiced',value:9000,org:'Cigna — Dr. Janet Huang',date:'2026-06-30',notes:'Q3 contract invoiced. Awaiting payment.'},
+  {id:3,name:'Google DC Monthly Sessions',stream:'corporate',stage:'confirmed',value:15000,org:'Google — Tobias Greene',date:'2026-12-31',notes:'Ongoing monthly. Great relationship.'},
+  {id:4,name:'Microsoft Annual Wellness Program',stream:'corporate',stage:'proposal',value:20000,org:'Microsoft — Alicia Fontaine',date:'2026-06-01',notes:'Proposal sent April 20. Follow up this week — key deal.'},
+  {id:5,name:'Amazon HQ2 Pilot Program',stream:'corporate',stage:'inquiry',value:12000,org:'Amazon — Devon Park',date:'2026-07-01',notes:'Budget approval pending. High potential.'},
+  {id:6,name:'Aetna Discovery → Contract',stream:'corporate',stage:'inquiry',value:10000,org:'Aetna — Nadia Russo',date:'2026-08-01',notes:'Discovery call May 14. Warm referral from Cigna.'},
+  {id:7,name:'lululemon Ambassador Retainer',stream:'brand',stage:'confirmed',value:24000,org:'lululemon — Simone Adler',date:'2026-12-31',notes:'Annual ambassador contract. Content deliverables monthly.'},
+  {id:8,name:'lululemon Q3 Campaign',stream:'brand',stage:'proposal',value:8000,org:'lululemon — Simone Adler',date:'2026-07-15',notes:'Awaiting campaign brief. Expected 3 posts + reel.'},
+  {id:9,name:'Adidas 3-Post Campaign',stream:'brand',stage:'negotiation',value:15000,org:'Adidas — Kenji Osei',date:'2026-06-15',notes:'Rates agreed verbally. Contract not signed. Push to close.'},
+  {id:10,name:'Georgetown Wellness Keynote',stream:'speaking',stage:'negotiation',value:8000,org:'Georgetown — Dr. Rachel Kim',date:'2026-11-10',notes:'Fee in negotiation. They offered $5K. Hold at $8K.'},
+  {id:11,name:'Ebony Fit Weekend Keynote',stream:'speaking',stage:'confirmed',value:6000,org:'Ebony Fit Weekend — Kiera Davis',date:'2026-09-20',notes:'Confirmed. Need logistics call to confirm travel + AV needs.'},
+  {id:12,name:'National Black MBA Keynote',stream:'speaking',stage:'inquiry',value:5000,org:'NBMBAA DC Chapter',date:'2026-10-05',notes:'Inbound inquiry. Send speaker kit this week.'},
+  {id:13,name:'Trap Yoga — The Gathering Spot June',stream:'event',stage:'confirmed',value:4500,org:'The Gathering Spot DC',date:'2026-06-21',notes:'Monthly event. Target 200 attendees. Shalynn co-instructing.'},
+  {id:14,name:'Trap Yoga NYC Pop-Up',stream:'event',stage:'inquiry',value:8000,org:'Independent',date:'2026-08-10',notes:'Inbound from NYC promoter. Huge opportunity to expand the brand.'},
+];
+
+const tasks = [
+  {id:1,text:'Follow up with Alicia Fontaine (Microsoft) — proposal sent 2 weeks ago',owner:'assistant',priority:'high',due:'2026-05-09',link:'Microsoft deal',done:false},
+  {id:2,text:'Send Adidas contract to Kenji Osei for signature',owner:'assistant',priority:'high',due:'2026-05-09',link:'Adidas campaign',done:false},
+  {id:3,text:'Schedule renewal call with Dr. Janet Huang (Cigna) before June',owner:'assistant',priority:'high',due:'2026-05-12',link:'Cigna contract',done:false},
+  {id:4,text:'Send speaker kit to NBMBAA DC Chapter',owner:'assistant',priority:'med',due:'2026-05-10',link:'NBMBAA keynote',done:false},
+  {id:5,text:'Confirm logistics with Kiera Davis (Ebony Fit Weekend) — travel & AV needs',owner:'assistant',priority:'med',due:'2026-05-14',link:'Ebony Fit Weekend',done:false},
+  {id:6,text:'Destiny Williams — reach out about Trap Yoga ambassador program',owner:'britt',priority:'med',due:'2026-05-13',link:'Destiny Williams',done:false},
+  {id:7,text:'Discovery call with Nadia Russo (Aetna) — confirm May 14 at 2pm',owner:'assistant',priority:'high',due:'2026-05-09',link:'Aetna inquiry',done:false},
+  {id:8,text:'Draft Q3 campaign brief response for lululemon',owner:'assistant',priority:'med',due:'2026-05-16',link:'lululemon Q3',done:false},
+  {id:9,text:'Finalize June Trap Yoga promo content with Imani (TGS DC)',owner:'britt',priority:'med',due:'2026-05-20',link:'TY June event',done:false},
+  {id:10,text:'Collect attendee emails from May Trap Yoga — follow up template',owner:'assistant',priority:'high',due:'2026-05-10',link:'Trap Yoga May',done:false},
+  {id:11,text:'Review Devon Park (Amazon) status — check on budget approval',owner:'assistant',priority:'low',due:'2026-05-22',link:'Amazon pilot',done:false},
+  {id:12,text:'Send monthly session recap to Tobias Greene (Google)',owner:'assistant',priority:'low',due:'2026-05-30',link:'Google contract',done:false},
+];
+
+const events = [
+  {id:1,name:'Trap Yoga & Mimosas — Birthday Edition',date:'2026-05-24',venue:'The Gathering Spot DC',capacity:180,attendance:176,revenue:5280,collaborators:['Shalynn Burrill','Brittney "Sunni" General'],attendees:[
+    {name:'Destiny Williams',tag:'superfan'},{name:'Jordan Hicks',tag:'repeat'},{name:'Marcus Rivera',tag:'private-client'},
+    {name:'Aaliyah Moore',tag:'first-timer'},{name:'Chris Obi',tag:'repeat'},{name:'Tasha Lee',tag:'first-timer'},
+    {name:'Dani Reeves',tag:'superfan'},{name:'Kevin Park',tag:'repeat'},
+  ],notes:'Sold out. Birthday edition with sound bath + drag brunch after. Viral IG reel — 80K views.'},
+  {id:2,name:'Trap Yoga — Sycamore & Oak',date:'2026-04-20',venue:'Sycamore & Oak',capacity:150,attendance:148,revenue:4440,collaborators:['Shalynn Burrill'],attendees:[
+    {name:'Destiny Williams',tag:'superfan'},{name:'Jordan Hicks',tag:'repeat'},{name:'Tasha Lee',tag:'repeat'},
+    {name:'Noel Adeyemi',tag:'first-timer'},{name:'Priya Sharma',tag:'first-timer'},
+  ],notes:'Virtually sold out. Growing reputation in the community.'},
+  {id:3,name:'WeFit & Friends — Trap Yoga',date:'2026-03-15',venue:'WeFitDC',capacity:120,attendance:110,revenue:3300,collaborators:['Shalynn Burrill'],attendees:[
+    {name:'Destiny Williams',tag:'superfan'},{name:'Chris Obi',tag:'first-timer'},{name:'Dani Reeves',tag:'first-timer'},
+  ],notes:'WeFit collab event. Good new audience.'},
+  {id:4,name:'Trap Yoga — The Gathering Spot',date:'2026-02-22',venue:'The Gathering Spot DC',capacity:180,attendance:162,revenue:4860,collaborators:['Shalynn Burrill','Sound Bath Artist'],attendees:[
+    {name:'Jordan Hicks',tag:'first-timer'},{name:'Aaliyah Moore',tag:'first-timer'},{name:'Destiny Williams',tag:'repeat'},
+  ],notes:'First TGS event. Huge success — set the monthly residency in motion.'},
+];
+
+const revData = {
+  months:['Jan','Feb','Mar','Apr','May'],
+  corporate:[8000,12000,15000,18000,18000],
+  speaking:[0,0,3000,6500,9500],
+  brand:[3000,3000,4000,4800,4800],
+  trapyoga:[2800,4860,3300,4440,4200],
+  coaching:[1800,1800,2000,2000,2000],
+};
+
+let editContactId = null;
+const today = '2026-05-09';
+
+// ══════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════
+function ini(name){return name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
+function uid(){return Date.now()+Math.floor(Math.random()*9999)}
+function fmt$(v){return '$'+Number(v).toLocaleString()}
+function daysBetween(a,b){return Math.round((new Date(b)-new Date(a))/(1000*60*60*24))}
+
+function typeColor(t){
+  const m={corporate:'av-blue',brand:'av-amber',coach:'av-green',hired:'av-green',speaker:'av-purple',event:'av-coral',community:'av-coral',lead:'av-gray'};
+  return m[t]||'av-gray';
+}
+function typeBadge(t){
+  const m={corporate:'b-corp',brand:'b-brand',coach:'b-coach',hired:'b-hired',speaker:'b-speak',event:'b-event',community:'b-event',lead:'b-lead'};
+  const l={corporate:'Corporate',brand:'Brand partner',coach:'Private client',hired:'Contractor',speaker:'Speaking',event:'Event collab',community:'TY Community',lead:'Lead'};
+  return `<span class="badge ${m[t]||'b-lead'}">${l[t]||t}</span>`;
+}
+function streamBadge(s){
+  const m={corporate:'b-corp',speaking:'b-speak',brand:'b-brand',event:'b-event',coaching:'b-coach'};
+  const l={corporate:'Corporate',speaking:'Speaking',brand:'Brand',event:'Events',coaching:'Coaching'};
+  return `<span class="badge ${m[s]||'b-lead'}">${l[s]||s}</span>`;
+}
+function stagePill(s){
+  const m={inquiry:'s-inquiry',proposal:'s-proposal',negotiation:'s-negotiation',confirmed:'s-confirmed',delivered:'s-delivered',invoiced:'s-invoiced',paid:'s-paid'};
+  const l={inquiry:'Inquiry',proposal:'Proposal sent',negotiation:'Negotiation',confirmed:'Confirmed',delivered:'Delivered',invoiced:'Invoiced',paid:'Paid'};
+  return `<span class="stage ${m[s]||'s-inquiry'}">${l[s]||s}</span>`;
+}
+function tagsHTML(tags=[]){return `<div class="tags">${(tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}</div>`}
+function lastContactHTML(d){
+  if(!d)return'<span style="color:var(--text3)">—</span>';
+  const days=daysBetween(d,today);
+  if(days>45)return`<span class="overdue">${days}d ago</span>`;
+  if(days>21)return`<span class="due-soon">${days}d ago</span>`;
+  return`<span style="color:var(--text2)">${days}d ago</span>`;
+}
+function attendeeTag(t){
+  const m={superfan:'b-corp',repeat:'b-coach',ambassador:'b-brand','first-timer':'b-lead','private-client':'b-corp'};
+  return `<span class="badge ${m[t]||'b-lead'}" style="font-size:10px">${t}</span>`;
+}
+
+// ══════════════════════════════════════════════
+// STATS
+// ══════════════════════════════════════════════
+function updateStats(){
+  const openDeals=deals.filter(d=>!['paid','delivered'].includes(d.stage));
+  document.getElementById('s-pipeline').textContent=fmt$(openDeals.reduce((s,d)=>s+d.value,0));
+  const confirmed=deals.filter(d=>['confirmed','invoiced','paid'].includes(d.stage));
+  document.getElementById('s-revenue').textContent=fmt$(confirmed.reduce((s,d)=>s+d.value,0));
+  document.getElementById('s-contacts').textContent=contacts.length;
+  document.getElementById('s-orgs').textContent=orgs.length+' orgs';
+  document.getElementById('s-ty').textContent=events[0]?events[0].attendance:0;
+  const urgentTasks=tasks.filter(t=>!t.done&&t.due<=today);
+  document.getElementById('s-tasks').textContent=urgentTasks.length;
+  const badge=document.getElementById('task-badge');
+  badge.textContent=urgentTasks.length||'';
+  badge.style.display=urgentTasks.length?'':'none';
+}
+
+// ══════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════
+function switchTab(t){
+  const tabNames=['contacts','orgs','pipeline','contracts','dcgov','events','classes','tasks','revenue','pnl','renewal','proposals','ambassador','waitlist','campaigns','speakerkit','press','sponsorship','expansion','network','ai','strategy'];
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',tabNames[i]===t));
+  document.querySelectorAll('.panel').forEach(el=>el.classList.remove('active'));
+  document.getElementById('panel-'+t).classList.add('active');
+  if(t==='network')setTimeout(initGraph,50);
+  if(t==='revenue')renderRevChart();
+  if(t==='pipeline')renderPipeline();
+  if(t==='tasks')renderTasks();
+  if(t==='contracts')renderContracts();
+  if(t==='dcgov')renderDCGov();
+  if(t==='classes')renderClasses();
+}
+
+// ══════════════════════════════════════════════
+// CONTACTS
+// ══════════════════════════════════════════════
+function renderContacts(){
+  const q=(document.getElementById('search-contacts').value||'').toLowerCase();
+  const ft=document.getElementById('filter-ctype').value;
+  let rows=contacts;
+  if(ft)rows=rows.filter(c=>c.type===ft);
+  if(q)rows=rows.filter(c=>[c.name,c.email,c.org,c.role,...(c.tags||[]),c.notes].filter(Boolean).join(' ').toLowerCase().includes(q));
+  const tb=document.getElementById('tbl-contacts');
+  if(!rows.length){tb.innerHTML=`<tr><td colspan="7"><div class="empty">No contacts found.</div></td></tr>`;return}
+  tb.innerHTML=rows.map(c=>`<tr>
+    <td><div class="name-cell"><div class="avatar ${typeColor(c.type)}">${ini(c.name)}</div><span>${c.name}</span></div></td>
+    <td>${typeBadge(c.type)}</td>
+    <td>${c.org?`<span class="org-tag">${c.org}</span>`:'<span style="color:var(--text3)">—</span>'}</td>
+    <td style="color:var(--text2)">${c.email||'<span style="color:var(--text3)">no email</span>'}</td>
+    <td>${tagsHTML(c.tags)}</td>
+    <td>${lastContactHTML(c.lastContact)}</td>
+    <td><div style="display:flex;gap:5px">
+      <button class="btn sm" onclick="editContact(${c.id})" title="Edit"><i class="ti ti-edit"></i></button>
+      <button class="btn sm danger" onclick="delContact(${c.id})" title="Delete"><i class="ti ti-trash"></i></button>
+    </div></td>
+  </tr>`).join('');
+}
+
+function openAddContact(){editContactId=null;document.getElementById('modal-contact-title').textContent='Add contact';['fc-name','fc-email','fc-phone','fc-org','fc-role','fc-ref','fc-tags','fc-notes','fc-id'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});document.getElementById('modal-contact').style.display='flex'}
+function editContact(id){
+  const c=contacts.find(x=>x.id===id);if(!c)return;
+  editContactId=id;
+  document.getElementById('modal-contact-title').textContent='Edit contact';
+  document.getElementById('fc-name').value=c.name||'';
+  document.getElementById('fc-email').value=c.email||'';
+  document.getElementById('fc-phone').value=c.phone||'';
+  document.getElementById('fc-type').value=c.type||'lead';
+  document.getElementById('fc-org').value=c.org||'';
+  document.getElementById('fc-role').value=c.role||'';
+  document.getElementById('fc-ref').value=c.ref||'';
+  document.getElementById('fc-tags').value=(c.tags||[]).join(', ');
+  document.getElementById('fc-notes').value=c.notes||'';
+  document.getElementById('fc-id').value=c.id;
+  document.getElementById('modal-contact').style.display='flex';
+}
+function saveContact(){
+  const name=document.getElementById('fc-name').value.trim();if(!name){alert('Name required');return}
+  const tags=document.getElementById('fc-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const data={id:editContactId||uid(),name,type:document.getElementById('fc-type').value,email:document.getElementById('fc-email').value.trim(),phone:document.getElementById('fc-phone').value.trim(),org:document.getElementById('fc-org').value.trim(),role:document.getElementById('fc-role').value.trim(),ref:document.getElementById('fc-ref').value.trim(),tags,notes:document.getElementById('fc-notes').value.trim(),lastContact:today};
+  if(editContactId){const i=contacts.findIndex(c=>c.id===editContactId);if(i>=0)contacts[i]=data}else contacts.push(data);
+  document.getElementById('modal-contact').style.display='none';
+  renderContacts();updateStats();initGraph();
+}
+function delContact(id){if(!confirm('Delete?'))return;const i=contacts.findIndex(c=>c.id===id);if(i>=0)contacts.splice(i,1);renderContacts();updateStats()}
+
+// ══════════════════════════════════════════════
+// ORGANIZATIONS
+// ══════════════════════════════════════════════
+function renderOrgs(){
+  const q=(document.getElementById('search-orgs').value||'').toLowerCase();
+  const ft=document.getElementById('filter-otype').value;
+  let rows=orgs;
+  if(ft)rows=rows.filter(o=>o.type===ft);
+  if(q)rows=rows.filter(o=>o.name.toLowerCase().includes(q));
+  const tb=document.getElementById('tbl-orgs');
+  const typeB=(t)=>{const m={corporate:'b-corp',brand:'b-brand',venue:'b-event',media:'b-speak',nonprofit:'b-lead'};const l={corporate:'Corporate',brand:'Brand',venue:'Venue',media:'Media',nonprofit:'Nonprofit/Gov'};return`<span class="badge ${m[t]||'b-lead'}">${l[t]||t}</span>`};
+  const statusB=(s)=>{const m={active:'b-coach',negotiation:'b-brand',lead:'b-lead',partner:'b-corp',confirmed:'b-speak'};return`<span class="badge ${m[s]||'b-lead'}">${s}</span>`};
+  tb.innerHTML=rows.map(o=>{
+    const c=contacts.filter(x=>x.org===o.name);
+    return`<tr>
+      <td><div class="name-cell"><div class="avatar av-blue" style="font-size:9px">${ini(o.name)}</div><span>${o.name}</span></div></td>
+      <td>${typeB(o.type)}</td>
+      <td><div style="display:flex;gap:4px;flex-wrap:wrap">${c.map(x=>`<span class="tag">${x.name.split(' ')[0]}</span>`).join('')||'<span style="color:var(--text3)">—</span>'}</div></td>
+      <td style="font-weight:500">${o.value?fmt$(o.value):'—'}</td>
+      <td>${statusB(o.status)}</td>
+      <td style="color:var(--text2)">${o.renewal||'—'}</td>
+      <td><button class="btn sm" title="Notes" onclick="alert('${o.notes.replace(/'/g,'`')}')" ><i class="ti ti-notes"></i></button></td>
+    </tr>`}).join('');
+}
+function openAddOrg(){alert('Add org form — coming in Phase 1 build')}
+
+// ══════════════════════════════════════════════
+// PIPELINE
+// ══════════════════════════════════════════════
+function renderPipeline(){
+  const fs=document.getElementById('filter-stream').value;
+  let rows=deals;
+  if(fs)rows=rows.filter(d=>d.stream===fs);
+
+  const openVal=rows.filter(d=>!['paid'].includes(d.stage)).reduce((s,d)=>s+d.value,0);
+  document.getElementById('pipeline-total').textContent=fmt$(openVal);
+
+  const stages=['inquiry','proposal','negotiation','confirmed'];
+  const board=document.getElementById('kanban-board');
+  board.innerHTML=stages.map(s=>{
+    const cards=rows.filter(d=>d.stage===s);
+    const stageLabel={inquiry:'Inquiry',proposal:'Proposal sent',negotiation:'Negotiation',confirmed:'Confirmed'}[s];
+    return`<div class="kanban-col">
+      <div class="kanban-col-header"><span>${stageLabel}</span><span style="background:var(--bg3);border-radius:20px;padding:1px 8px">${cards.length}</span></div>
+      ${cards.map(d=>`<div class="kanban-card">
+        <div class="kanban-card-name">${d.name}</div>
+        <div class="kanban-card-meta">${streamBadge(d.stream)}</div>
+        <div class="kanban-card-meta" style="margin-top:4px">${d.org}</div>
+        <div class="kanban-card-val">${fmt$(d.value)}</div>
+      </div>`).join('')}
+    </div>`;
+  }).join('');
+
+  const tb=document.getElementById('tbl-deals');
+  const allRows=fs?rows:deals;
+  tb.innerHTML=allRows.map(d=>{
+    const days=d.date?daysBetween(today,d.date):null;
+    const dateStr=days!==null?(days<0?`<span class="overdue">${d.date}</span>`:days<14?`<span class="due-soon">${d.date}</span>`:d.date):'—';
+    return`<tr>
+      <td style="font-weight:500">${d.name}</td>
+      <td>${streamBadge(d.stream)}</td>
+      <td style="color:var(--text2);font-size:12px">${d.org}</td>
+      <td style="font-weight:500">${fmt$(d.value)}</td>
+      <td>${stagePill(d.stage)}</td>
+      <td>${dateStr}</td>
+      <td><button class="btn sm" onclick="alert('${(d.notes||'').replace(/'/g,'`')}')" title="Notes"><i class="ti ti-notes"></i></button></td>
+    </tr>`}).join('');
+}
+function openAddDeal(){document.getElementById('modal-deal').style.display='flex'}
+function saveDeal(){
+  const name=document.getElementById('fd-name').value.trim();if(!name){alert('Name required');return}
+  deals.push({id:uid(),name,stream:document.getElementById('fd-stream').value,stage:document.getElementById('fd-stage').value,value:parseInt(document.getElementById('fd-value').value)||0,org:document.getElementById('fd-org').value.trim(),date:document.getElementById('fd-date').value,notes:document.getElementById('fd-notes').value.trim()});
+  document.getElementById('modal-deal').style.display='none';
+  renderPipeline();updateStats();
+}
+
+// ══════════════════════════════════════════════
+// EVENTS
+// ══════════════════════════════════════════════
+function renderEvents(){
+  const el=document.getElementById('events-list');
+  el.innerHTML=events.map(e=>{
+    const fillRate=Math.round(e.attendance/e.capacity*100);
+    return`<div class="event-card">
+      <div class="event-header">
+        <div>
+          <div class="event-title">${e.name}</div>
+          <div class="event-meta">${e.date} · ${e.venue}</div>
+          <div class="event-meta" style="margin-top:2px">Collaborators: ${e.collaborators.join(', ')}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:18px;font-weight:500;color:var(--green-text)">${fmt$(e.revenue)}</div>
+          <div style="font-size:12px;color:var(--text3)">${fillRate}% capacity</div>
+        </div>
+      </div>
+      <div class="event-stats">
+        <div class="event-stat"><div class="event-stat-label">Attendance</div><div class="event-stat-val">${e.attendance}</div></div>
+        <div class="event-stat"><div class="event-stat-label">Capacity</div><div class="event-stat-val">${e.capacity}</div></div>
+        <div class="event-stat"><div class="event-stat-label">Revenue</div><div class="event-stat-val">${fmt$(e.revenue)}</div></div>
+        <div class="event-stat"><div class="event-stat-label">Avg ticket</div><div class="event-stat-val">${fmt$(Math.round(e.revenue/e.attendance))}</div></div>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--text2);font-weight:500;margin-bottom:4px">Attendees tracked</div>
+      <div class="attendee-tags">${e.attendees.map(a=>`<span style="font-size:12px;background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius);padding:3px 8px;display:inline-flex;align-items:center;gap:5px">${a.name} ${attendeeTag(a.tag)}</span>`).join('')}</div>
+      ${e.notes?`<div style="margin-top:10px;font-size:12px;color:var(--text2);background:var(--bg2);border-radius:var(--radius);padding:8px 10px">${e.notes}</div>`:''}
+    </div>`}).join('');
+}
+function openAddEvent(){alert('Add event form — coming in Phase 3 build')}
+
+// ══════════════════════════════════════════════
+// TASKS
+// ══════════════════════════════════════════════
+function renderTasks(){
+  const owner=document.getElementById('filter-owner').value;
+  const pri=document.getElementById('filter-tpriority').value;
+  let rows=tasks;
+  if(owner)rows=rows.filter(t=>t.owner===owner);
+  if(pri)rows=rows.filter(t=>t.priority===pri);
+
+  const urgent=rows.filter(t=>!t.done&&t.due<=today);
+  const upcoming=rows.filter(t=>!t.done&&t.due>today);
+  const done=rows.filter(t=>t.done);
+
+  const taskRow=(t)=>{
+    const days=daysBetween(today,t.due);
+    const dueStr=t.due<=today?`<span class="overdue">${t.due<=today?'Overdue':t.due}</span>`:(days<=3?`<span class="due-soon">${t.due}</span>`:t.due);
+    const priIcon={high:'<span class="p-high"><i class="ti ti-urgent"></i></span>',med:'<span class="p-med"><i class="ti ti-alert-circle"></i></span>',low:'<span class="p-low"><i class="ti ti-minus"></i></span>'}[t.priority];
+    return`<tr class="${t.done?'task-row done':'task-row'}">
+      <td><div class="task-check ${t.done?'done':''}" onclick="toggleTask(${t.id})">${t.done?'<i class="ti ti-check" style="font-size:11px"></i>':''}</div></td>
+      <td style="font-weight:500">${t.text}</td>
+      <td style="color:var(--text2);font-size:12px">${t.link||'—'}</td>
+      <td><span class="badge ${t.owner==='britt'?'b-corp':'b-coach'}">${t.owner==='britt'?'Britt':'Assistant'}</span></td>
+      <td>${priIcon}</td>
+      <td>${dueStr}</td>
+    </tr>`;
+  };
+
+  const tbU=document.getElementById('tbl-tasks-urgent');
+  tbU.innerHTML=urgent.length?urgent.map(taskRow).join(''):`<tr><td colspan="6"><div class="empty" style="padding:1rem">No urgent tasks</div></td></tr>`;
+  const tbUp=document.getElementById('tbl-tasks-upcoming');
+  tbUp.innerHTML=upcoming.length?[...upcoming,...done].map(taskRow).join(''):`<tr><td colspan="6"><div class="empty" style="padding:1rem">No upcoming tasks</div></td></tr>`;
+}
+function toggleTask(id){const t=tasks.find(x=>x.id===id);if(t)t.done=!t.done;renderTasks();updateStats()}
+function openAddTask(){document.getElementById('modal-task').style.display='flex'}
+function saveTask(){
+  const text=document.getElementById('ft-text').value.trim();if(!text){alert('Task required');return}
+  tasks.push({id:uid(),text,owner:document.getElementById('ft-owner').value,priority:document.getElementById('ft-priority').value,due:document.getElementById('ft-due').value||today,link:document.getElementById('ft-link').value.trim(),done:false});
+  document.getElementById('modal-task').style.display='none';renderTasks();updateStats();
+}
+
+// ══════════════════════════════════════════════
+// REVENUE CHART
+// ══════════════════════════════════════════════
+function renderRevChart(){
+  const el=document.getElementById('rev-chart');if(!el)return;
+  const colors={corporate:'#378ADD',speaking:'#7F77DD',brand:'#BA7517',trapyoga:'#D85A30',coaching:'#1D9E75'};
+  const keys=['corporate','speaking','brand','trapyoga','coaching'];
+  const maxVal=Math.max(...revData.months.map((_,i)=>keys.reduce((s,k)=>s+(revData[k][i]||0),0)));
+  el.innerHTML=revData.months.map((_,i)=>{
+    const total=keys.reduce((s,k)=>s+(revData[k][i]||0),0);
+    const bars=keys.map(k=>{
+      const v=revData[k][i]||0;
+      const h=v?Math.round((v/maxVal)*120):0;
+      return`<div class="chart-bar" style="height:${h}px;background:${colors[k]};flex:1" title="${k}: ${fmt$(v)}"></div>`;
+    }).join('');
+    return`<div class="chart-bar-group">
+      <div style="display:flex;align-items:flex-end;gap:2px;height:120px;width:100%">${bars}</div>
+      <div class="chart-label">${revData.months[i]}<br><span style="font-weight:500;color:var(--text)">${fmt$(total)}</span></div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// NETWORK GRAPH
+// ══════════════════════════════════════════════
+const colorMap={corporate:'#378ADD',brand:'#BA7517',coach:'#1D9E75',hired:'#1D9E75',speaker:'#7F77DD',event:'#D85A30',community:'#D85A30',lead:'#888780',hub:'#1a1a18'};
+let gNodes=[],gLinks=[],gDrag=null;
+
+function initGraph(){
+  const canvas=document.getElementById('graph-canvas');if(!canvas)return;
+  const W=canvas.offsetWidth||700,H=400;
+  canvas.width=W*devicePixelRatio;canvas.height=H*devicePixelRatio;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';
+  const ctx=canvas.getContext('2d');ctx.scale(devicePixelRatio,devicePixelRatio);
+
+  const hub={id:'hub',label:'BRITT',x:W/2,y:H/2,r:24,color:colorMap.hub,type:'hub'};
+  gNodes=[hub];
+
+  // Add org nodes as medium nodes
+  const orgNodes=orgs.slice(0,10).map((o,i)=>{
+    const angle=(i/10)*Math.PI*2;
+    const dist=110+Math.random()*60;
+    return{id:'org_'+o.id,label:o.name.split(' ')[0],x:W/2+Math.cos(angle)*dist,y:H/2+Math.sin(angle)*dist,r:16,color:colorMap[o.type]||'#888',type:o.type,data:o};
+  });
+  gNodes.push(...orgNodes);
+
+  // Contact nodes
+  contacts.forEach((c,i)=>{
+    const angle=(i/contacts.length)*Math.PI*2;
+    const dist=180+Math.random()*80;
+    gNodes.push({id:'c_'+c.id,label:c.name.split(' ')[0],x:W/2+Math.cos(angle)*dist,y:H/2+Math.sin(angle)*dist,r:11,color:colorMap[c.type]||'#888',type:c.type,data:c});
+  });
+
+  gLinks=[
+    ...orgNodes.map(n=>({from:'hub',to:n.id})),
+    ...contacts.map(c=>{
+      const on=orgNodes.find(n=>n.data&&n.data.name===c.org);
+      return{from:on?on.id:'hub',to:'c_'+c.id};
+    })
+  ];
+
+  // Force layout
+  for(let iter=0;iter<200;iter++){
+    for(let i=1;i<gNodes.length;i++){
+      for(let j=i+1;j<gNodes.length;j++){
+        const a=gNodes[i],b=gNodes[j];
+        const dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1;
+        const min=45;
+        if(d<min){const f=(min-d)/(d*2);a.x-=dx*f;a.y-=dy*f;b.x+=dx*f;b.y+=dy*f}
+      }
+      const n=gNodes[i];
+      n.x=Math.max(n.r+10,Math.min(W-n.r-10,n.x));
+      n.y=Math.max(n.r+10,Math.min(H-n.r-10,n.y));
+    }
+  }
+
+  canvas._W=W;canvas._H=H;canvas._ctx=ctx;
+  drawGraph();
+  setupGraphEvents(canvas,W,H);
+}
+
+function drawGraph(){
+  const canvas=document.getElementById('graph-canvas');if(!canvas)return;
+  const ctx=canvas._ctx,W=canvas._W,H=canvas._H;if(!ctx)return;
+  const isDark=matchMedia('(prefers-color-scheme: dark)').matches;
+  const lineCol=isDark?'rgba(255,255,255,.08)':'rgba(0,0,0,.07)';
+  ctx.clearRect(0,0,W,H);
+
+  gLinks.forEach(l=>{
+    const a=gNodes.find(n=>n.id===l.from),b=gNodes.find(n=>n.id===l.to);if(!a||!b)return;
+    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+    ctx.strokeStyle=lineCol;ctx.lineWidth=1;ctx.stroke();
+  });
+
+  gNodes.forEach(n=>{
+    ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+    ctx.fillStyle=n.color+'22';ctx.fill();
+    ctx.strokeStyle=n.color;ctx.lineWidth=n.type==='hub'?2.5:1.5;ctx.stroke();
+    ctx.textAlign='center';
+    if(n.type==='hub'){ctx.font='bold 9px sans-serif';ctx.fillStyle='#fff';ctx.textBaseline='middle';ctx.fillText('BRITT',n.x,n.y)}
+    ctx.fillStyle=n.color;
+    ctx.font=`${n.r>14?'500 ':''}${Math.min(n.r,11)}px sans-serif`;
+    ctx.textBaseline='bottom';
+    ctx.fillText(n.label,n.x,n.y-n.r-3);
+  });
+}
+
+function setupGraphEvents(canvas,W,H){
+  function rel(e){const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+  function nodeAt(x,y){return gNodes.find(n=>Math.hypot(n.x-x,n.y-y)<n.r+6)}
+  canvas.onmousedown=e=>{const{x,y}=rel(e);const n=nodeAt(x,y);if(n){gDrag={node:n,ox:n.x-x,oy:n.y-y};canvas.style.cursor='grabbing'}};
+  canvas.onmousemove=e=>{const{x,y}=rel(e);if(gDrag){gDrag.node.x=Math.max(0,Math.min(W,x+gDrag.ox));gDrag.node.y=Math.max(0,Math.min(H,y+gDrag.oy));drawGraph()}else canvas.style.cursor=nodeAt(x,y)?'pointer':'grab'};
+  canvas.onmouseup=e=>{if(gDrag){gDrag=null;canvas.style.cursor='grab';return}const{x,y}=rel(e);const n=nodeAt(x,y);if(n&&n.data){const c=n.data;const info=c.name?`${c.name} · ${c.org||''} · ${c.email||'no email'}`:`${c.name} · ${n.type}`;document.getElementById('graph-info').textContent=info}};
+  canvas.onmouseleave=()=>{if(gDrag)gDrag=null};
+}
+
+// ══════════════════════════════════════════════
+// AI ASSISTANT
+// ══════════════════════════════════════════════
+function setPrompt(txt){document.getElementById('ai-prompt').value=txt;switchTab('ai')}
+
+async function askAI(){
+  const prompt=document.getElementById('ai-prompt').value.trim();if(!prompt)return;
+  const out=document.getElementById('ai-response');const btn=document.getElementById('ai-btn');
+  out.style.display='block';out.innerHTML='<span class="spinner"></span> Thinking...';btn.disabled=true;
+
+  const contactSummary=contacts.slice(0,15).map(c=>`- ${c.name} (${c.type}${c.org?', '+c.org:''}${c.lastContact?', last contact '+c.lastContact:''})`).join('\n');
+  const dealSummary=deals.map(d=>`- ${d.name}: ${d.stage}, ${fmt$(d.value)} (${d.stream})`).join('\n');
+  const taskSummary=tasks.filter(t=>!t.done).slice(0,8).map(t=>`- [${t.priority}] ${t.text} — due ${t.due}`).join('\n');
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:1000,
+      system:`You are the AI assistant for Britt Dupree Daniels, a wellness architect based in DC. He runs corporate wellness programs (Google, Salesforce, Cigna, Microsoft), Trap Yoga events (viral, 80K+ views, sold out concert venues), keynote speaking, brand partnerships (lululemon), and private coaching. He just hired an assistant to help him manage everything.\n\nContacts:\n${contactSummary}\n\nDeals/Pipeline:\n${dealSummary}\n\nOpen tasks:\n${taskSummary}\n\nBe concise and practical. Speak like a smart, organized business partner.`,
+      messages:[{role:'user',content:prompt}]
+    })});
+    const data=await res.json();
+    out.textContent=data.content?.map(b=>b.text||'').join('')||'No response.';
+  }catch(e){out.textContent='Could not reach Claude API.'}
+  btn.disabled=false;
+}
+document.getElementById('ai-prompt').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.metaKey||e.ctrlKey))askAI()});
+
+// ══════════════════════════════════════════════
+// CONTRACTS DATA
+// ══════════════════════════════════════════════
+const contracts_data = [
+  {id:1, name:'MedStar Health — Employee Wellness Program', org:'MedStar Health', contact:'Dr. Angela Torres, VP People', status:'active', value:18000, sessionsTotal:12, sessionsDone:5, startDate:'2026-02-01', endDate:'2026-07-31', location:'MedStar Washington Hospital Center', instructor:'Britt Dupree Daniels', backupInstructor:'Shalynn Burrill', rate:1500, notes:'Bi-weekly yoga + mindfulness. Contract runs 6 months. Strong renewal likelihood.', invoicedTo:'MedStar Health LLC · PO #MSH-2026-0331',
+    sessions:[
+      {date:'2026-02-08',done:true,attendance:24,rating:4.9,instructor:'Britt'},
+      {date:'2026-02-22',done:true,attendance:21,rating:4.8,instructor:'Britt'},
+      {date:'2026-03-08',done:true,attendance:26,rating:5.0,instructor:'Britt'},
+      {date:'2026-03-22',done:true,attendance:23,rating:4.7,instructor:'Shalynn Burrill (backup)'},
+      {date:'2026-04-05',done:true,attendance:25,rating:4.8,instructor:'Britt'},
+      {date:'2026-04-19',done:false,attendance:null,rating:null,instructor:'Britt'},
+      {date:'2026-05-03',done:false,attendance:null,rating:null,instructor:'Britt'},
+      {date:'2026-05-17',done:false,attendance:null,rating:null,instructor:'Britt'},
+      {date:'2026-06-07',done:false,attendance:null,rating:null,instructor:'Britt'},
+      {date:'2026-06-21',done:false,attendance:null,rating:null,instructor:'TBD'},
+      {date:'2026-07-05',done:false,attendance:null,rating:null,instructor:'TBD'},
+      {date:'2026-07-19',done:false,attendance:null,rating:null,instructor:'TBD'},
+    ]},
+  {id:2, name:'Aetna — Mindful Movement Series', org:'Aetna', contact:'Nadia Russo, Wellness Director', status:'negotiation', value:12000, sessionsTotal:8, sessionsDone:0, startDate:'2026-07-01', endDate:'2026-10-31', location:'Aetna DC Office, 1425 K St NW', instructor:'TBD', backupInstructor:'Jake Morrison', rate:1500, notes:'Discovery call completed. Proposal sent. Awaiting sign-off from their procurement team.',invoicedTo:'',
+    sessions:[
+      {date:'2026-07-12',done:false,attendance:null,rating:null,instructor:'TBD'},
+      {date:'2026-07-26',done:false,attendance:null,rating:null,instructor:'TBD'},
+      {date:'2026-08-09',done:false,attendance:null,rating:null,instructor:'TBD'},
+      {date:'2026-08-23',done:false,attendance:null,rating:null,instructor:'TBD'},
+      {date:'2026-09-13',done:false,attendance:null,rating:null,instructor:'TBD'},
+      {date:'2026-09-27',done:false,attendance:null,rating:null,instructor:'TBD'},
+      {date:'2026-10-11',done:false,attendance:null,rating:null,instructor:'TBD'},
+      {date:'2026-10-25',done:false,attendance:null,rating:null,instructor:'TBD'},
+    ]},
+  {id:3, name:'Google DC — Monthly Wellness Sessions', org:'Google DC', contact:'Tobias Greene, People Ops', status:'active', value:15000, sessionsTotal:10, sessionsDone:4, startDate:'2026-01-15', endDate:'2026-10-15', location:'Google DC Office, 25 Massachusetts Ave', instructor:'Britt Dupree Daniels', backupInstructor:'Dr. Lena Hofer', rate:1500, notes:'Monthly anchor contract. Great relationship. Tobias has mentioned expanding to bi-weekly.',invoicedTo:'Google LLC · PO #GOOG-WEL-DC-026',
+    sessions:[
+      {date:'2026-01-15',done:true,attendance:31,rating:4.9,instructor:'Britt'},
+      {date:'2026-02-19',done:true,attendance:28,rating:4.8,instructor:'Britt'},
+      {date:'2026-03-19',done:true,attendance:33,rating:5.0,instructor:'Britt'},
+      {date:'2026-04-16',done:true,attendance:30,rating:4.9,instructor:'Britt'},
+      {date:'2026-05-21',done:false,attendance:null,rating:null,instructor:'Britt'},
+      {date:'2026-06-18',done:false,attendance:null,rating:null,instructor:'Britt'},
+      {date:'2026-07-16',done:false,attendance:null,rating:null,instructor:'TBD'},
+      {date:'2026-08-20',done:false,attendance:null,rating:null,instructor:'TBD'},
+      {date:'2026-09-17',done:false,attendance:null,rating:null,instructor:'TBD'},
+      {date:'2026-10-15',done:false,attendance:null,rating:null,instructor:'TBD'},
+    ]},
+  {id:4, name:'Cigna — Q2/Q3 Wellness Consulting', org:'Cigna Health', contact:'Dr. Janet Huang', status:'active', value:9000, sessionsTotal:6, sessionsDone:3, startDate:'2026-04-01', endDate:'2026-09-30', location:'Cigna DC Office + Virtual', instructor:'Britt Dupree Daniels', backupInstructor:'Jake Morrison', rate:1500, notes:'Hybrid in-person and virtual. Renewal discussion needed by June.',invoicedTo:'Cigna Corp · PO #CGN-WEL-2026-DC',
+    sessions:[
+      {date:'2026-04-03',done:true,attendance:18,rating:4.7,instructor:'Britt'},
+      {date:'2026-04-17',done:true,attendance:22,rating:4.8,instructor:'Britt'},
+      {date:'2026-05-01',done:true,attendance:20,rating:4.9,instructor:'Britt'},
+      {date:'2026-05-15',done:false,attendance:null,rating:null,instructor:'Britt'},
+      {date:'2026-06-05',done:false,attendance:null,rating:null,instructor:'Britt'},
+      {date:'2026-06-19',done:false,attendance:null,rating:null,instructor:'TBD'},
+    ]},
+];
+
+// DC Gov schedule data
+const dcgovSessions = [
+  {id:1,date:'2026-06-07',time:'10:00 AM',instructor:'Britt Dupree Daniels',backup:'Shalynn Burrill',type:'Trap Yoga',status:'upcoming',checkins:0,rating:null,notes:'Opening session — bring extra mats'},
+  {id:2,date:'2026-06-21',time:'10:00 AM',instructor:'Shalynn Burrill',backup:'Jake Morrison',type:'Trap Yoga Flow',status:'upcoming',checkins:0,rating:null,notes:'Britt at Ebony Fit Weekend — Shalynn leads'},
+  {id:3,date:'2026-07-05',time:'10:00 AM',instructor:'Britt Dupree Daniels',backup:'Shalynn Burrill',type:'Trap Yoga',status:'upcoming',checkins:0,rating:null,notes:'July 4th weekend — expect lower turnout'},
+  {id:4,date:'2026-07-12',time:'10:00 AM',instructor:'Britt Dupree Daniels',backup:'TBD',type:'Trap Yoga & Sound Bath',status:'upcoming',checkins:0,rating:null,notes:'Partnering with sound bath artist'},
+  {id:5,date:'2026-07-19',time:'10:00 AM',instructor:'Shalynn Burrill',backup:'Jake Morrison',type:'Yoga Flow',status:'upcoming',checkins:0,rating:null,notes:''},
+  {id:6,date:'2026-08-02',time:'10:00 AM',instructor:'Britt Dupree Daniels',backup:'Shalynn Burrill',type:'Trap Yoga',status:'upcoming',checkins:0,rating:null,notes:''},
+  {id:7,date:'2026-08-16',time:'10:00 AM',instructor:'Jordan Hicks',backup:'Shalynn Burrill',type:'Power Yoga',status:'upcoming',checkins:0,rating:null,notes:'Jordan guest-leading — power yoga format'},
+  {id:8,date:'2026-08-30',time:'10:00 AM',instructor:'Britt Dupree Daniels',backup:'Shalynn Burrill',type:'Trap Yoga — Finale',status:'upcoming',checkins:0,rating:null,notes:'Final session of the summer series. Press + DC Govt invited.'},
+];
+
+const instructors = [
+  {name:'Britt Dupree Daniels',spec:'Trap Yoga, Mindfulness, HIIT',rate:0,assigned:5,email:'britt@prophetfitness.com',status:'Primary'},
+  {name:'Shalynn Burrill',spec:'Yoga Flow, Vinyasa',rate:400,assigned:4,email:'shalynn@shalynnfit.com',status:'Regular backup'},
+  {name:'Jake Morrison',spec:'Yoga & Mobility',rate:360,assigned:0,email:'jake@yogaflow.com',status:'On-call backup'},
+  {name:'Jordan Hicks',spec:'Power Yoga, HIIT',rate:350,assigned:1,email:'jordan.hicks@gmail.com',status:'Guest instructor'},
+];
+
+// Classes data
+const classes_data = [
+  {id:1,name:'MedStar Wellness — Session 6',type:'corporate',date:'2026-05-17',instructor:'Britt',location:'MedStar WH Center',checkins:25,rating:4.8,status:'upcoming',contract:'MedStar'},
+  {id:2,name:'Trap Yoga — Birthday Edition',type:'trapyoga',date:'2026-05-24',instructor:'Britt + Shalynn',location:'The Gathering Spot DC',checkins:176,rating:4.9,status:'upcoming',contract:'TY Series'},
+  {id:3,name:'Google DC Monthly',type:'corporate',date:'2026-05-21',instructor:'Britt',location:'Google DC Office',checkins:30,rating:null,status:'upcoming',contract:'Google'},
+  {id:4,name:'Cigna Hybrid Session 4',type:'corporate',date:'2026-05-15',instructor:'Britt',location:'Cigna DC + Virtual',checkins:22,rating:null,status:'upcoming',contract:'Cigna'},
+  {id:5,name:'Franklin Park — Session 1',type:'dcgov',date:'2026-06-07',instructor:'Britt',location:'Franklin Park, NW DC',checkins:0,rating:null,status:'upcoming',contract:'DC Gov Grant'},
+  {id:6,name:'MedStar Wellness — Session 5',type:'corporate',date:'2026-04-05',instructor:'Britt',location:'MedStar WH Center',checkins:25,rating:4.8,status:'completed',contract:'MedStar'},
+  {id:7,name:'Trap Yoga — Sycamore & Oak',type:'trapyoga',date:'2026-04-20',instructor:'Britt + Shalynn',location:'Sycamore & Oak',checkins:148,rating:4.9,status:'completed',contract:'TY Series'},
+  {id:8,name:'Google DC Monthly',type:'corporate',date:'2026-04-16',instructor:'Britt',location:'Google DC Office',checkins:30,rating:4.9,status:'completed',contract:'Google'},
+  {id:9,name:'Private — Marcus Rivera',type:'private',date:'2026-05-02',instructor:'Britt',location:'Capitol Hill Gym',checkins:1,rating:5.0,status:'completed',contract:'Private'},
+  {id:10,name:'Cigna Hybrid Session 3',type:'corporate',date:'2026-05-01',instructor:'Britt',location:'Cigna DC + Virtual',checkins:20,rating:4.9,status:'completed',contract:'Cigna'},
+];
+
+const recentFeedback = [
+  {name:'Destiny W.',class:'Trap Yoga — Birthday Edition',rating:5,comment:'Best class I\'ve been to all year. The energy was unreal.'},
+  {name:'Tobias G.',class:'Google DC Monthly',rating:5,comment:'Team absolutely loved it. Already asking when the next one is.'},
+  {name:'MedStar attendee',class:'MedStar Session 5',rating:5,comment:'Britt makes mindfulness accessible even for skeptics. Our team needs this every week.'},
+  {name:'Priya S.',class:'Trap Yoga — Sycamore & Oak',rating:4,comment:'Loved it but I wish it was longer. The cool-down was rushed.'},
+  {name:'Jordan H.',class:'WeFit Trap Yoga',rating:5,comment:'Never done yoga before and actually had a blast. Converting to a regular now.'},
+];
+
+// ══════════════════════════════════════════════
+// CONTRACTS RENDER
+// ══════════════════════════════════════════════
+function renderContracts(){
+  const fs = document.getElementById('filter-cstatus').value;
+  let rows = contracts_data;
+  if(fs) rows = rows.filter(c=>c.status===fs);
+  const total = contracts_data.filter(c=>c.status==='active').reduce((s,c)=>s+c.value,0);
+  document.getElementById('contract-total').textContent = fmt$(total);
+
+  document.getElementById('contracts-list').innerHTML = rows.map(c=>{
+    const pct = Math.round((c.sessionsDone/c.sessionsTotal)*100);
+    const remaining = c.value - Math.round((c.sessionsDone/c.sessionsTotal)*c.value);
+    const statusB = c.status==='active'?'b-coach':c.status==='negotiation'?'b-brand':'b-lead';
+    const statusL = {active:'Active',negotiation:'Negotiation',completed:'Completed'}[c.status]||c.status;
+    const completedSessions = c.sessions.filter(s=>s.done);
+    const avgRating = completedSessions.length ? (completedSessions.reduce((s,x)=>s+(x.rating||0),0)/completedSessions.length).toFixed(1) : '—';
+    const totalAttendees = completedSessions.reduce((s,x)=>s+(x.attendance||0),0);
+
+    return`<div class="contract-card">
+      <div class="contract-header">
+        <div>
+          <div class="contract-title">${c.name}</div>
+          <div class="contract-org">${c.org} · ${c.contact}</div>
+          <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge ${statusB}">${statusL}</span>
+            <span class="tag"><i class="ti ti-map-pin" style="font-size:11px"></i> ${c.location}</span>
+            ${c.invoicedTo?`<span class="tag"><i class="ti ti-file-invoice" style="font-size:11px"></i> ${c.invoicedTo}</span>`:''}
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-size:20px;font-weight:500;color:var(--green-text)">${fmt$(c.value)}</div>
+          <div style="font-size:12px;color:var(--text2)">${c.startDate} → ${c.endDate}</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px">${fmt$(c.rate)}/session</div>
+        </div>
+      </div>
+
+      <div class="contract-meta-grid">
+        <div class="contract-meta"><div class="contract-meta-label">Sessions</div><div class="contract-meta-val">${c.sessionsDone}/${c.sessionsTotal}</div></div>
+        <div class="contract-meta"><div class="contract-meta-label">Progress</div><div class="contract-meta-val">${pct}%</div></div>
+        <div class="contract-meta"><div class="contract-meta-label">Avg rating</div><div class="contract-meta-val">${avgRating}${avgRating!=='—'?' ⭐':''}</div></div>
+        <div class="contract-meta"><div class="contract-meta-label">Total attendees</div><div class="contract-meta-val">${totalAttendees}</div></div>
+        <div class="contract-meta"><div class="contract-meta-label">Remaining value</div><div class="contract-meta-val" style="color:var(--blue-text)">${fmt$(remaining)}</div></div>
+      </div>
+
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${pct===100?'var(--green)':'var(--blue)'}"></div></div>
+      <div style="font-size:11px;color:var(--text3);margin-top:4px;margin-bottom:12px">${pct}% delivered · Primary: ${c.instructor} · Backup: <span class="backup-badge">${c.backupInstructor}</span></div>
+
+      <div style="font-size:12px;font-weight:500;color:var(--text2);margin-bottom:6px">Session schedule</div>
+      <div class="session-list">
+        ${c.sessions.map((s,i)=>{
+          const isOverdue = !s.done && s.date < today;
+          return`<div class="session-row">
+            <div class="session-status ${s.done?'ss-done':isOverdue?'ss-overdue':'ss-upcoming'}"></div>
+            <span style="color:var(--text3);min-width:28px;font-size:12px">#${i+1}</span>
+            <span style="min-width:90px">${s.date}</span>
+            <span style="flex:1;color:var(--text2)">${s.instructor}</span>
+            ${s.done?`<span style="color:var(--green-text);font-size:12px"><i class="ti ti-users" style="font-size:11px"></i> ${s.attendance}</span>`:''}
+            ${s.done?`<span style="color:var(--amber-text);font-size:12px;margin-left:8px">${s.rating}⭐</span>`:''}
+            ${isOverdue?`<span class="badge" style="background:var(--red-fill);color:var(--red-text);font-size:10px">Overdue — confirm</span>`:''}
+            ${s.done?`<span class="badge b-coach" style="font-size:10px">Confirmed</span>`:''}
+          </div>`;
+        }).join('')}
+      </div>
+      ${c.notes?`<div style="margin-top:10px;font-size:12px;color:var(--text2);background:var(--bg2);border-radius:var(--radius);padding:8px 10px"><i class="ti ti-notes" style="font-size:12px;vertical-align:-1px;margin-right:4px"></i>${c.notes}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// DC GOV RENDER
+// ══════════════════════════════════════════════
+function renderDCGov(){
+  const done = dcgovSessions.filter(s=>s.status==='completed');
+  const totalCheckins = dcgovSessions.reduce((s,x)=>s+x.checkins,0);
+  const ratedSessions = dcgovSessions.filter(s=>s.rating);
+  const avgRating = ratedSessions.length?(ratedSessions.reduce((s,x)=>s+x.rating,0)/ratedSessions.length).toFixed(1):'—';
+  const pct = Math.round((done.length/dcgovSessions.length)*100);
+  const remaining = 20000 - Math.round((done.length/dcgovSessions.length)*20000);
+
+  document.getElementById('dcg-done').textContent = done.length;
+  document.getElementById('dcg-checkins').textContent = totalCheckins;
+  document.getElementById('dcg-rating').textContent = avgRating==='—'?'—':avgRating+'⭐';
+  document.getElementById('dcg-progress').style.width = pct+'%';
+  document.getElementById('dcg-pct').textContent = pct+'%';
+  document.getElementById('dcg-remaining').textContent = fmt$(remaining);
+
+  const months={6:'Jun',7:'Jul',8:'Aug'};
+  document.getElementById('dcgov-schedule').innerHTML = dcgovSessions.map(s=>{
+    const d=new Date(s.date);
+    const mo=months[d.getMonth()+1]||'';
+    const day=d.getDate();
+    const isUpcoming=s.date>today;
+    const statusColor=s.status==='completed'?'var(--green)':isUpcoming?'var(--blue)':'var(--coral)';
+    return`<div class="sched-card">
+      <div class="sched-date">
+        <div class="sched-date-day">${day}</div>
+        <div class="sched-date-mo">${mo}</div>
+      </div>
+      <div class="sched-info">
+        <div class="sched-title">${s.type} <span style="font-size:12px;color:var(--text3)">· ${s.time}</span></div>
+        <div class="sched-meta">Franklin Park, NW DC</div>
+        <div class="sched-instructor">
+          <div class="avatar av-green" style="width:22px;height:22px;font-size:9px">${ini(s.instructor.split(' ')[0]+' '+s.instructor.split(' ').slice(-1)[0])}</div>
+          <span style="font-size:12px">${s.instructor}</span>
+          <span class="backup-badge">Backup: ${s.backup}</span>
+        </div>
+        ${s.notes?`<div style="font-size:11px;color:var(--text3);margin-top:4px">${s.notes}</div>`:''}
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        ${s.checkins?`<div class="checkin-stat"><i class="ti ti-users" style="font-size:11px"></i>${s.checkins} checked in</div>`:''}
+        ${s.rating?`<div style="margin-top:4px" class="rating-stars">${s.rating}⭐</div>`:''}
+        <div style="margin-top:6px"><span class="stage" style="border-color:${statusColor};color:${statusColor}">${s.status==='completed'?'Done':isUpcoming?'Upcoming':'Confirm needed'}</span></div>
+        <div style="font-size:11px;color:var(--text2);margin-top:4px">${fmt$(2500)}/session</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Instructor table
+  document.getElementById('tbl-instructors').innerHTML = instructors.map(i=>{
+    const statusB = i.status==='Primary'?'b-corp':i.status==='Regular backup'?'b-coach':'b-lead';
+    return`<tr>
+      <td><div class="name-cell"><div class="avatar av-green">${ini(i.name)}</div><span>${i.name}</span></div></td>
+      <td style="color:var(--text2)">${i.spec}</td>
+      <td style="font-weight:500">${i.rate?fmt$(i.rate)+'/session':'(Britt — owner)'}</td>
+      <td>${i.assigned} sessions</td>
+      <td style="color:var(--text2)">${i.email}</td>
+      <td><span class="badge ${statusB}">${i.status}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// CLASSES RENDER
+// ══════════════════════════════════════════════
+function renderClasses(){
+  const ft=document.getElementById('filter-class-type').value;
+  const fs=document.getElementById('filter-class-status').value;
+  let rows=[...classes_data];
+  if(ft)rows=rows.filter(c=>c.type===ft);
+  if(fs)rows=rows.filter(c=>c.status===fs);
+  rows.sort((a,b)=>b.date.localeCompare(a.date));
+
+  const typeB=(t)=>{const m={corporate:'b-corp',trapyoga:'b-event',dcgov:'b-corp',private:'b-coach'};const l={corporate:'Corporate',trapyoga:'Trap Yoga',dcgov:'DC Gov',private:'Private'};return`<span class="badge ${m[t]||'b-lead'}">${l[t]||t}</span>`};
+
+  document.getElementById('tbl-classes').innerHTML = rows.map(c=>{
+    const statusB=c.status==='completed'?'b-coach':'b-corp';
+    return`<tr>
+      <td style="font-weight:500">${c.name}</td>
+      <td>${typeB(c.type)}</td>
+      <td style="color:var(--text2)">${c.date}</td>
+      <td style="color:var(--text2)">${c.instructor}</td>
+      <td style="color:var(--text2);font-size:12px">${c.location}</td>
+      <td><span class="checkin-stat" style="${!c.checkins?'background:var(--bg2);color:var(--text3)':''}">${c.checkins||'—'}</span></td>
+      <td>${c.rating?`<span class="rating-stars">${c.rating}⭐</span>`:'<span style="color:var(--text3)">—</span>'}</td>
+      <td><span class="badge ${statusB}">${c.status}</span></td>
+      <td><button class="btn sm" onclick="alert('Class detail view — Phase 2')"><i class="ti ti-arrow-right"></i></button></td>
+    </tr>`;
+  }).join('');
+
+  // Feedback
+  document.getElementById('feedback-list').innerHTML = recentFeedback.map(f=>`
+    <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+        <span style="font-size:13px;font-weight:500">${f.name}</span>
+        <span class="rating-stars" style="font-size:12px">${'⭐'.repeat(f.rating)}</span>
+      </div>
+      <div style="font-size:12px;color:var(--text2)"><em>"${f.comment}"</em></div>
+      <div style="font-size:11px;color:var(--text3);margin-top:2px">${f.class}</div>
+    </div>
+  `).join('');
+
+  // Ratings breakdown
+  const typeRatings={corporate:[],trapyoga:[],dcgov:[],private:[]};
+  classes_data.filter(c=>c.rating).forEach(c=>typeRatings[c.type]?.push(c.rating));
+  const typeNames={corporate:'Corporate wellness',trapyoga:'Trap Yoga',dcgov:'DC Gov / Public',private:'Private coaching'};
+  const typeColors={corporate:'var(--blue)',trapyoga:'var(--coral)',dcgov:'var(--purple)',private:'var(--green)'};
+  document.getElementById('ratings-breakdown').innerHTML = Object.entries(typeRatings).filter(([,v])=>v.length).map(([k,v])=>{
+    const avg=(v.reduce((s,x)=>s+x,0)/v.length).toFixed(1);
+    const pct=((avg/5)*100).toFixed(0);
+    return`<div style="margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+        <span>${typeNames[k]}</span>
+        <span style="font-weight:500">${avg} ⭐ <span style="color:var(--text3);font-weight:400">(${v.length} rated)</span></span>
+      </div>
+      <div class="progress-bar" style="height:8px"><div class="progress-fill" style="width:${pct}%;background:${typeColors[k]}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// Check-in page preview
+function openCheckinPreview(){
+  window.open('bdd_checkin.html','_blank') || alert('Open bdd_checkin.html in your browser to see the attendee check-in page.');
+}
+function exportCheckinData(){
+  const hdr=['Name','Email','Class','Date','Rating','Comment'];
+  const rows=recentFeedback.map(f=>[f.name,'(email captured)',f.class,'2026-04-26',f.rating,f.comment].map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`));
+  const csv=[hdr,...rows].map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='bdd_checkins.csv';a.click();
+}
+
+// ══════════════════════════════════════════════
+// PROPOSAL GENERATOR
+// ══════════════════════════════════════════════
+function openProposalGen(){
+  const el=document.getElementById('proposal-gen');
+  el.style.display=el.style.display==='none'?'block':'none';
+}
+async function generateProposal(){
+  const org=document.getElementById('pg-org').value;
+  const type=document.getElementById('pg-type').value;
+  const notes=document.getElementById('pg-notes').value;
+  const out=document.getElementById('pg-output');
+  out.style.display='block';out.textContent='Drafting proposal...';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:1000,
+      system:`You are drafting a professional wellness services proposal for Britt Dupree Daniels, a DC-based wellness architect. His clients include Google, Salesforce, Cigna, Microsoft. He runs Trap Yoga (viral, 80K views), holds a DC Magazine Best Personal Trainer award, and is a lululemon ambassador. Write in a warm, confident, professional tone. Structure: brief opening, proposed scope, why Britt, investment, next steps. Keep it under 400 words.`,
+      messages:[{role:'user',content:`Write a proposal for ${org} for a ${type}. Additional context: ${notes||'No additional context.'}`}]
+    })});
+    const data=await res.json();
+    out.textContent=data.content?.map(b=>b.text||'').join('')||'No response.';
+  }catch(e){out.textContent='Could not reach Claude API.'}
+}
+
+// ══════════════════════════════════════════════
+// CAMPAIGN GENERATOR
+// ══════════════════════════════════════════════
+function openCampaignGen(){
+  const el=document.getElementById('campaign-gen');
+  el.style.display=el.style.display==='none'?'block':'none';
+}
+async function generateCampaign(){
+  const seg=document.getElementById('cg-seg').value;
+  const type=document.getElementById('cg-type').value;
+  const subject=document.getElementById('cg-subject').value;
+  const notes=document.getElementById('cg-notes').value;
+  const out=document.getElementById('cg-output');
+  out.style.display='block';out.textContent='Drafting campaign...';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:800,
+      system:`You are drafting an email campaign for Britt Dupree Daniels, a DC wellness architect and creator of Trap Yoga. His community is engaged, diverse, wellness-focused DC residents. Write in Britt's warm, energetic, authentic voice. Include subject line, preview text, and email body. Keep it concise — people read on their phones.`,
+      messages:[{role:'user',content:`Write a ${type} email for ${seg}. Subject: ${subject||'(suggest one)'}. Key points: ${notes||'Make it compelling and on-brand.'}`}]
+    })});
+    const data=await res.json();
+    out.textContent=data.content?.map(b=>b.text||'').join('')||'No response.';
+  }catch(e){out.textContent='Could not reach Claude API.'}
+}
+
+// ══════════════════════════════════════════════
+// EXPORT
+// ══════════════════════════════════════════════
+function exportCSV(){
+  const hdr=['Name','Type','Org','Role','Email','Phone','Tags','Last Contact','Notes'];
+  const rows=contacts.map(c=>[c.name,c.type,c.org,c.role,c.email,c.phone,(c.tags||[]).join('|'),c.lastContact,c.notes].map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`));
+  const csv=[hdr,...rows].map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='bdd_contacts.csv';a.click();
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+updateStats();
+renderContacts();
+renderOrgs();
+renderEvents();
+renderTasks();
+
+// Hash-based tab routing — allows bdd_crm.html#pipeline deep links from the map
+(function(){
+  const hash = window.location.hash.replace('#','');
+  const valid = ['contacts','orgs','pipeline','contracts','dcgov','events','classes','tasks','revenue','pnl','renewal','proposals','ambassador','waitlist','campaigns','speakerkit','press','sponsorship','expansion','network','ai','strategy'];
+  const tabHash = hash === 'contracts-sign' ? 'contracts' : hash;
+  if(tabHash && valid.includes(tabHash)) switchTab(tabHash);
+})();
+</script>
+</body>
+</html>

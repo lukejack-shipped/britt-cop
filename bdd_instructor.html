@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Session Report — BDD Wellness</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f5f5f3;--bg3:#eeede8;
+  --text:#1a1a18;--text2:#6b6b66;--text3:#9b9a94;
+  --border:rgba(0,0,0,.12);--border2:rgba(0,0,0,.22);
+  --radius:10px;--radius-lg:16px;
+  --green:#1D9E75;--green-fill:#EAF3DE;--green-text:#27500A;
+  --blue:#378ADD;--blue-fill:#E6F1FB;--blue-text:#0C447C;
+  --amber:#BA7517;--amber-fill:#FAEEDA;--amber-text:#633806;
+  --coral:#D85A30;--coral-fill:#FAECE7;--coral-text:#993C1D;
+  --red-fill:#FCEBEB;--red-text:#A32D2D;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg2);color:var(--text);min-height:100vh;padding-bottom:4rem}
+
+/* Hero */
+.hero{background:var(--text);color:#fff;padding:1.5rem 1.25rem 3rem}
+.hero-top{display:flex;align-items:center;gap:12px;margin-bottom:1rem}
+.hero-logo{width:40px;height:40px;border-radius:50%;background:#fff;color:var(--text);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hero-brand{font-size:14px;font-weight:500}
+.hero-brand-sub{font-size:12px;opacity:.6}
+.hero h1{font-size:22px;font-weight:500;margin-bottom:4px}
+.hero-sub{font-size:14px;opacity:.7}
+.session-chip{margin-top:1rem;background:rgba(255,255,255,.12);border-radius:var(--radius);padding:10px 14px}
+.session-chip-label{font-size:11px;opacity:.6;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.session-chip-name{font-size:16px;font-weight:500}
+.session-chip-meta{font-size:13px;opacity:.75;margin-top:2px}
+
+/* Cards */
+.card{background:var(--bg);border-radius:var(--radius-lg);padding:1.25rem;margin:0 1rem 1rem;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.card.pulled-up{margin-top:-1.5rem}
+.card-title{font-size:16px;font-weight:500;margin-bottom:1rem}
+.card-section{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin:1rem 0 10px;padding-top:1rem;border-top:0.5px solid var(--border)}
+.card-section:first-of-type{border-top:none;padding-top:0;margin-top:0}
+
+/* Form */
+.form-row{margin-bottom:14px}
+.form-row label{display:block;font-size:13px;color:var(--text2);margin-bottom:5px;font-weight:500}
+.form-row label .required{color:var(--coral);margin-left:2px}
+.form-row input,.form-row select,.form-row textarea{width:100%;padding:12px 14px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:16px;font-family:inherit;outline:none;-webkit-appearance:none}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-fill)}
+.form-row textarea{min-height:80px;resize:none}
+.form-row input[type=number]{-moz-appearance:textfield}
+.form-row input::placeholder,.form-row textarea::placeholder{color:var(--text3)}
+.counter-input{display:flex;align-items:center;gap:10px}
+.counter-input input{text-align:center;font-size:22px;font-weight:500;max-width:100px}
+.counter-btn{width:44px;height:44px;border-radius:50%;border:0.5px solid var(--border2);background:var(--bg2);color:var(--text);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+.counter-btn:active{background:var(--bg3)}
+
+/* Checklist */
+.checklist{display:grid;gap:10px}
+.check-item{display:flex;align-items:flex-start;gap:10px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.check-box{width:22px;height:22px;border:0.5px solid var(--border2);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .12s}
+.check-box.checked{background:var(--text);border-color:var(--text)}
+.check-icon{color:#fff;font-size:13px;display:none}
+.check-box.checked .check-icon{display:block}
+.check-label{font-size:14px;line-height:1.4}
+.check-sub{font-size:12px;color:var(--text2);margin-top:2px}
+
+/* Radio options */
+.radio-group{display:grid;gap:8px}
+.radio-item{display:flex;align-items:center;gap:10px;padding:12px 14px;border:0.5px solid var(--border2);border-radius:var(--radius);cursor:pointer;transition:border-color .12s;-webkit-tap-highlight-color:transparent}
+.radio-item.selected{border-color:var(--text);background:var(--bg2)}
+.radio-dot{width:18px;height:18px;border-radius:50%;border:0.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.radio-dot.filled{background:var(--text);border-color:var(--text)}
+.radio-dot-inner{width:8px;height:8px;border-radius:50%;background:#fff}
+.radio-label{font-size:14px}
+
+/* Photo upload */
+.photo-upload{border:1.5px dashed var(--border2);border-radius:var(--radius);padding:1.5rem;text-align:center;cursor:pointer;transition:border-color .12s}
+.photo-upload:active{border-color:var(--blue)}
+.photo-upload-icon{font-size:28px;margin-bottom:8px;opacity:.4}
+.photo-upload-text{font-size:14px;color:var(--text2)}
+.photo-upload-sub{font-size:12px;color:var(--text3);margin-top:4px}
+.photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.photo-thumb{aspect-ratio:1;border-radius:8px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:24px;position:relative;overflow:hidden}
+.photo-thumb img{width:100%;height:100%;object-fit:cover}
+.photo-remove{position:absolute;top:4px;right:4px;width:20px;height:20px;background:rgba(0,0,0,.5);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+
+/* Incident toggle */
+.incident-section{display:none}
+.incident-section.visible{display:block}
+
+/* Warning box */
+.warning-box{background:var(--amber-fill);border-radius:var(--radius);padding:12px 14px;margin-bottom:1rem;font-size:13px;color:var(--amber-text)}
+.warning-box strong{display:block;margin-bottom:3px}
+
+/* Grant requirements */
+.req-box{background:var(--blue-fill);border-radius:var(--radius);padding:12px 14px;font-size:13px;color:var(--blue-text);margin-bottom:1rem}
+.req-box strong{display:block;margin-bottom:6px;font-size:14px}
+.req-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:4px}
+.req-item:last-child{margin-bottom:0}
+
+/* Submit */
+.btn{display:block;width:100%;padding:15px;border:none;border-radius:var(--radius);font-size:16px;font-weight:500;cursor:pointer;font-family:inherit;transition:opacity .15s;-webkit-tap-highlight-color:transparent}
+.btn.primary{background:var(--text);color:#fff}
+.btn.primary:active{opacity:.88}
+.btn.primary:disabled{opacity:.4;cursor:not-allowed}
+.btn.secondary{background:var(--bg2);color:var(--text);margin-top:10px;border:0.5px solid var(--border2)}
+
+/* Success */
+.success-card{display:none}
+.success-card.visible{display:block}
+.success-inner{text-align:center;padding:1rem 0}
+.success-icon{width:64px;height:64px;border-radius:50%;background:var(--green-fill);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 1rem}
+.success-card h2{font-size:20px;font-weight:500;margin-bottom:8px}
+.success-card p{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:1rem}
+.summary-box{background:var(--bg2);border-radius:var(--radius);padding:14px;text-align:left;margin:1rem 0}
+.summary-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:0.5px solid var(--border)}
+.summary-row:last-child{border-bottom:none}
+.summary-label{color:var(--text2)}
+.summary-val{font-weight:500}
+
+/* Grant specific */
+.grant-badge{display:inline-flex;align-items:center;gap:5px;background:var(--blue-fill);color:var(--blue-text);border-radius:20px;padding:3px 10px;font-size:12px;font-weight:500;margin-bottom:10px}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeIn .3s ease forwards}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-top">
+    <div class="hero-logo">BDD</div>
+    <div>
+      <div class="hero-brand">Britt Dupree Daniels</div>
+      <div class="hero-brand-sub">Instructor Portal</div>
+    </div>
+  </div>
+  <h1>Post-class report</h1>
+  <div class="hero-sub">Complete this after every session. Takes ~2 minutes.</div>
+  <div class="session-chip">
+    <div class="session-chip-label">Today's session</div>
+    <div class="session-chip-name" id="session-name">Trap Yoga — Franklin Park</div>
+    <div class="session-chip-meta" id="session-meta">Sat, Jun 7 · Franklin Park, NW DC · 10:00 AM</div>
+  </div>
+</div>
+
+<!-- MAIN FORM -->
+<div id="report-form">
+
+  <!-- WHO ARE YOU -->
+  <div class="card pulled-up fade-in">
+    <div class="card-title">Your details</div>
+    <div class="form-row">
+      <label>Your name <span class="required">*</span></label>
+      <select id="r-instructor">
+        <option value="">— select your name —</option>
+        <option value="Shalynn Burrill">Shalynn Burrill</option>
+        <option value="Jake Morrison">Jake Morrison</option>
+        <option value="Jordan Hicks">Jordan Hicks</option>
+        <option value="Dr. Lena Hofer">Dr. Lena Hofer</option>
+        <option value="other">Other (type below)</option>
+      </select>
+    </div>
+    <div class="form-row" id="instructor-other-row" style="display:none">
+      <label>Your name</label>
+      <input id="r-instructor-other" type="text" placeholder="Full name">
+    </div>
+    <div class="form-row">
+      <label>Confirming session <span class="required">*</span></label>
+      <select id="r-session">
+        <option value="Franklin Park — Jun 7">Franklin Park — Jun 7, 2026</option>
+        <option value="Franklin Park — Jun 21">Franklin Park — Jun 21, 2026</option>
+        <option value="Franklin Park — Jul 5">Franklin Park — Jul 5, 2026</option>
+        <option value="Franklin Park — Jul 12">Franklin Park — Jul 12, 2026</option>
+        <option value="Franklin Park — Jul 19">Franklin Park — Jul 19, 2026</option>
+        <option value="Franklin Park — Aug 2">Franklin Park — Aug 2, 2026</option>
+        <option value="Franklin Park — Aug 16">Franklin Park — Aug 16, 2026</option>
+        <option value="Franklin Park — Aug 30">Franklin Park — Aug 30, 2026</option>
+        <option value="MedStar — session">MedStar Health — session</option>
+        <option value="Google DC — session">Google DC — session</option>
+        <option value="Cigna — session">Cigna Health — session</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ATTENDANCE -->
+  <div class="card fade-in">
+    <div class="card-title">Attendance</div>
+
+    <div id="grant-badge-wrap" style="display:none">
+      <div class="grant-badge">🏛️ DC Government Grant — attendance data required for reporting</div>
+    </div>
+
+    <div class="form-row">
+      <label>Total attendees <span class="required">*</span></label>
+      <div class="counter-input">
+        <button class="counter-btn" onclick="adjustCount(-1)" type="button">−</button>
+        <input id="r-attendance" type="number" value="0" min="0" max="500">
+        <button class="counter-btn" onclick="adjustCount(1)" type="button">+</button>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label>Session ran on time?</label>
+      <div class="radio-group" id="rg-time">
+        <div class="radio-item selected" onclick="selectRadio('rg-time',this,'on-time')">
+          <div class="radio-dot filled"><div class="radio-dot-inner"></div></div>
+          <span class="radio-label">Yes — started and ended on schedule</span>
+        </div>
+        <div class="radio-item" onclick="selectRadio('rg-time',this,'late-start')">
+          <div class="radio-dot"></div>
+          <span class="radio-label">Started late</span>
+        </div>
+        <div class="radio-item" onclick="selectRadio('rg-time',this,'cut-short')">
+          <div class="radio-dot"></div>
+          <span class="radio-label">Cut short</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label>Overall session energy</label>
+      <div class="radio-group" id="rg-energy">
+        <div class="radio-item selected" onclick="selectRadio('rg-energy',this,'high')">
+          <div class="radio-dot filled"><div class="radio-dot-inner"></div></div>
+          <span class="radio-label">🔥 High — crowd was really engaged</span>
+        </div>
+        <div class="radio-item" onclick="selectRadio('rg-energy',this,'good')">
+          <div class="radio-dot"></div>
+          <span class="radio-label">👍 Good — solid session</span>
+        </div>
+        <div class="radio-item" onclick="selectRadio('rg-energy',this,'low')">
+          <div class="radio-dot"></div>
+          <span class="radio-label">😐 Low energy — tough crowd or conditions</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DC GOV CHECKLIST -->
+  <div class="card fade-in" id="grant-checklist-card">
+    <div class="grant-badge">🏛️ DC Gov Grant requirements</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">These items are required for Britt to invoice the DC Government and file the grant report. Please confirm each one.</p>
+    <div class="checklist" id="grant-checklist">
+      <label class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div>
+          <div class="check-label">Attendance count confirmed above</div>
+          <div class="check-sub">Required for grant reporting</div>
+        </div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div>
+          <div class="check-label">At least 3 photos taken during session</div>
+          <div class="check-sub">Upload below — required for DC Govt documentation</div>
+        </div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div>
+          <div class="check-label">QR check-in code was displayed at the session</div>
+          <div class="check-sub">Attendee emails are required for grant reporting</div>
+        </div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <div class="check-box"><span class="check-icon">✓</span></div>
+        <div>
+          <div class="check-label">Session held at Franklin Park as contracted</div>
+          <div class="check-sub">If location changed, note it below</div>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <!-- PHOTOS -->
+  <div class="card fade-in">
+    <div class="card-title">Photos</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px">Upload at least 3 photos. DC Gov grant requires photo documentation per session. Action shots, crowd shots, and setup all count.</p>
+    <div class="photo-upload" onclick="document.getElementById('photo-input').click()">
+      <div class="photo-upload-icon">📷</div>
+      <div class="photo-upload-text">Tap to add photos</div>
+      <div class="photo-upload-sub">JPEG or PNG · Up to 10 photos</div>
+    </div>
+    <input type="file" id="photo-input" accept="image/*" multiple capture="environment" style="display:none" onchange="handlePhotos(this)">
+    <div class="photos-grid" id="photos-grid"></div>
+    <div id="photo-count" style="font-size:12px;color:var(--text3);margin-top:8px"></div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="card fade-in">
+    <div class="card-title">Session notes</div>
+
+    <div class="form-row">
+      <label>General notes <span style="font-weight:400;color:var(--text3)">(optional)</span></label>
+      <textarea id="r-notes" placeholder="How did it go? Anything Britt should know — crowd composition, requests, what worked well, what to change next time…"></textarea>
+    </div>
+
+    <div class="form-row">
+      <label>Any equipment issues or venue problems?</label>
+      <div class="radio-group" id="rg-venue">
+        <div class="radio-item selected" onclick="selectRadio('rg-venue',this,'none');document.getElementById('venue-issue-row').style.display='none'">
+          <div class="radio-dot filled"><div class="radio-dot-inner"></div></div>
+          <span class="radio-label">No issues</span>
+        </div>
+        <div class="radio-item" onclick="selectRadio('rg-venue',this,'minor');document.getElementById('venue-issue-row').style.display='block'">
+          <div class="radio-dot"></div>
+          <span class="radio-label">Minor issue — handled on the day</span>
+        </div>
+        <div class="radio-item" onclick="selectRadio('rg-venue',this,'major');document.getElementById('venue-issue-row').style.display='block'">
+          <div class="radio-dot"></div>
+          <span class="radio-label">⚠ Major issue — Britt needs to know</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-row" id="venue-issue-row" style="display:none">
+      <label>Describe the issue</label>
+      <textarea id="r-venue-issue" placeholder="What happened? How was it handled?"></textarea>
+    </div>
+
+    <div class="form-row">
+      <label>Any incidents or safety concerns?</label>
+      <div class="radio-group" id="rg-incident">
+        <div class="radio-item selected" onclick="selectRadio('rg-incident',this,'none');document.getElementById('incident-detail').classList.remove('visible')">
+          <div class="radio-dot filled"><div class="radio-dot-inner"></div></div>
+          <span class="radio-label">No incidents</span>
+        </div>
+        <div class="radio-item" onclick="selectRadio('rg-incident',this,'yes');document.getElementById('incident-detail').classList.add('visible')">
+          <div class="radio-dot"></div>
+          <span class="radio-label">⚠ Yes — report an incident</span>
+        </div>
+      </div>
+    </div>
+    <div class="incident-section" id="incident-detail">
+      <div class="warning-box">
+        <strong>Important</strong>
+        Britt will be notified immediately. For medical emergencies, call 911 first.
+      </div>
+      <div class="form-row">
+        <label>Describe what happened</label>
+        <textarea id="r-incident" placeholder="What happened, when, who was involved, what action was taken…" style="min-height:100px"></textarea>
+      </div>
+      <div class="form-row">
+        <label>Was medical attention required?</label>
+        <div class="radio-group" id="rg-medical">
+          <div class="radio-item selected" onclick="selectRadio('rg-medical',this,'no')"><div class="radio-dot filled"><div class="radio-dot-inner"></div></div><span class="radio-label">No</span></div>
+          <div class="radio-item" onclick="selectRadio('rg-medical',this,'yes')"><div class="radio-dot"></div><span class="radio-label">Yes — 911 was called / person went to hospital</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEEDBACK ON ATTENDEES -->
+  <div class="card fade-in">
+    <div class="card-title">Community observations</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px">Optional but really useful for Britt — helps him identify superfans, potential ambassadors, and people to follow up with.</p>
+
+    <div class="form-row">
+      <label>Anyone stand out as a superfan or potential ambassador?</label>
+      <textarea id="r-standouts" placeholder="Names, descriptions, or IG handles of people who brought big energy, brought a crew, or asked about future events…"></textarea>
+    </div>
+
+    <div class="form-row">
+      <label>Did anyone ask about private training or corporate wellness?</label>
+      <textarea id="r-inquiries" placeholder="Names or details of anyone who expressed interest in working with Britt directly…"></textarea>
+    </div>
+
+    <div class="form-row">
+      <label>Anything Britt should follow up on?</label>
+      <textarea id="r-followup" placeholder="Press contacts, brand reps, other instructors, potential venue partners who showed up…"></textarea>
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <div style="margin:0 1rem">
+    <div class="req-box">
+      <strong>Before you submit</strong>
+      <div class="req-item"><span>✓</span><span>Attendance count entered</span></div>
+      <div class="req-item"><span>✓</span><span>At least 3 photos uploaded (DC Gov sessions)</span></div>
+      <div class="req-item"><span>✓</span><span>DC Gov checklist completed (if applicable)</span></div>
+      <div class="req-item"><span>✓</span><span>Any incidents or venue issues noted</span></div>
+    </div>
+    <button class="btn primary" id="submit-btn" onclick="submitReport()">Submit session report</button>
+    <p style="font-size:12px;color:var(--text3);text-align:center;margin-top:10px">Britt and his assistant will be notified immediately. You'll get a confirmation text.</p>
+  </div>
+
+</div>
+
+<!-- SUCCESS -->
+<div id="success-card" class="card pulled-up success-card fade-in">
+  <div class="success-inner">
+    <div class="success-icon">✓</div>
+    <h2>Report submitted</h2>
+    <p id="success-msg">Thanks — Britt's assistant has been notified and will process the session confirmation.</p>
+
+    <div class="summary-box" id="summary-box"></div>
+
+    <div style="background:var(--green-fill);border-radius:var(--radius);padding:12px 14px;text-align:left;margin-bottom:1rem">
+      <div style="font-size:13px;font-weight:500;color:var(--green-text);margin-bottom:4px">What happens next</div>
+      <div style="font-size:13px;color:var(--green-text);display:grid;gap:4px">
+        <div>→ Assistant logs attendance in the CRM</div>
+        <div>→ Session marked confirmed in the contract</div>
+        <div id="grant-next" style="display:none">→ DC Gov invoice will be processed within 5 business days</div>
+        <div>→ You'll receive payment confirmation within 48 hrs</div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1.5rem">Questions? Text or email Britt's assistant directly.</div>
+    <button class="btn secondary" onclick="resetForm()">Submit another report</button>
+  </div>
+</div>
+
+<script>
+// Radio group helper
+const radioValues = {};
+function selectRadio(groupId, el, val){
+  radioValues[groupId] = val;
+  document.querySelectorAll(`#${groupId} .radio-item`).forEach(item=>{
+    item.classList.remove('selected');
+    item.querySelector('.radio-dot').classList.remove('filled');
+    item.querySelector('.radio-dot-inner')?.remove();
+  });
+  el.classList.add('selected');
+  const dot = el.querySelector('.radio-dot');
+  dot.classList.add('filled');
+  if(!dot.querySelector('.radio-dot-inner')){
+    const inner = document.createElement('div');
+    inner.className = 'radio-dot-inner';
+    dot.appendChild(inner);
+  }
+}
+
+// Checkbox toggle
+function toggleCheck(el){
+  const box = el.querySelector('.check-box');
+  box.classList.toggle('checked');
+}
+
+// Attendance counter
+function adjustCount(delta){
+  const input = document.getElementById('r-attendance');
+  const val = Math.max(0, Math.min(500, parseInt(input.value)||0 + delta));
+  input.value = val;
+}
+
+// Instructor select
+document.getElementById('r-instructor').addEventListener('change', function(){
+  document.getElementById('instructor-other-row').style.display = this.value === 'other' ? 'block' : 'none';
+});
+
+// Session select — show grant section if Franklin Park
+document.getElementById('r-session').addEventListener('change', function(){
+  const isDCGov = this.value.includes('Franklin Park');
+  document.getElementById('grant-checklist-card').style.display = isDCGov ? 'block' : 'none';
+  document.getElementById('grant-badge-wrap').style.display = isDCGov ? 'block' : 'none';
+  document.getElementById('grant-next').style.display = isDCGov ? 'block' : 'none';
+});
+// Init — check if current session is DC Gov
+const initSession = document.getElementById('r-session').value;
+if(!initSession.includes('Franklin Park')){
+  document.getElementById('grant-checklist-card').style.display = 'none';
+}
+
+// Photo handling
+let uploadedPhotos = [];
+function handlePhotos(input){
+  const files = Array.from(input.files);
+  files.slice(0, 10 - uploadedPhotos.length).forEach(file=>{
+    const reader = new FileReader();
+    reader.onload = e=>{
+      uploadedPhotos.push(e.target.result);
+      renderPhotos();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function renderPhotos(){
+  const grid = document.getElementById('photos-grid');
+  const count = document.getElementById('photo-count');
+  grid.innerHTML = uploadedPhotos.map((src,i)=>`
+    <div class="photo-thumb">
+      <img src="${src}" alt="Session photo ${i+1}">
+      <div class="photo-remove" onclick="removePhoto(${i})">✕</div>
+    </div>
+  `).join('');
+  count.textContent = uploadedPhotos.length ? `${uploadedPhotos.length} photo${uploadedPhotos.length>1?'s':''} added` : '';
+}
+function removePhoto(i){
+  uploadedPhotos.splice(i,1);
+  renderPhotos();
+}
+
+// Submit
+function submitReport(){
+  const instructorEl = document.getElementById('r-instructor');
+  const instructor = instructorEl.value === 'other'
+    ? document.getElementById('r-instructor-other').value.trim()
+    : instructorEl.value;
+  const session = document.getElementById('r-session').value;
+  const attendance = parseInt(document.getElementById('r-attendance').value)||0;
+
+  if(!instructor){ alert('Please select your name.'); return; }
+  if(!session){ alert('Please select the session you\'re confirming.'); return; }
+  if(attendance < 1){ alert('Please enter the attendance count.'); return; }
+
+  const isDCGov = session.includes('Franklin Park');
+  if(isDCGov && uploadedPhotos.length < 1){
+    if(!confirm('DC Gov sessions require at least 3 photos for grant reporting. Submit anyway?')) return;
+  }
+
+  const data = {
+    instructor, session, attendance,
+    timing: radioValues['rg-time'] || 'on-time',
+    energy: radioValues['rg-energy'] || 'high',
+    venueIssue: radioValues['rg-venue'] || 'none',
+    venueDetail: document.getElementById('r-venue-issue').value.trim(),
+    incident: radioValues['rg-incident'] || 'none',
+    incidentDetail: document.getElementById('r-incident').value.trim(),
+    notes: document.getElementById('r-notes').value.trim(),
+    standouts: document.getElementById('r-standouts').value.trim(),
+    inquiries: document.getElementById('r-inquiries').value.trim(),
+    followup: document.getElementById('r-followup').value.trim(),
+    photoCount: uploadedPhotos.length,
+    isDCGov,
+    timestamp: new Date().toISOString(),
+  };
+
+  // In production: POST to backend / Google Sheets / Airtable
+  console.log('Session report submitted:', data);
+
+  // Build summary
+  const hasIncident = data.incident === 'yes';
+  document.getElementById('success-msg').textContent = hasIncident
+    ? `Report submitted. ⚠ Britt has been alerted about the incident — expect a call shortly.`
+    : `Thanks ${instructor.split(' ')[0]} — report received. Britt's assistant will process this today.`;
+
+  document.getElementById('summary-box').innerHTML = `
+    <div class="summary-row"><span class="summary-label">Session</span><span class="summary-val">${session}</span></div>
+    <div class="summary-row"><span class="summary-label">Instructor</span><span class="summary-val">${instructor}</span></div>
+    <div class="summary-row"><span class="summary-label">Attendance</span><span class="summary-val">${attendance} people</span></div>
+    <div class="summary-row"><span class="summary-label">Energy</span><span class="summary-val">${{high:'🔥 High',good:'👍 Good',low:'😐 Low'}[data.energy]||data.energy}</span></div>
+    <div class="summary-row"><span class="summary-label">Photos</span><span class="summary-val">${data.photoCount} uploaded</span></div>
+    ${hasIncident?`<div class="summary-row"><span class="summary-label">Incident</span><span class="summary-val" style="color:var(--coral-text)">⚠ Reported</span></div>`:''}
+    <div class="summary-row"><span class="summary-label">Submitted</span><span class="summary-val">${new Date().toLocaleTimeString()}</span></div>
+  `;
+
+  document.getElementById('grant-next').style.display = isDCGov ? 'block' : 'none';
+
+  document.getElementById('report-form').style.display = 'none';
+  const card = document.getElementById('success-card');
+  card.classList.add('visible');
+  card.style.marginTop = '-1.5rem';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function resetForm(){
+  document.getElementById('report-form').style.display = 'block';
+  document.getElementById('success-card').classList.remove('visible');
+  document.getElementById('r-attendance').value = '0';
+  document.getElementById('r-notes').value = '';
+  document.getElementById('r-standouts').value = '';
+  document.getElementById('r-inquiries').value = '';
+  document.getElementById('r-followup').value = '';
+  uploadedPhotos = [];
+  renderPhotos();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// URL params — pre-fill session
+const params = new URLSearchParams(window.location.search);
+if(params.get('session')){
+  const sel = document.getElementById('r-session');
+  for(let opt of sel.options){ if(opt.value.includes(params.get('session'))){ sel.value = opt.value; sel.dispatchEvent(new Event('change')); break; } }
+}
+if(params.get('name')){
+  const sel = document.getElementById('r-instructor');
+  for(let opt of sel.options){ if(opt.value === params.get('name')){ sel.value = opt.value; break; } }
+}
+if(params.get('class')){ document.getElementById('session-name').textContent = decodeURIComponent(params.get('class')); }
+if(params.get('meta')){ document.getElementById('session-meta').textContent = decodeURIComponent(params.get('meta')); }
+</script>
+</body>
+</html>

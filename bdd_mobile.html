@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BDD — Morning Briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0e0d0b;--cream:#f0ece3;--cream2:#e8e3d8;--warm:#c8b89a;
+  --muted:#7a7265;--faint:#1e1d1a;--faint2:#161513;
+  --border:rgba(200,184,154,.15);--border2:rgba(200,184,154,.28);
+  --green:#2ec27e;--green-fill:rgba(46,194,126,.13);
+  --blue:#4a9eff;--blue-fill:rgba(74,158,255,.13);
+  --amber:#f0a030;--amber-fill:rgba(240,160,48,.13);
+  --coral:#f06050;--coral-fill:rgba(240,96,80,.13);
+  --purple:#9b7fff;--purple-fill:rgba(155,127,255,.13);
+  --teal:#20c0b0;--teal-fill:rgba(32,192,176,.13);
+}
+html,body{height:100%;overflow-x:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);min-height:100vh;padding-bottom:7rem}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.6;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")}
+
+/* TOP BAR */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(14,13,11,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:0.5px solid var(--border);padding:14px 20px 12px;display:flex;align-items:center;justify-content:space-between}
+.topbar-brand{display:flex;align-items:center;gap:9px}
+.brand-mark{width:34px;height:34px;border-radius:50%;background:var(--cream);color:var(--ink);font-family:'Cinzel',serif;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brand-name{font-family:'Cinzel',serif;font-size:13px;font-weight:400;letter-spacing:.04em}
+.brand-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.06em;margin-top:1px}
+.icon-btn{width:36px;height:36px;border-radius:50%;border:0.5px solid var(--border2);background:var(--faint);color:var(--cream);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;-webkit-tap-highlight-color:transparent}
+
+/* GREETING */
+.greeting{padding:24px 20px 6px}
+.greeting-time{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.greeting-name{font-family:'Cinzel',serif;font-size:28px;font-weight:400;color:var(--cream);line-height:1.15;margin-bottom:6px}
+.greeting-name em{font-style:normal;color:var(--warm)}
+.greeting-sub{font-size:14px;font-weight:300;color:var(--muted);line-height:1.5}
+
+/* DATE STRIP */
+.date-strip{margin:14px 20px 0;background:var(--faint2);border:0.5px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.date-main{font-family:'Cinzel',serif;font-size:14px;font-weight:400;color:var(--cream)}
+.date-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.05em}
+
+/* SECTION LABEL */
+.section-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:20px 20px 8px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:0.5px;background:var(--border)}
+
+/* ALERT CARDS */
+.alerts{padding:0 20px;display:grid;gap:10px}
+.alert-card{border-radius:12px;padding:14px 16px;border:0.5px solid;display:flex;align-items:flex-start;gap:12px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity .15s;text-decoration:none}
+.alert-card:active{opacity:.75}
+.alert-card.urgent{background:var(--coral-fill);border-color:rgba(240,96,80,.3)}
+.alert-card.warning{background:var(--amber-fill);border-color:rgba(240,160,48,.3)}
+.alert-card.info{background:var(--blue-fill);border-color:rgba(74,158,255,.3)}
+.alert-card.good{background:var(--green-fill);border-color:rgba(46,194,126,.3)}
+.alert-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.alert-title{font-size:14px;font-weight:500;color:var(--cream);margin-bottom:3px;line-height:1.3}
+.alert-desc{font-size:13px;font-weight:300;color:var(--muted);line-height:1.5}
+.alert-action{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;margin-top:8px;display:inline-flex;align-items:center;gap:5px}
+.alert-card.urgent .alert-action{color:var(--coral)}
+.alert-card.warning .alert-action{color:var(--amber)}
+.alert-card.info .alert-action{color:var(--blue)}
+.alert-card.good .alert-action{color:var(--green)}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px}
+.stat-card{background:var(--faint2);border:0.5px solid var(--border);border-radius:12px;padding:14px 16px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:-20px;right:-20px;width:60px;height:60px;border-radius:50%;background:var(--stat-glow,transparent);filter:blur(20px);opacity:.6}
+.stat-eyebrow{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.stat-val{font-family:'Cinzel',serif;font-size:24px;font-weight:500;color:var(--cream);line-height:1;margin-bottom:4px}
+.stat-val span{font-size:14px;font-weight:400;color:var(--warm)}
+.stat-sub{font-size:12px;font-weight:300;color:var(--muted)}
+.stat-trend{display:inline-flex;align-items:center;gap:3px;font-size:11px;margin-top:6px;font-family:'DM Mono',monospace}
+.trend-up{color:var(--green)}
+.trend-warn{color:var(--amber)}
+.stat-card.wide{grid-column:span 2}
+
+/* SCHEDULE */
+.schedule{padding:0 20px;display:grid;gap:8px}
+.sched-item{background:var(--faint2);border:0.5px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;-webkit-tap-highlight-color:transparent}
+.sched-item.next{border-color:var(--border2)}
+.sched-time{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);min-width:42px}
+.sched-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sched-info{flex:1}
+.sched-title{font-size:14px;font-weight:500;color:var(--cream);margin-bottom:2px}
+.sched-meta{font-size:12px;font-weight:300;color:var(--muted)}
+.sched-badge{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.04em;padding:3px 9px;border-radius:20px;border:0.5px solid;flex-shrink:0}
+.badge-now{color:var(--green);border-color:rgba(46,194,126,.4);background:var(--green-fill)}
+.badge-next{color:var(--blue);border-color:rgba(74,158,255,.4);background:var(--blue-fill)}
+
+/* PIPELINE */
+.pipeline-snap{margin:0 20px;background:var(--faint2);border:0.5px solid var(--border);border-radius:12px;overflow:hidden}
+.pipeline-header{padding:14px 16px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.pipeline-header-left{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.pipeline-header-right{font-family:'Cinzel',serif;font-size:18px;font-weight:400;color:var(--cream)}
+.pipeline-header-right span{font-size:12px;color:var(--warm)}
+.pipeline-deal{padding:12px 16px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:12px}
+.pipeline-deal:last-child{border-bottom:none}
+.deal-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.deal-name{font-size:13px;font-weight:500;color:var(--cream2);line-height:1.3}
+.deal-org{font-size:11px;font-weight:300;color:var(--muted);margin-top:1px}
+.deal-right{text-align:right;flex-shrink:0;margin-left:auto}
+.deal-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--cream)}
+.deal-stage{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.04em;margin-top:2px}
+
+/* TY COMMUNITY */
+.ty-community{margin:0 20px;display:grid;gap:8px}
+.member-row{background:var(--faint2);border:0.5px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.member-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.member-name{font-size:14px;font-weight:500;color:var(--cream);margin-bottom:2px}
+.member-detail{font-size:12px;font-weight:300;color:var(--muted)}
+.member-tags{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap}
+.mtag{font-size:10px;padding:2px 7px;border-radius:20px;font-family:'DM Mono',monospace;letter-spacing:.03em;border:0.5px solid}
+.mtag-fire{color:var(--coral);border-color:rgba(240,96,80,.3);background:var(--coral-fill)}
+.mtag-star{color:var(--amber);border-color:rgba(240,160,48,.3);background:var(--amber-fill)}
+.mtag-new{color:var(--green);border-color:rgba(46,194,126,.3);background:var(--green-fill)}
+.mtag-ref{color:var(--purple);border-color:rgba(155,127,255,.3);background:var(--purple-fill)}
+.member-count{font-family:'Cinzel',serif;font-size:18px;font-weight:400;color:var(--warm);text-align:right}
+.member-count-label{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;text-align:right}
+
+/* AI CARD */
+.ai-card{margin:0 20px;background:var(--faint2);border:0.5px solid var(--border);border-radius:12px;overflow:hidden}
+.ai-card-header{padding:12px 16px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px}
+.ai-pulse{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 6px var(--teal);animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.ai-title{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.ai-content{padding:14px 16px;font-size:13px;font-weight:300;color:var(--cream2);line-height:1.75}
+.ai-content strong{color:var(--cream);font-weight:500}
+.ai-content .hi{color:var(--amber)}
+.ai-content .go{color:var(--green)}
+.ai-ask{padding:0 16px 16px;display:flex;gap:8px}
+.ai-input{flex:1;padding:10px 12px;border:0.5px solid var(--border2);border-radius:8px;background:var(--faint);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:15px;outline:none}
+.ai-input::placeholder{color:var(--muted)}
+.ai-send{padding:10px 14px;background:var(--cream);color:var(--ink);border:none;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent}
+
+/* QUICK ADD */
+.quick-add-btn{position:fixed;bottom:76px;left:50%;transform:translateX(-50%);background:var(--cream);color:var(--ink);border:none;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;padding:13px 28px;display:flex;align-items:center;gap:8px;cursor:pointer;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.3);-webkit-tap-highlight-color:transparent;transition:transform .15s,opacity .15s;white-space:nowrap}
+.quick-add-btn:active{transform:translateX(-50%) scale(.96);opacity:.9}
+
+/* QUICK ADD SHEET */
+.qa-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:300;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s}
+.qa-overlay.open{opacity:1;pointer-events:all}
+.qa-sheet{background:var(--faint);border:0.5px solid var(--border2);border-radius:20px 20px 0 0;padding:20px 20px 40px;width:100%;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,0,1)}
+.qa-overlay.open .qa-sheet{transform:translateY(0)}
+.qa-handle{width:36px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 20px}
+.qa-title{font-family:'Cinzel',serif;font-size:18px;font-weight:400;color:var(--cream);margin-bottom:16px}
+.qa-field{margin-bottom:12px}
+.qa-field label{display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.qa-field input,.qa-field select{width:100%;padding:13px 14px;border:0.5px solid var(--border2);border-radius:10px;background:var(--faint2);color:var(--cream);font-family:'DM Sans',sans-serif;font-size:16px;outline:none;-webkit-appearance:none}
+.qa-field input:focus,.qa-field select:focus{border-color:var(--warm)}
+.qa-field input::placeholder{color:var(--muted)}
+.qa-submit{width:100%;padding:14px;background:var(--cream);color:var(--ink);border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;cursor:pointer;margin-top:4px;-webkit-tap-highlight-color:transparent}
+.qa-cancel{width:100%;padding:12px;background:transparent;color:var(--muted);border:none;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;margin-top:4px;-webkit-tap-highlight-color:transparent}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(14,13,11,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:10px 0 20px}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);cursor:pointer;text-decoration:none;-webkit-tap-highlight-color:transparent;padding:4px 12px;border-radius:8px;transition:color .15s;position:relative}
+.nav-item.active{color:var(--warm)}
+.nav-icon{font-size:20px}
+.nav-badge{position:absolute;top:-2px;right:2px;width:16px;height:16px;border-radius:50%;background:var(--coral);color:#fff;font-size:9px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace}
+
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.su{animation:slideUp .4s ease both}
+.su:nth-child(2){animation-delay:.06s}
+.su:nth-child(3){animation-delay:.12s}
+.su:nth-child(4){animation-delay:.18s}
+.su:nth-child(5){animation-delay:.24s}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="brand-mark">BDD</div>
+    <div>
+      <div class="brand-name">Britt Dupree Daniels</div>
+      <div class="brand-sub">Morning briefing</div>
+    </div>
+  </div>
+  <a href="bdd_crm.html" class="icon-btn" title="Full CRM">⚙</a>
+</div>
+
+<div class="greeting su">
+  <div class="greeting-time" id="greeting-time">Good morning · Sunday, May 10</div>
+  <div class="greeting-name">Good morning,<br><em>Britt.</em></div>
+  <div class="greeting-sub">5 things need your attention. Your assistant is handling the rest.</div>
+</div>
+
+<div class="date-strip su">
+  <div>
+    <div class="date-main">Sunday, May 10, 2026</div>
+    <div class="date-sub">Q2 · Day 130</div>
+  </div>
+  <div style="text-align:right">
+    <div style="font-family:'Cinzel',serif;font-size:18px">72°F ☀</div>
+    <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)">Washington DC</div>
+  </div>
+</div>
+
+<div class="section-label su">🔴 Needs your eye</div>
+<div class="alerts su">
+  <a class="alert-card urgent" href="bdd_crm.html">
+    <div class="alert-icon">⚡</div>
+    <div>
+      <div class="alert-title">Microsoft deal — 20 days, no reply</div>
+      <div class="alert-desc">$20K proposal to Alicia Fontaine. Assistant has a follow-up draft ready — from you, not them. Approve it?</div>
+      <div class="alert-action">Review draft →</div>
+    </div>
+  </a>
+  <a class="alert-card urgent" href="bdd_crm.html">
+    <div class="alert-icon">✍️</div>
+    <div>
+      <div class="alert-title">Adidas said yes — contract still unsent</div>
+      <div class="alert-desc">$15K. Verbal yes from Kenji. Every day without a signature is risk. Takes 2 minutes.</div>
+      <div class="alert-action">Send contract →</div>
+    </div>
+  </a>
+  <a class="alert-card warning" href="bdd_crm.html">
+    <div class="alert-icon">🔄</div>
+    <div>
+      <div class="alert-title">Cigna renewal in 90 days — no conversation started</div>
+      <div class="alert-desc">$18K contract with Dr. Huang. Don't let August sneak up.</div>
+      <div class="alert-action">Schedule call →</div>
+    </div>
+  </a>
+  <a class="alert-card info" href="bdd_crm.html">
+    <div class="alert-icon">📞</div>
+    <div>
+      <div class="alert-title">Aetna discovery call — May 14</div>
+      <div class="alert-desc">$10K opportunity. Warm intro from Dr. Huang. Prep talking points.</div>
+      <div class="alert-action">View contact →</div>
+    </div>
+  </a>
+  <a class="alert-card good" href="bdd_crm.html">
+    <div class="alert-icon">🔥</div>
+    <div>
+      <div class="alert-title">Birthday Edition — 176 attended, 80K views</div>
+      <div class="alert-desc">Best event yet. 3 private training inquiries coming in. Franklin Park series starts June 7 — announce it while this is hot.</div>
+      <div class="alert-action">See event data →</div>
+    </div>
+  </a>
+</div>
+
+<div class="section-label su">💰 Your numbers</div>
+<div class="stats-row su">
+  <div class="stat-card" style="--stat-glow:var(--green)">
+    <div class="stat-eyebrow">Confirmed / month</div>
+    <div class="stat-val">$38<span>K</span></div>
+    <div class="stat-sub">all 5 streams</div>
+    <div class="stat-trend trend-up">↑ 22% vs last month</div>
+  </div>
+  <div class="stat-card" style="--stat-glow:var(--blue)">
+    <div class="stat-eyebrow">Open pipeline</div>
+    <div class="stat-val">$127<span>K</span></div>
+    <div class="stat-sub">if all deals close</div>
+    <div class="stat-trend trend-warn">2 deals at risk</div>
+  </div>
+  <div class="stat-card" style="--stat-glow:var(--coral)">
+    <div class="stat-eyebrow">Last Trap Yoga</div>
+    <div class="stat-val">176</div>
+    <div class="stat-sub">$5,280 revenue</div>
+    <div class="stat-trend trend-up">↑ 19% vs prior</div>
+  </div>
+  <div class="stat-card" style="--stat-glow:var(--amber)">
+    <div class="stat-eyebrow">DC Gov series</div>
+    <div class="stat-val">0<span>/8</span></div>
+    <div class="stat-sub">$20K grant · starts Jun 7</div>
+    <div class="stat-trend" style="color:var(--blue)">28 days away</div>
+  </div>
+  <div class="stat-card wide" style="--stat-glow:var(--purple)">
+    <div class="stat-eyebrow">Assistant tasks</div>
+    <div class="stat-val">7 <span style="font-size:14px;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:300">open · 3 overdue</span></div>
+    <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+      <span style="font-size:11px;background:var(--coral-fill);color:var(--coral);border:0.5px solid rgba(240,96,80,.3);border-radius:20px;padding:3px 9px;font-family:'DM Mono',monospace">3 overdue</span>
+      <span style="font-size:11px;background:var(--amber-fill);color:var(--amber);border:0.5px solid rgba(240,160,48,.3);border-radius:20px;padding:3px 9px;font-family:'DM Mono',monospace">4 this week</span>
+      <span style="font-size:11px;background:var(--green-fill);color:var(--green);border:0.5px solid rgba(46,194,126,.3);border-radius:20px;padding:3px 9px;font-family:'DM Mono',monospace">All assigned</span>
+    </div>
+  </div>
+</div>
+
+<div class="section-label su">📅 Today</div>
+<div class="schedule su">
+  <div class="sched-item">
+    <div class="sched-time">9:00</div>
+    <div class="sched-dot" style="background:var(--green);box-shadow:0 0 6px var(--green)"></div>
+    <div class="sched-info">
+      <div class="sched-title">Private — Marcus Rivera</div>
+      <div class="sched-meta">Capitol Hill Gym · 60 min</div>
+    </div>
+    <div class="sched-badge badge-now">Now</div>
+  </div>
+  <div class="sched-item next">
+    <div class="sched-time">11:30</div>
+    <div class="sched-dot" style="background:var(--blue)"></div>
+    <div class="sched-info">
+      <div class="sched-title">Call — Kiera Davis, Ebony Fit</div>
+      <div class="sched-meta">Keynote logistics · Sep 20 confirmed</div>
+    </div>
+    <div class="sched-badge badge-next">Next</div>
+  </div>
+  <div class="sched-item">
+    <div class="sched-time">2:00</div>
+    <div class="sched-dot" style="background:var(--amber)"></div>
+    <div class="sched-info">
+      <div class="sched-title">Private — Sarah Chen</div>
+      <div class="sched-meta">14th St Studio · Marathon prep · Session 32</div>
+    </div>
+    <div class="sched-badge" style="color:var(--muted);border-color:var(--border)">Later</div>
+  </div>
+  <div class="sched-item">
+    <div class="sched-time">4:30</div>
+    <div class="sched-dot" style="background:var(--purple)"></div>
+    <div class="sched-info">
+      <div class="sched-title">lululemon Q3 brief review</div>
+      <div class="sched-meta">Review Simone's campaign brief and respond</div>
+    </div>
+    <div class="sched-badge" style="color:var(--muted);border-color:var(--border)">Later</div>
+  </div>
+</div>
+
+<div class="section-label su">📊 Top open deals</div>
+<div class="pipeline-snap su">
+  <div class="pipeline-header">
+    <div class="pipeline-header-left">Open pipeline</div>
+    <div class="pipeline-header-right">$127<span>K</span></div>
+  </div>
+  <div class="pipeline-deal">
+    <div class="deal-dot" style="background:var(--blue)"></div>
+    <div style="flex:1">
+      <div class="deal-name">Microsoft Annual Wellness</div>
+      <div class="deal-org">Alicia Fontaine · Corporate</div>
+    </div>
+    <div class="deal-right">
+      <div class="deal-val">$20K</div>
+      <div class="deal-stage" style="color:var(--blue)">Proposal sent</div>
+    </div>
+  </div>
+  <div class="pipeline-deal">
+    <div class="deal-dot" style="background:var(--amber)"></div>
+    <div style="flex:1">
+      <div class="deal-name">Adidas 3-Post Campaign</div>
+      <div class="deal-org">Kenji Osei · Brand</div>
+    </div>
+    <div class="deal-right">
+      <div class="deal-val">$15K</div>
+      <div class="deal-stage" style="color:var(--amber)">Negotiation</div>
+    </div>
+  </div>
+  <div class="pipeline-deal">
+    <div class="deal-dot" style="background:var(--teal)"></div>
+    <div style="flex:1">
+      <div class="deal-name">Aetna Discovery → Contract</div>
+      <div class="deal-org">Nadia Russo · Corporate</div>
+    </div>
+    <div class="deal-right">
+      <div class="deal-val">$10K</div>
+      <div class="deal-stage" style="color:var(--muted)">Inquiry</div>
+    </div>
+  </div>
+  <div class="pipeline-deal">
+    <div class="deal-dot" style="background:var(--purple)"></div>
+    <div style="flex:1">
+      <div class="deal-name">Georgetown Keynote</div>
+      <div class="deal-org">Dr. Rachel Kim · Speaking</div>
+    </div>
+    <div class="deal-right">
+      <div class="deal-val">$8K</div>
+      <div class="deal-stage" style="color:var(--amber)">Negotiation</div>
+    </div>
+  </div>
+</div>
+
+<div class="section-label su">🧘 Trap Yoga community</div>
+<div class="ty-community su">
+  <div class="member-row">
+    <div class="member-av" style="background:rgba(240,96,80,.15);color:var(--coral)">DW</div>
+    <div style="flex:1">
+      <div class="member-name">Destiny Williams</div>
+      <div class="member-detail">Always brings a crew · Asked about ambassadors</div>
+      <div class="member-tags"><span class="mtag mtag-fire">Superfan</span><span class="mtag mtag-star">Ambassador?</span></div>
+    </div>
+    <div><div class="member-count">8</div><div class="member-count-label">events</div></div>
+  </div>
+  <div class="member-row">
+    <div class="member-av" style="background:rgba(155,127,255,.15);color:var(--purple)">JH</div>
+    <div style="flex:1">
+      <div class="member-name">Jordan Hicks</div>
+      <div class="member-detail">Personal trainer · Potential collab instructor</div>
+      <div class="member-tags"><span class="mtag mtag-star">Repeat</span><span class="mtag mtag-ref">Collab?</span></div>
+    </div>
+    <div><div class="member-count">5</div><div class="member-count-label">events</div></div>
+  </div>
+  <div class="member-row">
+    <div class="member-av" style="background:rgba(46,194,126,.15);color:var(--green)">AM</div>
+    <div style="flex:1">
+      <div class="member-name">Aaliyah Moore</div>
+      <div class="member-detail">Birthday Edition · Loved it · No email yet</div>
+      <div class="member-tags"><span class="mtag mtag-new">First timer</span></div>
+    </div>
+    <div><div class="member-count">1</div><div class="member-count-label">event</div></div>
+  </div>
+</div>
+
+<div class="section-label su">🤖 Claude says</div>
+<div class="ai-card su">
+  <div class="ai-card-header">
+    <div class="ai-pulse"></div>
+    <div class="ai-title">Morning analysis · May 10</div>
+  </div>
+  <div class="ai-content" id="ai-content">
+    Your biggest move this week is <strong>Microsoft</strong> — $20K sitting untouched for 20 days. A direct note from you (not the assistant) changes the dynamic. <span class="hi">Draft is ready to approve.</span><br><br>
+    The <strong>Adidas deal</strong> is essentially done — just needs a contract. Don't let a verbal yes evaporate.<br><br>
+    <span class="go">Trap Yoga momentum is real.</span> Announce Franklin Park now while Birthday Edition buzz is fresh. That's 8 free outdoor events — DC loves this stuff. Every announcement is also an email capture opportunity.
+  </div>
+  <div class="ai-ask">
+    <input class="ai-input" id="ai-input" type="text" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')askAI()">
+    <button class="ai-send" onclick="askAI()">→</button>
+  </div>
+</div>
+
+<button class="quick-add-btn" onclick="openQA()">＋ Quick add contact</button>
+
+<div class="qa-overlay" id="qa-overlay" onclick="if(event.target===this)closeQA()">
+  <div class="qa-sheet">
+    <div class="qa-handle"></div>
+    <div class="qa-title">Quick add contact</div>
+    <div class="qa-field"><label>Name</label><input id="qa-name" type="text" placeholder="First and last name" autocomplete="name"></div>
+    <div class="qa-field"><label>Email or phone</label><input id="qa-contact" type="text" placeholder="email@co.com or 202-555-0000"></div>
+    <div class="qa-field"><label>Type</label>
+      <select id="qa-type">
+        <option value="lead">Lead / prospect</option>
+        <option value="corporate">Corporate client contact</option>
+        <option value="brand">Brand partner</option>
+        <option value="coach">Private coaching client</option>
+        <option value="community">Trap Yoga community</option>
+        <option value="hired">Contractor</option>
+      </select>
+    </div>
+    <div class="qa-field"><label>Quick note</label><input id="qa-note" type="text" placeholder="Where you met, what they need..."></div>
+    <button class="qa-submit" onclick="submitQA()">Save contact</button>
+    <button class="qa-cancel" onclick="closeQA()">Cancel</button>
+  </div>
+</div>
+
+<nav class="bottom-nav">
+  <a class="nav-item active" href="#"><span class="nav-icon">🌅</span><span>Briefing</span></a>
+  <a class="nav-item" href="bdd_crm.html"><span class="nav-icon">👥</span><span>Contacts</span></a>
+  <a class="nav-item" href="bdd_crm.html" style="position:relative"><span class="nav-icon">📊</span><span>Pipeline</span><div class="nav-badge">2</div></a>
+  <a class="nav-item" href="bdd_crm.html"><span class="nav-icon">🧘</span><span>TY</span></a>
+  <a class="nav-item" href="bdd_map.html"><span class="nav-icon">🗺</span><span>Map</span></a>
+</nav>
+
+<script>
+function setGreeting(){
+  const now=new Date();
+  const h=now.getHours();
+  const g=h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('greeting-time').textContent=`${g} · ${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
+  document.querySelector('.greeting-name').innerHTML=`${g},<br><em>Britt.</em>`;
+}
+setGreeting();
+
+function openQA(){document.getElementById('qa-overlay').classList.add('open');setTimeout(()=>document.getElementById('qa-name').focus(),350)}
+function closeQA(){document.getElementById('qa-overlay').classList.remove('open')}
+function submitQA(){
+  const name=document.getElementById('qa-name').value.trim();
+  if(!name){alert('Name required');return}
+  console.log('Quick add:',{name,contact:document.getElementById('qa-contact').value,type:document.getElementById('qa-type').value,note:document.getElementById('qa-note').value,ts:new Date().toISOString()});
+  closeQA();
+  const btn=document.querySelector('.quick-add-btn');
+  btn.textContent='✓ Saved';btn.style.background='var(--green)';btn.style.color='#fff';
+  setTimeout(()=>{btn.textContent='＋ Quick add contact';btn.style.background='';btn.style.color=''},2500);
+  ['qa-name','qa-contact','qa-note'].forEach(id=>document.getElementById(id).value='');
+}
+
+async function askAI(){
+  const prompt=document.getElementById('ai-input').value.trim();if(!prompt)return;
+  const content=document.getElementById('ai-content');
+  content.innerHTML='<span style="color:var(--muted)">Thinking...</span>';
+  document.getElementById('ai-input').value='';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:300,
+      system:'You are Britt Dupree Daniels\' smart business assistant. Britt is a DC wellness architect with corporate clients (Google, Salesforce, Cigna, Microsoft), Trap Yoga events going viral (80K views, 176 attendees last event), a $20K DC Gov grant, and $127K open pipeline. He\'s between sessions on his phone. Be direct, warm, concise — max 2-3 short sentences. No bullet points. Sound like a trusted advisor.',
+      messages:[{role:'user',content:prompt}]
+    })});
+    const data=await res.json();
+    content.innerHTML=data.content?.map(b=>b.text||'').join('')||'No response.';
+  }catch(e){content.innerHTML='<span style="color:var(--muted)">Couldn\'t reach Claude.</span>'}
+}
+document.getElementById('ai-input').addEventListener('keydown',e=>{if(e.key==='Enter')askAI()});
+</script>
+</body>
+</html>

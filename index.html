@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDD — System Vision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0e0d0b;--cream:#f0ece3;--cream2:#e8e3d8;--cream3:#d8d2c4;
+  --warm:#c8b89a;--muted:#6b6355;--faint:#1e1c19;--faint2:#141310;
+  --border:rgba(200,184,154,.13);--border2:rgba(200,184,154,.28);
+  --blue:#4a9eff;--blue-dim:rgba(74,158,255,.1);
+  --green:#2ec27e;--green-dim:rgba(46,194,126,.1);
+  --amber:#f0a030;--amber-dim:rgba(240,160,48,.1);
+  --coral:#f06050;--coral-dim:rgba(240,96,80,.1);
+  --purple:#9b7fff;--purple-dim:rgba(155,127,255,.1);
+  --teal:#20c0b0;--teal-dim:rgba(32,192,176,.1);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")}
+
+/* ── HERO ── */
+.hero{max-width:1200px;margin:0 auto;padding:5rem 3rem 4rem;display:grid;grid-template-columns:1.1fr .9fr;gap:3rem;align-items:end;border-bottom:.5px solid var(--border)}
+.eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--warm);margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';display:inline-block;width:24px;height:1px;background:var(--warm)}
+.hero h1{font-family:'Cinzel',serif;font-size:clamp(2.2rem,4.5vw,3.8rem);font-weight:500;line-height:1.05;letter-spacing:-.02em;margin-bottom:1.5rem}
+.hero h1 em{font-style:normal;color:var(--warm)}
+.hero-desc{font-size:15px;font-weight:300;color:var(--muted);line-height:1.75;max-width:440px;margin-bottom:2rem}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hstat{background:var(--faint2);border:.5px solid var(--border);border-radius:10px;padding:14px 16px}
+.hstat-val{font-family:'Cinzel',serif;font-size:26px;font-weight:500;line-height:1;margin-bottom:4px}
+.hstat-val span{color:var(--warm)}
+.hstat-label{font-size:11px;color:var(--muted);font-weight:300;letter-spacing:.04em}
+.hero-badge{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);border:.5px solid var(--border2);border-radius:20px;padding:6px 14px;letter-spacing:.06em;margin-top:14px;display:inline-block}
+
+/* ── NAV ── */
+.nav{display:flex;gap:8px;padding:1.25rem 3rem;max-width:1200px;margin:0 auto;flex-wrap:wrap;border-bottom:.5px solid var(--border)}
+.nav a{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:5px 14px;border:.5px solid var(--border);border-radius:20px;text-decoration:none;transition:all .2s}
+.nav a:hover{color:var(--cream);border-color:var(--border2);background:var(--faint)}
+
+/* ── LEGEND ── */
+.legend{max-width:1200px;margin:0 auto;padding:.9rem 3rem 1.5rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;border-bottom:.5px solid var(--border)}
+.legend-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.li{display:flex;align-items:center;gap:7px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--muted)}
+.ldot{width:7px;height:7px;border-radius:50%}
+
+/* ── SECTION ── */
+.section{max-width:1200px;margin:0 auto;padding:2.5rem 3rem 1rem}
+.section-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.section-head:hover .section-title{color:var(--warm)}
+.sec-num{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--warm)}
+.section-title{font-family:'Cinzel',serif;font-size:1.25rem;font-weight:400;transition:color .2s}
+.sec-divider{flex:1;height:.5px;background:linear-gradient(90deg,var(--border2),transparent)}
+.sec-toggle{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);transition:transform .25s;display:inline-block;margin-left:4px}
+.sec-toggle.open{transform:rotate(90deg)}
+
+/* Section description panel */
+.sec-desc{overflow:hidden;max-height:0;transition:max-height .35s ease,opacity .3s ease;opacity:0;margin-bottom:0}
+.sec-desc.open{max-height:400px;opacity:1;margin-bottom:1.5rem}
+.sec-desc-inner{background:var(--faint2);border:.5px solid var(--border2);border-radius:12px;padding:1.25rem 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.sec-desc-text{font-size:14px;font-weight:300;color:var(--muted);line-height:1.75}
+.sec-desc-text strong{color:var(--cream);font-weight:500}
+.sec-desc-outcomes{display:flex;flex-direction:column;gap:8px}
+.sec-outcome{display:flex;align-items:flex-start;gap:8px;font-size:13px;font-weight:300;color:var(--muted)}
+.sec-outcome::before{content:'→';color:var(--warm);flex-shrink:0;font-size:12px;margin-top:1px}
+
+/* ── CARDS ── */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:1.5rem}
+.grid.g2{grid-template-columns:repeat(2,1fr)}
+.grid.g4{grid-template-columns:repeat(4,1fr)}
+
+.card{position:relative;background:var(--faint2);border:.5px solid var(--border);border-radius:14px;padding:1.4rem;text-decoration:none;display:block;transition:all .25s;overflow:hidden;animation:cardIn .4s ease both;color:var(--cream)}
+.card::before{content:'';position:absolute;inset:0;background:var(--cg,transparent);opacity:0;transition:opacity .3s;border-radius:14px;pointer-events:none}
+.card:hover{border-color:var(--ca,var(--border2));transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.card:hover::before{opacity:1}
+.card.wide{grid-column:span 2}
+.card.wide-inner{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:center}
+
+/* Status */
+.cstatus{position:absolute;top:13px;right:13px;display:flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase}
+.sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.s-built .sdot{background:var(--green);box-shadow:0 0 6px var(--green)}
+.s-built{color:var(--green)}
+.s-partial .sdot{background:var(--amber);box-shadow:0 0 6px var(--amber)}
+.s-partial{color:var(--amber)}
+.s-vision .sdot{background:var(--muted)}
+.s-vision{color:var(--muted)}
+
+.cicon{font-size:22px;margin-bottom:11px;display:block}
+.cname{font-family:'Cinzel',serif;font-size:13.5px;font-weight:500;color:var(--cream);margin-bottom:7px;line-height:1.3}
+.cval{font-size:12.5px;font-weight:300;color:var(--muted);line-height:1.6;margin-bottom:13px}
+.cdetail{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.04em;color:var(--ca-text,var(--muted));display:flex;align-items:center;gap:5px;opacity:.85}
+.cdetail::before{content:'→';font-size:10px}
+.cbar{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--ca,transparent);opacity:.4;transition:opacity .3s}
+.card:hover .cbar{opacity:1}
+
+/* Featured card terminal */
+.terminal{background:var(--faint);border-radius:9px;padding:.9rem 1rem;border:.5px solid var(--border);font-family:'DM Mono',monospace;font-size:11px;line-height:1.85;color:var(--muted)}
+.terminal .h{color:var(--cream2)}
+.terminal .a{color:var(--ca-text,var(--warm))}
+
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.card:nth-child(1){animation-delay:.05s}.card:nth-child(2){animation-delay:.1s}.card:nth-child(3){animation-delay:.15s}
+.card:nth-child(4){animation-delay:.2s}.card:nth-child(5){animation-delay:.25s}.card:nth-child(6){animation-delay:.3s}
+
+/* ── CTA ── */
+.cta{max-width:1200px;margin:2rem auto 0;padding:2.5rem 3rem;border-top:.5px solid var(--border);display:grid;grid-template-columns:1fr auto;align-items:center;gap:2rem}
+.cta-title{font-family:'Cinzel',serif;font-size:1.5rem;font-weight:400;margin-bottom:8px}
+.cta-sub{font-size:14px;font-weight:300;color:var(--muted);line-height:1.6}
+.cta-btns{display:flex;flex-direction:column;gap:9px;align-items:flex-end}
+.cbtn{display:inline-flex;align-items:center;gap:7px;padding:11px 22px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;white-space:nowrap;text-decoration:none;font-family:'DM Sans',sans-serif}
+.cbtn.p{background:var(--cream);color:var(--ink);border:none}.cbtn.p:hover{background:var(--cream2)}
+.cbtn.s{background:transparent;color:var(--cream);border:.5px solid var(--border2)}.cbtn.s:hover{border-color:var(--warm);color:var(--warm)}
+
+footer{max-width:1200px;margin:0 auto;padding:1.75rem 3rem;border-top:.5px solid var(--border);display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.06em}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;padding:3rem 1.5rem 2.5rem;gap:1.5rem}
+  .section{padding:2rem 1.5rem 1rem}.nav{padding:1rem 1.5rem}.legend{padding:.75rem 1.5rem 1rem}
+  .grid{grid-template-columns:1fr 1fr}.grid.g4{grid-template-columns:1fr 1fr}.card.wide{grid-column:span 2}.card.wide-inner{grid-template-columns:1fr}
+  .cta{grid-template-columns:1fr;padding:2rem 1.5rem}.cta-btns{align-items:flex-start}
+  footer{padding:1.5rem;flex-direction:column;gap:6px}.sec-desc-inner{grid-template-columns:1fr}
+}
+@media(max-width:580px){.grid,.grid.g2,.grid.g4{grid-template-columns:1fr}.card.wide{grid-column:span 1}.card.wide-inner{grid-template-columns:1fr}.hero-stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="eyebrow">System Vision · May 2026</div>
+    <h1>The Operating<br>System for<br><em>Britt Dupree<br>Daniels</em></h1>
+    <p class="hero-desc">A complete business infrastructure — from corporate wellness contracts and Trap Yoga events to brand deals, speaking gigs, and a growing DC community. Every capability mapped. Every decision yours.</p>
+  </div>
+  <div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-val">5<span>×</span></div><div class="hstat-label">Revenue streams tracked</div></div>
+      <div class="hstat"><div class="hstat-val">21<span>+</span></div><div class="hstat-label">Capabilities mapped</div></div>
+      <div class="hstat"><div class="hstat-val">3</div><div class="hstat-label">Role-based views</div></div>
+      <div class="hstat"><div class="hstat-val">$<span>0</span></div><div class="hstat-label">Monthly software cost</div></div>
+    </div>
+    <div class="hero-badge">6 files · fully clickable · GitHub Pages ready</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#crm">Core CRM</a>
+  <a href="#delivery">Delivery</a>
+  <a href="#community">Community</a>
+  <a href="#intelligence">Intelligence</a>
+  <a href="#growth">Growth</a>
+  <a href="#public">Public pages</a>
+  <a href="#roles">Role views</a>
+</nav>
+
+<!-- LEGEND -->
+<div class="legend">
+  <span class="legend-label">Status:</span>
+  <div class="li"><div class="ldot" style="background:var(--green);box-shadow:0 0 6px var(--green)"></div>Built</div>
+  <div class="li"><div class="ldot" style="background:var(--amber);box-shadow:0 0 6px var(--amber)"></div>Partially built</div>
+  <div class="li"><div class="ldot" style="background:var(--muted)"></div>Vision mockup</div>
+  <span style="margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)">↑ Click any section title to expand description</span>
+</div>
+
+
+<!-- ══ 01 CORE CRM ══ -->
+<div id="crm" class="section">
+  <div class="section-head" onclick="toggleSection('s-crm')">
+    <span class="sec-num">01</span>
+    <span class="section-title">Core CRM</span>
+    <div class="sec-divider"></div>
+    <span class="sec-toggle" id="t-s-crm">▶</span>
+  </div>
+  <div class="sec-desc" id="s-crm">
+    <div class="sec-desc-inner">
+      <div class="sec-desc-text">The Core CRM is the <strong>permanent record of every relationship</strong> Britt has ever built. It's what the assistant opens every morning to understand who needs attention, what's in motion, and what's at risk. Without this foundation, every other tool in the system is flying blind.<br><br>Together these modules answer: <strong>Who do I know? What are they worth? What do I need to do next?</strong></div>
+      <div class="sec-desc-outcomes">
+        <div class="sec-outcome">Never lose a lead — every inquiry gets logged immediately</div>
+        <div class="sec-outcome">Full context on every relationship before any outreach</div>
+        <div class="sec-outcome">Pipeline visibility across all 5 revenue streams at once</div>
+        <div class="sec-outcome">Assistant has a clear daily work list without being told what to do</div>
+        <div class="sec-outcome">Morning briefing replaces an hour of manual tab-checking</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <a class="card" href="bdd_crm.html#contacts" style="--ca:var(--blue);--cg:var(--blue-dim);--ca-text:var(--blue)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">👥</span>
+      <div class="cname">Contacts</div>
+      <div class="cval">Every person in Britt's world — corporate contacts, brand partners, clients, contractors, community members, and leads — with full context on each relationship, last contact date, and tags.</div>
+      <div class="cdetail">20 contacts · type filter · staleness alerts · CSV export</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#orgs" style="--ca:var(--blue);--cg:var(--blue-dim);--ca-text:var(--blue)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🏢</span>
+      <div class="cname">Organizations</div>
+      <div class="cval">Company-level records for Google, Salesforce, Cigna, lululemon, and every org Britt works with. Multiple contacts per org, contract values, statuses, and renewal dates all visible at a glance.</div>
+      <div class="cdetail">14 orgs · contacts linked · renewal tracking</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#pipeline" style="--ca:var(--purple);--cg:var(--purple-dim);--ca-text:var(--purple)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">📊</span>
+      <div class="cname">Pipeline</div>
+      <div class="cval">Every open deal across all five revenue streams from inquiry to paid. Kanban board for quick visual status, full table for detail. $127K open pipeline tracked in real time.</div>
+      <div class="cdetail">Kanban + table · stage pills · $127K open</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#tasks" style="--ca:var(--amber);--cg:var(--amber-dim);--ca-text:var(--amber)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">✅</span>
+      <div class="cname">Tasks</div>
+      <div class="cval">Every follow-up, deadline, and action item assigned to Britt or the assistant, linked to a contact or deal, flagged by priority. The assistant's daily work list lives here.</div>
+      <div class="cdetail">Owner assignment · priority flags · urgent queue</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_mobile.html" style="--ca:var(--teal);--cg:var(--teal-dim);--ca-text:var(--teal)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🌅</span>
+      <div class="cname">Morning Briefing</div>
+      <div class="cval">Claude synthesizes everything overnight and delivers one page every morning: deals going cold, contracts up for renewal, leads going stale, and the top 3 actions for the day. The assistant's day starts here.</div>
+      <div class="cdetail">AI-generated daily digest · one-tap actions · mobile</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#ai" style="--ca:var(--teal);--cg:var(--teal-dim);--ca-text:var(--teal)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🤖</span>
+      <div class="cname">AI Assistant</div>
+      <div class="cval">Claude trained on Britt's full business context. Draft proposals, summarize the pipeline, write follow-up emails in Britt's voice, identify cross-referral opportunities, and flag what needs attention.</div>
+      <div class="cdetail">Live Claude API · full context · quick prompts</div>
+      <div class="cbar"></div>
+    </a>
+  </div>
+</div>
+
+
+<!-- ══ 02 DELIVERY ══ -->
+<div id="delivery" class="section">
+  <div class="section-head" onclick="toggleSection('s-delivery')">
+    <span class="sec-num">02</span>
+    <span class="section-title">Delivery</span>
+    <div class="sec-divider"></div>
+    <span class="sec-toggle" id="t-s-delivery">▶</span>
+  </div>
+  <div class="sec-desc" id="s-delivery">
+    <div class="sec-desc-inner">
+      <div class="sec-desc-text">Delivery is about <strong>managing what's been sold</strong> — making sure every contracted session happens, is documented, and gets invoiced. As Britt scales and brings in sub-contractors to run classes, this becomes critical. <strong>One missed session or unsigned contract can cost thousands.</strong><br><br>These tools also protect Britt legally — especially for the DC Government grant, which requires documented attendance, photos, and timely invoicing per session.</div>
+      <div class="sec-desc-outcomes">
+        <div class="sec-outcome">Every contracted session tracked from schedule to confirmation</div>
+        <div class="sec-outcome">Backup instructors always identified — no session gets cancelled</div>
+        <div class="sec-outcome">DC Gov grant documented for reporting — $20K protected</div>
+        <div class="sec-outcome">Proposals generated in minutes, not hours</div>
+        <div class="sec-outcome">Deals move from verbal agreement to signed contract in one click</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <a class="card wide wide-inner" href="bdd_crm.html#contracts" style="--ca:var(--green);--cg:var(--green-dim);--ca-text:var(--green)">
+      <div>
+        <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+        <span class="cicon">📋</span>
+        <div class="cname">Corporate Wellness Contracts</div>
+        <div class="cval">Full contract lifecycle for MedStar, Google, Cigna, Aetna. Session-by-session tracking, primary and backup instructor per session, delivery progress bar, invoicing reference, and overdue alerts. Protects Britt legally and ensures nothing slips.</div>
+        <div class="cdetail">4 active contracts · progress bars · backup instructors · invoicing ref</div>
+      </div>
+      <div class="terminal">
+        <div><span class="h">MedStar Health</span></div>
+        <div class="a">████████████░░░░░░ 58%</div>
+        <div>Sessions: <span class="h">5 / 12</span></div>
+        <div>Avg rating: <span class="h">4.88 ⭐</span></div>
+        <div>Remaining: <span class="a">$7,500</span></div>
+        <div style="margin-top:6px">Backup: <span class="h">Shalynn Burrill</span></div>
+        <div>Next: <span class="a">May 17 · Confirmed</span></div>
+      </div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#dcgov" style="--ca:var(--blue);--cg:var(--blue-dim);--ca-text:var(--blue)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🏛️</span>
+      <div class="cname">DC Gov / Franklin Park</div>
+      <div class="cval">Dedicated module for the $20K DC Government grant. 8-session summer schedule, instructor assignments, backup coverage, grant delivery progress, documentation requirements, and invoice tracking per session.</div>
+      <div class="cdetail">$20K grant · 8 sessions · Jun–Aug 2026</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#classes" style="--ca:var(--green);--cg:var(--green-dim);--ca-text:var(--green)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">📅</span>
+      <div class="cname">Classes & Schedule</div>
+      <div class="cval">Every session across all contracts and events in one view. Filter by type, see check-in counts, ratings, and revenue. The operational heartbeat of the whole business.</div>
+      <div class="cdetail">All session types · check-in data · rating tracker</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#proposals" style="--ca:var(--teal);--cg:var(--teal-dim);--ca-text:var(--teal)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">📄</span>
+      <div class="cname">Proposal Generator</div>
+      <div class="cval">Claude pulls org, contact, deal type, and discovery call notes from the CRM and drafts a full polished proposal in Britt's voice. Cuts proposal time from 2 hours to 5 minutes.</div>
+      <div class="cdetail">AI-generated · PDF export · Britt's voice · templates</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#contracts-sign" style="--ca:var(--teal);--cg:var(--teal-dim);--ca-text:var(--teal)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">✍️</span>
+      <div class="cname">Contract Templates & E-Sign</div>
+      <div class="cval">Once a deal is verbally confirmed, the assistant generates a contract from a template, pre-fills all fields from the CRM, and sends for e-signature. Deal moves from negotiation to signed in one click.</div>
+      <div class="cdetail">Auto-fill from CRM · e-signature flow · stage update</div>
+      <div class="cbar"></div>
+    </a>
+  </div>
+</div>
+
+
+<!-- ══ 03 COMMUNITY ══ -->
+<div id="community" class="section">
+  <div class="section-head" onclick="toggleSection('s-community')">
+    <span class="sec-num">03</span>
+    <span class="section-title">Community</span>
+    <div class="sec-divider"></div>
+    <span class="sec-toggle" id="t-s-community">▶</span>
+  </div>
+  <div class="sec-desc" id="s-community">
+    <div class="sec-desc-inner">
+      <div class="sec-desc-text">Trap Yoga went viral for a reason — <strong>Britt has built a genuine community</strong>, not just an audience. But right now that community lives in Instagram DMs, ticket stubs, and Britt's memory. These tools capture it, nurture it, and turn it into a compounding asset.<br><br>The check-in page alone, deployed at every class, could add <strong>hundreds of real email addresses per month</strong> — contacts Britt owns forever, regardless of what Instagram does.</div>
+      <div class="sec-desc-outcomes">
+        <div class="sec-outcome">Every attendee's name and email captured at the door</div>
+        <div class="sec-outcome">Superfans identified and activated as ambassadors</div>
+        <div class="sec-outcome">Sold-out demand quantified and used as leverage</div>
+        <div class="sec-outcome">Monthly newsletter sent in minutes, not hours</div>
+        <div class="sec-outcome">Public classes page gives the community a home online</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <a class="card" href="bdd_crm.html#events" style="--ca:var(--coral);--cg:var(--coral-dim);--ca-text:var(--coral)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🧘</span>
+      <div class="cname">Trap Yoga Events</div>
+      <div class="cval">Event-by-event tracking for the full Trap Yoga series — attendance, venue fill rate, revenue, per-ticket average, collaborators, and individual attendee tagging. Superfans, repeats, and first-timers all visible.</div>
+      <div class="cdetail">4 events logged · attendee tagging · revenue trend</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_checkin.html" style="--ca:var(--green);--cg:var(--green-dim);--ca-text:var(--green)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">📲</span>
+      <div class="cname">Attendee Check-in & Ratings</div>
+      <div class="cval">Attendees scan a QR code or tap a link, check in, rate the session, and see upcoming events. Requires name and email — every class automatically builds the database and captures feedback.</div>
+      <div class="cdetail">QR + link · email capture · ratings · upcoming classes</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#ambassador" style="--ca:var(--amber);--cg:var(--amber-dim);--ca-text:var(--amber)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">⭐</span>
+      <div class="cname">Ambassador Program</div>
+      <div class="cval">Destiny Williams has been to 8 Trap Yoga events and always brings friends. This formally activates people like her — referral codes, perks tracking, attendance history. Turns loyal community members into a street team.</div>
+      <div class="cdetail">Referral tracking · superfan ID · perk management</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#waitlist" style="--ca:var(--amber);--cg:var(--amber-dim);--ca-text:var(--amber)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🎟️</span>
+      <div class="cname">Waitlist & Demand Tracker</div>
+      <div class="cval">Trap Yoga is selling out. The waitlist captures everyone who wanted in — that number is Britt's leverage with venues for bigger spaces and with sponsors for reach data. Currently this demand is invisible.</div>
+      <div class="cdetail">Overflow capture · venue leverage data · sponsor pitch</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#campaigns" style="--ca:var(--blue);--cg:var(--blue-dim);--ca-text:var(--blue)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">📧</span>
+      <div class="cname">Email Campaigns</div>
+      <div class="cval">The check-in page is capturing emails. Right now they go nowhere. A simple campaign builder lets the assistant draft and send post-event recaps, class announcements, and newsletters to segmented lists — without leaving the CRM.</div>
+      <div class="cdetail">Segmented lists · Claude-drafted · send from CRM</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_classes.html" style="--ca:var(--coral);--cg:var(--coral-dim);--ca-text:var(--coral)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🗓️</span>
+      <div class="cname">Public Classes Page</div>
+      <div class="cval">A beautiful mobile-first page showing all upcoming classes — Trap Yoga, DC Gov sessions — with links to register or join the waitlist. The face of Britt's community for anyone who finds him online.</div>
+      <div class="cdetail">Upcoming schedule · registration links · waitlist capture</div>
+      <div class="cbar"></div>
+    </a>
+  </div>
+</div>
+
+
+<!-- ══ 04 INTELLIGENCE ══ -->
+<div id="intelligence" class="section">
+  <div class="section-head" onclick="toggleSection('s-intelligence')">
+    <span class="sec-num">04</span>
+    <span class="section-title">Business Intelligence</span>
+    <div class="sec-divider"></div>
+    <span class="sec-toggle" id="t-s-intelligence">▶</span>
+  </div>
+  <div class="sec-desc" id="s-intelligence">
+    <div class="sec-desc-inner">
+      <div class="sec-desc-text">Britt is running <strong>five different businesses simultaneously</strong> — corporate wellness, Trap Yoga, speaking, brand deals, and private coaching. Most entrepreneurs in this position don't actually know which stream is most profitable per hour of their time. <strong>This section answers that question</strong> — and surfaces the risks before they become missed opportunities.</div>
+      <div class="sec-desc-outcomes">
+        <div class="sec-outcome">Know which revenue stream makes the most money per hour of effort</div>
+        <div class="sec-outcome">See the real P&L — not just revenue, but what Britt actually nets</div>
+        <div class="sec-outcome">Renewal radar surfaces at-risk contracts 60 days before they lapse</div>
+        <div class="sec-outcome">Network visualization shows where relationship density is and where gaps are</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid g2">
+    <a class="card" href="bdd_crm.html#revenue" style="--ca:var(--green);--cg:var(--green-dim);--ca-text:var(--green)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">💰</span>
+      <div class="cname">Revenue by Stream</div>
+      <div class="cval">Monthly revenue broken down across all five streams — confirmed vs projected. Stacked bar chart by month with a detail table showing top clients per stream and open pipeline value.</div>
+      <div class="cdetail">5 streams · monthly chart · $38.5K confirmed this month</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#pnl" style="--ca:var(--green);--cg:var(--green-dim);--ca-text:var(--green)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">📉</span>
+      <div class="cname">Real P&L</div>
+      <div class="cval">Gross revenue minus instructor costs minus venue fees equals what Britt actually nets. DC Gov pays $2,500/session — but Shalynn costs $400. Which stream is most profitable per hour of Britt's time? This answers it.</div>
+      <div class="cdetail">Gross → net · instructor deductions · per-hour profitability</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#network" style="--ca:var(--purple);--cg:var(--purple-dim);--ca-text:var(--purple)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🕸️</span>
+      <div class="cname">Network Graph</div>
+      <div class="cval">Interactive two-tier visualization of Britt's full network. Organizations as mid-nodes, people attached to them, all connected to Britt at center. Drag nodes, click for details, see where relationship density is strongest.</div>
+      <div class="cdetail">Two-tier · draggable nodes · click for detail</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#renewal" style="--ca:var(--teal);--cg:var(--teal-dim);--ca-text:var(--teal)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🔄</span>
+      <div class="cname">Retention & Renewal Radar</div>
+      <div class="cval">Which clients are at risk of not renewing? Cigna is up in August. Britt hasn't talked to Dr. Huang in 3 weeks. Amazon is still waiting on budget. This surfaces risks 60 days before they become missed revenue.</div>
+      <div class="cdetail">Renewal calendar · at-risk scoring · proactive alerts</div>
+      <div class="cbar"></div>
+    </a>
+  </div>
+</div>
+
+
+<!-- ══ 05 GROWTH ══ -->
+<div id="growth" class="section">
+  <div class="section-head" onclick="toggleSection('s-growth')">
+    <span class="sec-num">05</span>
+    <span class="section-title">Growth Tools</span>
+    <div class="sec-divider"></div>
+    <span class="sec-toggle" id="t-s-growth">▶</span>
+  </div>
+  <div class="sec-desc" id="s-growth">
+    <div class="sec-desc-inner">
+      <div class="sec-desc-text">Britt is already at the level where <strong>inbound opportunities are coming to him</strong> — NYC Trap Yoga pop-up, keynote inquiries, brand deals. The bottleneck isn't getting noticed; it's <strong>converting and capturing that inbound efficiently</strong>. A speaker kit request shouldn't take 2 hours. A press mention shouldn't live in an email thread. These tools make sure every opportunity is met with the right asset at the right moment.</div>
+      <div class="sec-desc-outcomes">
+        <div class="sec-outcome">Speaker kit generated in one click — polished PDF ready to send</div>
+        <div class="sec-outcome">Trap Yoga sponsorships tracked as a separate revenue pipeline</div>
+        <div class="sec-outcome">Press log turns scattered mentions into a professional media kit</div>
+        <div class="sec-outcome">Expansion into new markets planned and modeled before commitment</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid g4">
+    <a class="card" href="bdd_crm.html#speakerkit" style="--ca:var(--amber);--cg:var(--amber-dim);--ca-text:var(--amber)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🎤</span>
+      <div class="cname">Speaker Kit Generator</div>
+      <div class="cval">One-click PDF speaker kit — bio, topics, fees, and headshots — generated from CRM data. Makes Britt look like a $20K speaker at the exact moment a decision-maker is evaluating him.</div>
+      <div class="cdetail">One-click PDF · bio · topics · fee sheet</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#sponsorship" style="--ca:var(--coral);--cg:var(--coral-dim);--ca-text:var(--coral)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🤝</span>
+      <div class="cname">Sponsorship Tracker</div>
+      <div class="cval">Trap Yoga is growing fast. Brands will want to sponsor it. Tracks packages — mat logo, IG mention, on-site activation — deliverables, and payment. Turns community growth into direct revenue.</div>
+      <div class="cdetail">Sponsor pipeline · package tiers · deliverable tracking</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#press" style="--ca:var(--purple);--cg:var(--purple-dim);--ca-text:var(--purple)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">📰</span>
+      <div class="cname">Press & Media Log</div>
+      <div class="cval">Fox 5 DC. Ebony. Every appearance, feature, and quote in one place. The assistant pulls a media kit in minutes instead of digging through old emails and screenshots.</div>
+      <div class="cdetail">Appearances · quotes · media kit generator</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_crm.html#expansion" style="--ca:var(--teal);--cg:var(--teal-dim);--ca-text:var(--teal)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🗺️</span>
+      <div class="cname">Expansion Planner</div>
+      <div class="cval">Trap Yoga NYC pop-up is already an inbound inquiry. Tracks new market opportunities — cities, venues, promoter contacts, logistics costs — and models the financial case before committing.</div>
+      <div class="cdetail">Market tracking · promoter contacts · financial modeling</div>
+      <div class="cbar"></div>
+    </a>
+  </div>
+</div>
+
+
+<!-- ══ 06 PUBLIC ══ -->
+<div id="public" class="section">
+  <div class="section-head" onclick="toggleSection('s-public')">
+    <span class="sec-num">06</span>
+    <span class="section-title">Public Pages</span>
+    <div class="sec-divider"></div>
+    <span class="sec-toggle" id="t-s-public">▶</span>
+  </div>
+  <div class="sec-desc" id="s-public">
+    <div class="sec-desc-inner">
+      <div class="sec-desc-text">These are the pages the <strong>outside world interacts with</strong> — attendees, instructors, and anyone who finds Britt online. They're not just informational; they're <strong>data collection engines</strong>. Every check-in is a new email address. Every instructor report is a legal record. Every class page visit is a potential conversion.</div>
+      <div class="sec-desc-outcomes">
+        <div class="sec-outcome">Every attendee's email captured automatically at check-in</div>
+        <div class="sec-outcome">Instructor confirmations create a legal paper trail for contracts and grants</div>
+        <div class="sec-outcome">Public classes page converts Instagram followers to registered attendees</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <a class="card" href="bdd_checkin.html" style="--ca:var(--green);--cg:var(--green-dim);--ca-text:var(--green)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">📲</span>
+      <div class="cname">Attendee Check-in Page</div>
+      <div class="cval">Mobile-first. QR code or link. Check in, rate the class, see what's coming up. Every check-in captures name and email. The single best data collection tool in the whole system — deployed at every class.</div>
+      <div class="cdetail">QR + link access · email capture · ratings · upcoming</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_instructor.html" style="--ca:var(--amber);--cg:var(--amber-dim);--ca-text:var(--amber)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🏋️</span>
+      <div class="cname">Instructor Portal</div>
+      <div class="cval">Shalynn, Jake, Jordan open this after every session. Log headcount, energy, incident reports, photos, community observations. DC Gov grant checklist built in. Creates the paper trail for invoicing and legal protection.</div>
+      <div class="cdetail">Post-class confirmation · attendance · photos · DC Gov checklist</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_classes.html" style="--ca:var(--coral);--cg:var(--coral-dim);--ca-text:var(--coral)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🗓️</span>
+      <div class="cname">Public Classes Page</div>
+      <div class="cval">A beautiful, mobile-first page showing all upcoming classes — Trap Yoga, Franklin Park, and more. Registration and waitlist links. The face of Britt's community for anyone who finds him on Instagram or Google.</div>
+      <div class="cdetail">Upcoming schedule · filter by type · register + waitlist</div>
+      <div class="cbar"></div>
+    </a>
+  </div>
+</div>
+
+
+<!-- ══ 07 ROLES ══ -->
+<div id="roles" class="section" style="padding-bottom:3rem">
+  <div class="section-head" onclick="toggleSection('s-roles')">
+    <span class="sec-num">07</span>
+    <span class="section-title">Role-Based Views</span>
+    <div class="sec-divider"></div>
+    <span class="sec-toggle" id="t-s-roles">▶</span>
+  </div>
+  <div class="sec-desc" id="s-roles">
+    <div class="sec-desc-inner">
+      <div class="sec-desc-text">The same underlying data powers <strong>three completely different experiences</strong> depending on who's using it. Britt needs a 60-second mobile check-in between sessions. The assistant needs a full desktop command center. Instructors need a single focused form they fill out in 3 minutes. <strong>The right tool for each person means the whole system actually gets used.</strong></div>
+      <div class="sec-desc-outcomes">
+        <div class="sec-outcome">Britt stays informed without managing the system himself</div>
+        <div class="sec-outcome">Assistant has everything needed to run the business independently</div>
+        <div class="sec-outcome">Instructors submit confirmations without needing training</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid">
+    <a class="card" href="bdd_crm.html" style="--ca:var(--blue);--cg:var(--blue-dim);--ca-text:var(--blue)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">💻</span>
+      <div class="cname">Assistant Desktop CRM</div>
+      <div class="cval">The full system. Every tab, every module, every piece of data. Optimized for someone sitting at a desk managing deals, logging tasks, confirming sessions, and drafting outreach on behalf of Britt.</div>
+      <div class="cdetail">12 tabs · all modules · full data · desktop</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_mobile.html" style="--ca:var(--amber);--cg:var(--amber-dim);--ca-text:var(--amber)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">📱</span>
+      <div class="cname">Britt's Mobile View</div>
+      <div class="cval">Britt is between sessions, not at a desk. His view is a morning briefing, key stats, a one-tap action list, AI assistant, and a quick-add button for logging a new lead mid-conversation. Everything else is the assistant's job.</div>
+      <div class="cdetail">Morning briefing · quick stats · AI · quick-add lead · mobile-only</div>
+      <div class="cbar"></div>
+    </a>
+    <a class="card" href="bdd_instructor.html" style="--ca:var(--green);--cg:var(--green-dim);--ca-text:var(--green)">
+      <div class="cstatus s-built"><div class="sdot"></div>Built</div>
+      <span class="cicon">🧘</span>
+      <div class="cname">Instructor View</div>
+      <div class="cval">Shalynn and the other instructors get one page, one job: confirm the session, log attendance, upload photos, note anything unusual. Simple, mobile, done in 3 minutes. Feeds directly into contract and grant records.</div>
+      <div class="cdetail">Post-class only · mobile-first · pre-fillable via URL</div>
+      <div class="cbar"></div>
+    </a>
+  </div>
+</div>
+
+
+<!-- CTA -->
+<div class="cta">
+  <div>
+    <div class="cta-title">Every capability. Ready to explore.</div>
+    <div class="cta-sub">All 21 modules are mockup-ready and fully clickable.<br>The next step is deciding which ones to productionalize — and in what order.</div>
+  </div>
+  <div class="cta-btns">
+    <a class="cbtn p" href="bdd_crm.html">Open assistant CRM →</a>
+    <a class="cbtn s" href="bdd_mobile.html">Britt's mobile view</a>
+    <a class="cbtn s" href="bdd_checkin.html">Attendee check-in</a>
+    <a class="cbtn s" href="bdd_instructor.html">Instructor portal</a>
+    <a class="cbtn s" href="bdd_classes.html">Public classes page</a>
+  </div>
+</div>
+
+<footer>
+  <span>BRITT DUPREE DANIELS · SYSTEM VISION · V1.0 · MAY 2026</span>
+  <span>Prophet Fitness LLC · Washington D.C.</span>
+</footer>
+
+<script>
+function toggleSection(id){
+  const desc = document.getElementById(id);
+  const toggle = document.getElementById('t-'+id);
+  const isOpen = desc.classList.contains('open');
+  desc.classList.toggle('open', !isOpen);
+  toggle.classList.toggle('open', !isOpen);
+  toggle.textContent = isOpen ? '▶' : '▼';
+}
+// Smooth scroll for nav
+document.querySelectorAll('.nav a').forEach(a=>{
+  a.addEventListener('click', e=>{
+    const href = a.getAttribute('href');
+    if(href.startsWith('#')){
+      e.preventDefault();
+      document.querySelector(href)?.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  });
+});
+</script>
+</body>
+</html>

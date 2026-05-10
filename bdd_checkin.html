@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Check In — Britt Dupree Daniels</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f5f5f3;--bg3:#eeede8;
+  --text:#1a1a18;--text2:#6b6b66;--text3:#9b9a94;
+  --border:rgba(0,0,0,.12);--border2:rgba(0,0,0,.22);
+  --radius:10px;--radius-lg:16px;
+  --green:#1D9E75;--green-fill:#EAF3DE;--green-text:#27500A;
+  --blue:#378ADD;--blue-fill:#E6F1FB;--blue-text:#0C447C;
+  --amber:#BA7517;--amber-fill:#FAEEDA;--amber-text:#633806;
+  --coral:#D85A30;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg2);color:var(--text);min-height:100vh;padding-bottom:3rem}
+
+.hero{background:var(--text);color:#fff;padding:1.5rem 1.25rem 3rem;text-align:center}
+.hero-logo{width:52px;height:52px;border-radius:50%;background:#fff;color:var(--text);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
+.hero h1{font-size:22px;font-weight:500;margin-bottom:4px}
+.hero-sub{font-size:14px;opacity:.7}
+.hero-class{margin-top:1rem;background:rgba(255,255,255,.12);border-radius:var(--radius);padding:10px 14px;display:inline-block;font-size:13px}
+.hero-class strong{display:block;font-size:16px;font-weight:500;margin-bottom:2px}
+
+.card{background:var(--bg);border-radius:var(--radius-lg);padding:1.25rem;margin:0 1rem 1rem;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.card.pulled-up{margin-top:-1.5rem}
+
+h2{font-size:17px;font-weight:500;margin-bottom:1rem}
+.form-row{margin-bottom:14px}
+.form-row label{display:block;font-size:13px;color:var(--text2);margin-bottom:5px;font-weight:500}
+.form-row input,.form-row select,.form-row textarea{width:100%;padding:12px 14px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:16px;font-family:inherit;outline:none;-webkit-appearance:none}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:var(--blue)}
+.form-row textarea{min-height:80px;resize:none;font-size:15px}
+
+.stars{display:flex;gap:10px;margin-top:4px}
+.star{font-size:32px;cursor:pointer;opacity:.3;transition:opacity .1s;-webkit-tap-highlight-color:transparent}
+.star.active{opacity:1}
+.star-label{font-size:13px;color:var(--text2);margin-top:4px;min-height:18px;text-align:center}
+
+.btn{display:block;width:100%;padding:14px;border:none;border-radius:var(--radius);font-size:16px;font-weight:500;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.btn.primary{background:var(--text);color:#fff}
+.btn.primary:hover{opacity:.88}
+.btn.secondary{background:var(--bg2);color:var(--text);margin-top:10px}
+
+.success-screen{display:none;text-align:center;padding:2rem 1.25rem}
+.success-icon{width:64px;height:64px;border-radius:50%;background:var(--green-fill);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 1rem}
+.success-screen h2{font-size:20px;font-weight:500;margin-bottom:8px}
+.success-screen p{font-size:14px;color:var(--text2);margin-bottom:1.5rem;line-height:1.6}
+
+.upcoming-section{margin:0 1rem}
+.upcoming-section h3{font-size:14px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.upcoming-card{background:var(--bg);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.upcoming-date{min-width:48px;text-align:center;background:var(--text);color:#fff;border-radius:8px;padding:6px 4px}
+.upcoming-date-day{font-size:18px;font-weight:500;line-height:1}
+.upcoming-date-mo{font-size:10px;text-transform:uppercase;opacity:.7}
+.upcoming-info{flex:1}
+.upcoming-title{font-size:14px;font-weight:500}
+.upcoming-meta{font-size:12px;color:var(--text2);margin-top:2px}
+.upcoming-badge{font-size:11px;background:var(--green-fill);color:var(--green-text);padding:2px 8px;border-radius:20px;display:inline-block;margin-top:4px}
+
+.divider{height:0.5px;background:var(--border);margin:0 1rem 1rem}
+.footer{text-align:center;font-size:12px;color:var(--text3);padding:0 1rem;margin-top:1.5rem}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeIn .3s ease forwards}
+
+.privacy-note{font-size:12px;color:var(--text3);text-align:center;margin-top:10px;line-height:1.5}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-logo">BDD</div>
+  <h1>Britt Dupree Daniels</h1>
+  <div class="hero-sub">Wellness Architect · Washington D.C.</div>
+  <div class="hero-class">
+    <strong id="class-name">Trap Yoga — Birthday Edition</strong>
+    <span id="class-details">Sat, May 24 · The Gathering Spot DC · 10:00 AM</span>
+  </div>
+</div>
+
+<!-- CHECK-IN FORM -->
+<div id="checkin-form">
+  <div class="card pulled-up fade-in">
+    <h2>Check in to today's class</h2>
+    <div class="form-row">
+      <label>Your name *</label>
+      <input id="ci-name" type="text" placeholder="First and last name" autocomplete="name">
+    </div>
+    <div class="form-row">
+      <label>Email *</label>
+      <input id="ci-email" type="email" placeholder="you@email.com" autocomplete="email">
+    </div>
+    <div class="form-row">
+      <label>How did you hear about this class?</label>
+      <select id="ci-source">
+        <option value="">— select one —</option>
+        <option value="instagram">Instagram / social media</option>
+        <option value="friend">Friend or word of mouth</option>
+        <option value="eventbrite">Eventbrite / ticketing</option>
+        <option value="google">Google search</option>
+        <option value="workplace">Through my workplace</option>
+        <option value="returning">I'm a returning attendee!</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Is this your first time at a BDD class?</label>
+      <select id="ci-first">
+        <option value="yes">Yes — first time!</option>
+        <option value="no">No — I'm a regular</option>
+      </select>
+    </div>
+
+    <div style="height:0.5px;background:var(--border);margin:1rem 0"></div>
+    <h2 style="font-size:15px;margin-bottom:4px">Rate today's class</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:12px">You can also rate after the class — just come back to this link.</p>
+
+    <div class="form-row">
+      <label>Overall rating</label>
+      <div class="stars" id="stars">
+        <span class="star" data-val="1" onclick="setRating(1)">⭐</span>
+        <span class="star" data-val="2" onclick="setRating(2)">⭐</span>
+        <span class="star" data-val="3" onclick="setRating(3)">⭐</span>
+        <span class="star" data-val="4" onclick="setRating(4)">⭐</span>
+        <span class="star" data-val="5" onclick="setRating(5)">⭐</span>
+      </div>
+      <div class="star-label" id="star-label">Tap to rate</div>
+    </div>
+
+    <div class="form-row">
+      <label>What did you love? Anything to improve?</label>
+      <textarea id="ci-feedback" placeholder="The energy was incredible… / I wish there was more cool-down time…"></textarea>
+    </div>
+
+    <div class="form-row">
+      <label>Would you like updates on upcoming classes?</label>
+      <select id="ci-optin">
+        <option value="yes">Yes, keep me posted!</option>
+        <option value="no">No thanks</option>
+      </select>
+    </div>
+
+    <button class="btn primary" onclick="submitCheckin()">Check in ✓</button>
+    <p class="privacy-note">Your info is only used by Britt's team to send class updates. No spam, ever.</p>
+  </div>
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div id="success-screen" class="card pulled-up fade-in" style="display:none">
+  <div class="success-screen">
+    <div class="success-icon">✓</div>
+    <h2>You're checked in!</h2>
+    <p id="success-msg">Thanks for coming out. Your feedback has been recorded and helps Britt keep improving every class.</p>
+    <div style="background:var(--green-fill);border-radius:var(--radius);padding:12px 16px;margin-bottom:1.5rem;text-align:left">
+      <div style="font-size:13px;font-weight:500;color:var(--green-text);margin-bottom:4px">You're on the list 🎉</div>
+      <div style="font-size:13px;color:var(--green-text)">Watch your inbox for upcoming class announcements from Britt.</div>
+    </div>
+    <button class="btn secondary" onclick="document.getElementById('success-screen').style.display='none';document.getElementById('checkin-form').style.display='block'">Back</button>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- UPCOMING CLASSES -->
+<div class="upcoming-section">
+  <h3>Upcoming classes</h3>
+  <div class="upcoming-card">
+    <div class="upcoming-date"><div class="upcoming-date-day">7</div><div class="upcoming-date-mo">Jun</div></div>
+    <div class="upcoming-info">
+      <div class="upcoming-title">Trap Yoga — Franklin Park</div>
+      <div class="upcoming-meta">Franklin Park, NW DC · 10:00 AM · Free (DC Gov event)</div>
+      <span class="upcoming-badge">Free admission</span>
+    </div>
+  </div>
+  <div class="upcoming-card">
+    <div class="upcoming-date"><div class="upcoming-date-day">21</div><div class="upcoming-date-mo">Jun</div></div>
+    <div class="upcoming-info">
+      <div class="upcoming-title">Trap Yoga — The Gathering Spot</div>
+      <div class="upcoming-meta">The Gathering Spot DC · 10:00 AM</div>
+      <span class="upcoming-badge">Monthly series</span>
+    </div>
+  </div>
+  <div class="upcoming-card">
+    <div class="upcoming-date"><div class="upcoming-date-day">12</div><div class="upcoming-date-mo">Jul</div></div>
+    <div class="upcoming-info">
+      <div class="upcoming-title">Trap Yoga & Sound Bath — Franklin Park</div>
+      <div class="upcoming-meta">Franklin Park, NW DC · 10:00 AM · Free</div>
+      <span class="upcoming-badge">Special edition</span>
+    </div>
+  </div>
+  <div class="upcoming-card">
+    <div class="upcoming-date"><div class="upcoming-date-day">30</div><div class="upcoming-date-mo">Aug</div></div>
+    <div class="upcoming-info">
+      <div class="upcoming-title">Trap Yoga Finale — Franklin Park</div>
+      <div class="upcoming-meta">Franklin Park, NW DC · 10:00 AM · Free</div>
+      <span class="upcoming-badge">Summer finale</span>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p style="margin-bottom:4px">Built for <strong>Britt Dupree Daniels</strong> · Wellness Architect</p>
+  <p>Prophet Fitness LLC · Washington D.C.</p>
+</div>
+
+<script>
+let selectedRating = 0;
+const starLabels = ['','Not great','It was ok','Pretty good','Really good','Amazing!'];
+
+function setRating(val){
+  selectedRating = val;
+  document.querySelectorAll('.star').forEach((s,i)=>{
+    s.classList.toggle('active', i < val);
+  });
+  document.getElementById('star-label').textContent = starLabels[val]||'';
+}
+
+function submitCheckin(){
+  const name = document.getElementById('ci-name').value.trim();
+  const email = document.getElementById('ci-email').value.trim();
+  if(!name || !email){ alert('Please enter your name and email to check in.'); return; }
+  if(!email.includes('@')){ alert('Please enter a valid email address.'); return; }
+
+  // In production this would POST to a backend / Airtable / Google Sheet
+  const data = {
+    name,email,
+    source: document.getElementById('ci-source').value,
+    firstTime: document.getElementById('ci-first').value,
+    rating: selectedRating||null,
+    feedback: document.getElementById('ci-feedback').value.trim(),
+    optin: document.getElementById('ci-optin').value,
+    class: document.getElementById('class-name').textContent,
+    timestamp: new Date().toISOString(),
+  };
+  console.log('Check-in submitted:', data);
+
+  const msg = selectedRating >= 4
+    ? `Thanks for coming out, ${name.split(' ')[0]}! So glad you loved it — see you at the next one.`
+    : selectedRating
+    ? `Thanks for the honest feedback, ${name.split(' ')[0]}. Britt reads every rating and uses it to improve.`
+    : `You're all checked in, ${name.split(' ')[0]}! Come back to this link after class to rate your experience.`;
+
+  document.getElementById('success-msg').textContent = msg;
+  document.getElementById('checkin-form').style.display = 'none';
+  document.getElementById('success-screen').style.display = 'block';
+  document.getElementById('success-screen').classList.add('fade-in');
+}
+
+// Auto-populate class from URL params (e.g. ?class=MedStar&date=2026-05-17)
+const params = new URLSearchParams(window.location.search);
+if(params.get('class')) document.getElementById('class-name').textContent = decodeURIComponent(params.get('class'));
+if(params.get('date') && params.get('venue')){
+  document.getElementById('class-details').textContent = `${params.get('date')} · ${decodeURIComponent(params.get('venue'))}`;
+}
+</script>
+</body>
+</html>

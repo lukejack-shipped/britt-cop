@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classes — Britt Dupree Daniels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0e0d0b;
+  --cream:#f0ece3;
+  --cream2:#d8d2c4;
+  --warm:#c8b89a;
+  --muted:#6b6355;
+  --faint:#1e1c19;
+  --faint2:#252220;
+  --border:rgba(200,184,154,.15);
+  --border2:rgba(200,184,154,.28);
+  --green:#2ec27e;--green-dim:rgba(46,194,126,.1);
+  --blue:#4a9eff;--blue-dim:rgba(74,158,255,.1);
+  --amber:#f0a030;--amber-dim:rgba(240,160,48,.1);
+  --coral:#f06050;--coral-dim:rgba(240,96,80,.1);
+  --purple:#9b7fff;--purple-dim:rgba(155,127,255,.1);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--ink);
+  color:var(--cream);
+  min-height:100vh;
+}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:100;
+  padding:1rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(14,13,11,.92);
+  backdrop-filter:blur(12px);
+  border-bottom:0.5px solid var(--border);
+}
+.nav-brand{
+  display:flex;align-items:center;gap:12px;
+}
+.nav-logo{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--cream);color:var(--ink);
+  font-family:'Cinzel',serif;font-size:12px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+}
+.nav-name{font-family:'Cinzel',serif;font-size:14px;font-weight:500;letter-spacing:.03em}
+.nav-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.nav-links{display:flex;gap:1.5rem;align-items:center}
+.nav-link{
+  font-size:13px;color:var(--muted);
+  text-decoration:none;transition:color .2s;
+}
+.nav-link:hover{color:var(--cream)}
+.nav-cta{
+  padding:8px 18px;
+  border-radius:20px;
+  background:var(--cream);color:var(--ink);
+  font-size:13px;font-weight:500;
+  text-decoration:none;
+  transition:opacity .2s;
+}
+.nav-cta:hover{opacity:.85}
+@media(max-width:640px){
+  nav{padding:.875rem 1.25rem}
+  .nav-links{display:none}
+}
+
+/* ── HERO ── */
+.hero{
+  padding:5rem 2rem 4rem;
+  max-width:900px;margin:0 auto;
+  text-align:center;
+  border-bottom:0.5px solid var(--border);
+}
+.hero-eyebrow{
+  font-family:'DM Mono',monospace;
+  font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--warm);
+  margin-bottom:1.25rem;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.hero-eyebrow::before,.hero-eyebrow::after{
+  content:'';display:inline-block;width:32px;height:0.5px;background:var(--warm);opacity:.5;
+}
+.hero h1{
+  font-family:'Cinzel',serif;
+  font-size:clamp(2.2rem,6vw,4.5rem);
+  font-weight:500;line-height:1.05;
+  letter-spacing:-.02em;
+  color:var(--cream);
+  margin-bottom:1.25rem;
+}
+.hero h1 em{font-style:normal;color:var(--warm)}
+.hero-sub{
+  font-size:16px;font-weight:300;
+  color:var(--muted);line-height:1.7;
+  max-width:560px;margin:0 auto 2rem;
+}
+.hero-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:2.5rem}
+.hero-tag{
+  font-family:'DM Mono',monospace;
+  font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  padding:5px 14px;border-radius:20px;
+  border:0.5px solid var(--border2);color:var(--muted);
+}
+.hero-stats{
+  display:flex;gap:3rem;justify-content:center;flex-wrap:wrap;
+}
+.hero-stat{text-align:center}
+.hero-stat-val{
+  font-family:'Cinzel',serif;
+  font-size:2rem;font-weight:500;
+  color:var(--cream);line-height:1;margin-bottom:4px;
+}
+.hero-stat-val span{color:var(--warm)}
+.hero-stat-label{font-size:12px;color:var(--muted);font-weight:300}
+
+/* ── FILTER BAR ── */
+.filter-bar{
+  max-width:900px;margin:0 auto;
+  padding:1.5rem 2rem;
+  display:flex;gap:8px;flex-wrap:wrap;
+  border-bottom:0.5px solid var(--border);
+}
+.filter-pill{
+  font-family:'DM Mono',monospace;
+  font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  padding:6px 16px;border-radius:20px;
+  border:0.5px solid var(--border);
+  color:var(--muted);background:none;
+  cursor:pointer;transition:all .2s;
+}
+.filter-pill.active,.filter-pill:hover{
+  border-color:var(--border2);color:var(--cream);background:var(--faint2);
+}
+
+/* ── CLASSES ── */
+.classes-wrap{max-width:900px;margin:0 auto;padding:2rem}
+
+/* Month header */
+.month-header{
+  font-family:'Cinzel',serif;
+  font-size:1rem;font-weight:400;
+  color:var(--warm);letter-spacing:.08em;
+  text-transform:uppercase;
+  margin:2rem 0 1rem;
+  padding-bottom:.75rem;
+  border-bottom:0.5px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+
+/* Class card */
+.class-card{
+  border:0.5px solid var(--border);
+  border-radius:16px;
+  padding:1.5rem;
+  margin-bottom:14px;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:1.25rem;
+  align-items:start;
+  transition:border-color .2s,transform .2s;
+  cursor:pointer;
+  text-decoration:none;
+  color:inherit;
+  background:var(--faint);
+}
+.class-card:hover{
+  border-color:var(--border2);
+  transform:translateY(-1px);
+}
+.class-card.featured{
+  background:linear-gradient(135deg,var(--faint2) 0%,var(--faint) 100%);
+  border-color:var(--border2);
+}
+
+/* Date block */
+.date-block{
+  min-width:64px;
+  text-align:center;
+  background:var(--ink);
+  border-radius:10px;
+  padding:10px 8px;
+  border:0.5px solid var(--border);
+}
+.date-day{
+  font-family:'Cinzel',serif;
+  font-size:26px;font-weight:500;line-height:1;
+  color:var(--cream);
+}
+.date-month{
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);margin-top:3px;
+}
+.date-dow{
+  font-size:10px;color:var(--muted);margin-top:2px;font-weight:300;
+}
+
+/* Class info */
+.class-info{}
+.class-type{
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:6px;display:flex;align-items:center;gap:8px;
+}
+.class-name{
+  font-family:'Cinzel',serif;
+  font-size:1.1rem;font-weight:500;
+  color:var(--cream);margin-bottom:6px;line-height:1.2;
+}
+.class-meta{
+  font-size:13px;font-weight:300;color:var(--muted);
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  margin-bottom:8px;line-height:1.5;
+}
+.class-meta-sep{color:var(--border2)}
+.class-desc{
+  font-size:13px;font-weight:300;color:var(--muted);
+  line-height:1.6;margin-bottom:10px;
+  display:none;
+}
+.class-card.featured .class-desc{display:block}
+.class-tags{display:flex;gap:6px;flex-wrap:wrap}
+.ctag{
+  font-size:11px;padding:2px 9px;border-radius:20px;
+  border:0.5px solid;font-weight:500;
+}
+.ctag-free{background:var(--green-dim);color:var(--green);border-color:rgba(46,194,126,.3)}
+.ctag-corp{background:var(--blue-dim);color:var(--blue);border-color:rgba(74,158,255,.3)}
+.ctag-ty{background:var(--coral-dim);color:var(--coral);border-color:rgba(240,96,80,.3)}
+.ctag-sold{background:var(--amber-dim);color:var(--amber);border-color:rgba(240,160,48,.3)}
+.ctag-priv{background:var(--purple-dim);color:var(--purple);border-color:rgba(155,127,255,.3)}
+.ctag-new{background:var(--green-dim);color:var(--green);border-color:rgba(46,194,126,.3)}
+
+/* CTA block */
+.class-cta{
+  display:flex;flex-direction:column;gap:8px;align-items:flex-end;flex-shrink:0;
+}
+.btn-register{
+  padding:10px 18px;
+  border-radius:8px;
+  background:var(--cream);color:var(--ink);
+  font-size:13px;font-weight:500;
+  border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  text-decoration:none;
+  white-space:nowrap;
+  transition:opacity .15s;
+  display:inline-block;
+}
+.btn-register:hover{opacity:.85}
+.btn-waitlist{
+  padding:8px 14px;border-radius:8px;
+  background:transparent;color:var(--muted);
+  font-size:12px;font-weight:400;
+  border:0.5px solid var(--border2);cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  white-space:nowrap;
+  transition:color .2s,border-color .2s;
+  display:inline-block;text-decoration:none;
+}
+.btn-waitlist:hover{color:var(--cream);border-color:var(--border2)}
+.spots-left{
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:.05em;
+  text-align:right;
+}
+.spots-low{color:var(--coral)}
+.spots-ok{color:var(--muted)}
+.spots-free{color:var(--green)}
+
+/* Instructor line */
+.instructor-line{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;color:var(--muted);
+  margin-top:4px;
+}
+.instructor-av{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--faint2);border:0.5px solid var(--border2);
+  font-size:8px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--warm);
+}
+
+/* ── EMAIL CAPTURE ── */
+.email-strip{
+  max-width:900px;margin:0 auto 0;
+  padding:3rem 2rem;
+  border-top:0.5px solid var(--border);
+  text-align:center;
+}
+.email-strip h2{
+  font-family:'Cinzel',serif;
+  font-size:1.6rem;font-weight:400;
+  color:var(--cream);margin-bottom:.75rem;
+}
+.email-strip p{
+  font-size:14px;font-weight:300;color:var(--muted);
+  line-height:1.6;margin-bottom:1.5rem;
+}
+.email-form{
+  display:flex;gap:8px;max-width:420px;margin:0 auto;
+}
+.email-form input{
+  flex:1;padding:12px 16px;
+  border:0.5px solid var(--border2);border-radius:8px;
+  background:var(--faint2);color:var(--cream);
+  font-size:14px;font-family:'DM Sans',sans-serif;
+  outline:none;
+}
+.email-form input:focus{border-color:var(--warm)}
+.email-form input::placeholder{color:var(--muted)}
+.email-form button{
+  padding:12px 20px;border:none;border-radius:8px;
+  background:var(--cream);color:var(--ink);
+  font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;
+  cursor:pointer;white-space:nowrap;
+  transition:opacity .15s;
+}
+.email-form button:hover{opacity:.85}
+.email-note{font-size:11px;color:var(--muted);margin-top:10px}
+
+/* ── FOOTER ── */
+footer{
+  max-width:900px;margin:0 auto;
+  padding:2rem;
+  border-top:0.5px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:.05em;flex-wrap:wrap;gap:10px;
+}
+.footer-links{display:flex;gap:1rem}
+.footer-links a{color:var(--muted);text-decoration:none;transition:color .2s}
+.footer-links a:hover{color:var(--warm)}
+
+@media(max-width:640px){
+  .hero{padding:3rem 1.25rem 2.5rem}
+  .filter-bar{padding:1rem 1.25rem}
+  .classes-wrap{padding:1.25rem}
+  .class-card{grid-template-columns:auto 1fr;gap:1rem}
+  .class-cta{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center}
+  .hero-stats{gap:2rem}
+  .email-form{flex-direction:column}
+  footer{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">BDD</div>
+    <div>
+      <div class="nav-name">Britt Dupree Daniels</div>
+      <div class="nav-sub">Wellness Architect · DC</div>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a class="nav-link" href="#">About</a>
+    <a class="nav-link" href="#">Corporate</a>
+    <a class="nav-link" href="#">Press</a>
+    <a class="nav-cta" href="bdd_checkin.html">Check in →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Washington D.C. · 2026</div>
+  <h1>Move with<br><em>Purpose.</em></h1>
+  <p class="hero-sub">Trap Yoga, corporate wellness, community classes, and retreats — led by DC's award-winning wellness architect. Free community classes all summer at Franklin Park.</p>
+  <div class="hero-tags">
+    <div class="hero-tag">Trap Yoga</div>
+    <div class="hero-tag">Corporate wellness</div>
+    <div class="hero-tag">Free DC Gov classes</div>
+    <div class="hero-tag">Private coaching</div>
+    <div class="hero-tag">Retreats</div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-val">10<span>K+</span></div>
+      <div class="hero-stat-label">Community members</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">4.9<span>⭐</span></div>
+      <div class="hero-stat-label">Average class rating</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">80<span>K</span></div>
+      <div class="hero-stat-label">Trap Yoga views</div>
+    </div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <button class="filter-pill active" onclick="filterClasses('all',this)">All classes</button>
+  <button class="filter-pill" onclick="filterClasses('trapyoga',this)">Trap Yoga</button>
+  <button class="filter-pill" onclick="filterClasses('free',this)">Free events</button>
+  <button class="filter-pill" onclick="filterClasses('corporate',this)">Corporate</button>
+  <button class="filter-pill" onclick="filterClasses('private',this)">Private coaching</button>
+</div>
+
+<!-- CLASSES -->
+<div class="classes-wrap" id="classes-wrap">
+
+  <!-- MAY -->
+  <div class="month-header" data-month="may">
+    <span>May 2026</span>
+    <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)">3 classes</span>
+  </div>
+
+  <a class="class-card featured" href="bdd_checkin.html" data-type="trapyoga">
+    <div class="date-block">
+      <div class="date-day">24</div>
+      <div class="date-month">May</div>
+      <div class="date-dow">Saturday</div>
+    </div>
+    <div class="class-info">
+      <div class="class-type">
+        <span style="color:var(--coral)">●</span>
+        <span style="color:var(--coral)">Trap Yoga</span>
+        <span style="font-size:10px;color:var(--muted)">· Monthly series</span>
+      </div>
+      <div class="class-name">Trap Yoga — Birthday Edition</div>
+      <div class="class-meta">
+        <span>10:00 AM</span><span class="class-meta-sep">·</span>
+        <span>The Gathering Spot DC</span><span class="class-meta-sep">·</span>
+        <span>90 min</span>
+      </div>
+      <div class="class-desc">The biggest Trap Yoga yet — birthday edition featuring a sound bath finale and post-class drag brunch. Expect 175+ people, elevated energy, and vibes you won't find anywhere else in DC. Britt and Shalynn Burrill co-instructing.</div>
+      <div class="class-tags">
+        <span class="ctag ctag-sold">Almost sold out</span>
+        <span class="ctag ctag-ty">Trap Yoga</span>
+      </div>
+      <div class="instructor-line">
+        <div class="instructor-av">BD</div>
+        <span>Britt Dupree Daniels</span>
+        <span style="color:var(--border2)">+</span>
+        <div class="instructor-av">SB</div>
+        <span>Shalynn Burrill</span>
+      </div>
+    </div>
+    <div class="class-cta">
+      <a class="btn-register" href="bdd_checkin.html">Register →</a>
+      <a class="btn-waitlist" href="bdd_checkin.html">Waitlist</a>
+      <div class="spots-left spots-low">8 spots left</div>
+    </div>
+  </a>
+
+  <a class="class-card" href="#" data-type="corporate">
+    <div class="date-block">
+      <div class="date-day">17</div>
+      <div class="date-month">May</div>
+      <div class="date-dow">Saturday</div>
+    </div>
+    <div class="class-info">
+      <div class="class-type">
+        <span style="color:var(--blue)">●</span>
+        <span style="color:var(--blue)">Corporate</span>
+      </div>
+      <div class="class-name">MedStar Wellness — Session 6</div>
+      <div class="class-meta">
+        <span>11:00 AM</span><span class="class-meta-sep">·</span>
+        <span>MedStar Washington Hospital</span><span class="class-meta-sep">·</span>
+        <span>75 min</span>
+      </div>
+      <div class="class-tags">
+        <span class="ctag ctag-corp">Private — MedStar staff only</span>
+      </div>
+    </div>
+    <div class="class-cta">
+      <span style="font-size:12px;color:var(--muted);text-align:right">Staff only<br>via MedStar HR</span>
+    </div>
+  </a>
+
+  <a class="class-card" href="#" data-type="private">
+    <div class="date-block">
+      <div class="date-day">10</div>
+      <div class="date-month">May</div>
+      <div class="date-dow">Sunday</div>
+    </div>
+    <div class="class-info">
+      <div class="class-type">
+        <span style="color:var(--purple)">●</span>
+        <span style="color:var(--purple)">Private Coaching</span>
+      </div>
+      <div class="class-name">1:1 Private Session — Marcus Rivera</div>
+      <div class="class-meta">
+        <span>9:00 AM</span><span class="class-meta-sep">·</span>
+        <span>Capitol Hill Gym</span><span class="class-meta-sep">·</span>
+        <span>60 min</span>
+      </div>
+      <div class="class-tags">
+        <span class="ctag ctag-priv">Private client</span>
+      </div>
+    </div>
+    <div class="class-cta">
+      <a class="btn-waitlist" href="#">Inquire →</a>
+    </div>
+  </a>
+
+  <!-- JUNE -->
+  <div class="month-header" data-month="jun">
+    <span>June 2026</span>
+    <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)">4 classes</span>
+  </div>
+
+  <a class="class-card featured" href="bdd_checkin.html?class=Franklin+Park&date=Jun+7&venue=Franklin+Park+NW+DC" data-type="free">
+    <div class="date-block">
+      <div class="date-day">7</div>
+      <div class="date-month">Jun</div>
+      <div class="date-dow">Sunday</div>
+    </div>
+    <div class="class-info">
+      <div class="class-type">
+        <span style="color:var(--green)">●</span>
+        <span style="color:var(--green)">Free Community</span>
+        <span style="font-size:10px;color:var(--muted)">· DC Gov × BDD</span>
+      </div>
+      <div class="class-name">Trap Yoga at Franklin Park</div>
+      <div class="class-meta">
+        <span>10:00 AM</span><span class="class-meta-sep">·</span>
+        <span>Franklin Park, NW DC</span><span class="class-meta-sep">·</span>
+        <span>60 min</span>
+      </div>
+      <div class="class-desc">The DC Government is bringing Trap Yoga to the people — free, outdoors, and open to everyone. Part of a summer-long series at Franklin Park funded by DPRW. Just show up. All levels welcome.</div>
+      <div class="class-tags">
+        <span class="ctag ctag-free">Free admission</span>
+        <span class="ctag ctag-new">Series opener</span>
+        <span class="ctag ctag-ty">Trap Yoga</span>
+      </div>
+      <div class="instructor-line">
+        <div class="instructor-av">BD</div>
+        <span>Britt Dupree Daniels</span>
+      </div>
+    </div>
+    <div class="class-cta">
+      <a class="btn-register" href="bdd_checkin.html">RSVP free →</a>
+      <div class="spots-left spots-free">Free · Open to all</div>
+    </div>
+  </a>
+
+  <a class="class-card" href="bdd_checkin.html" data-type="trapyoga">
+    <div class="date-block">
+      <div class="date-day">21</div>
+      <div class="date-month">Jun</div>
+      <div class="date-dow">Sunday</div>
+    </div>
+    <div class="class-info">
+      <div class="class-type">
+        <span style="color:var(--coral)">●</span>
+        <span style="color:var(--coral)">Trap Yoga</span>
+        <span style="font-size:10px;color:var(--muted)">· Monthly series</span>
+      </div>
+      <div class="class-name">Trap Yoga — The Gathering Spot</div>
+      <div class="class-meta">
+        <span>10:00 AM</span><span class="class-meta-sep">·</span>
+        <span>The Gathering Spot DC</span><span class="class-meta-sep">·</span>
+        <span>90 min</span>
+      </div>
+      <div class="class-tags">
+        <span class="ctag ctag-ty">Trap Yoga</span>
+      </div>
+      <div class="instructor-line">
+        <div class="instructor-av">SB</div>
+        <span>Shalynn Burrill</span>
+        <span style="font-size:11px;color:var(--muted)">(Britt at Ebony Fit Weekend)</span>
+      </div>
+    </div>
+    <div class="class-cta">
+      <a class="btn-register" href="bdd_checkin.html">Register →</a>
+      <div class="spots-left spots-ok">Tickets available</div>
+    </div>
+  </a>
+
+  <a class="class-card" href="#" data-type="free">
+    <div class="date-block">
+      <div class="date-day">21</div>
+      <div class="date-month">Jun</div>
+      <div class="date-dow">Sunday</div>
+    </div>
+    <div class="class-info">
+      <div class="class-type">
+        <span style="color:var(--green)">●</span>
+        <span style="color:var(--green)">Free Community</span>
+        <span style="font-size:10px;color:var(--muted)">· DC Gov × BDD</span>
+      </div>
+      <div class="class-name">Trap Yoga Flow — Franklin Park</div>
+      <div class="class-meta">
+        <span>10:00 AM</span><span class="class-meta-sep">·</span>
+        <span>Franklin Park, NW DC</span><span class="class-meta-sep">·</span>
+        <span>60 min</span>
+      </div>
+      <div class="class-tags">
+        <span class="ctag ctag-free">Free admission</span>
+        <span class="ctag ctag-ty">Trap Yoga</span>
+      </div>
+      <div class="instructor-line">
+        <div class="instructor-av">SB</div>
+        <span>Shalynn Burrill</span>
+      </div>
+    </div>
+    <div class="class-cta">
+      <a class="btn-register" href="#">RSVP free →</a>
+      <div class="spots-left spots-free">Free · Open to all</div>
+    </div>
+  </a>
+
+  <!-- JULY -->
+  <div class="month-header" data-month="jul">
+    <span>July 2026</span>
+    <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)">3 classes</span>
+  </div>
+
+  <a class="class-card featured" href="#" data-type="free">
+    <div class="date-block">
+      <div class="date-day">12</div>
+      <div class="date-month">Jul</div>
+      <div class="date-dow">Sunday</div>
+    </div>
+    <div class="class-info">
+      <div class="class-type">
+        <span style="color:var(--green)">●</span>
+        <span style="color:var(--green)">Free Community</span>
+        <span style="font-size:10px;color:var(--muted)">· Special edition</span>
+      </div>
+      <div class="class-name">Trap Yoga & Sound Bath — Franklin Park</div>
+      <div class="class-meta">
+        <span>10:00 AM</span><span class="class-meta-sep">·</span>
+        <span>Franklin Park, NW DC</span><span class="class-meta-sep">·</span>
+        <span>75 min</span>
+      </div>
+      <div class="class-desc">A special edition combining Trap Yoga with a live sound bath — yoga practice followed by a full guided sound healing session outdoors. Free for the community, made possible by the DC Government.</div>
+      <div class="class-tags">
+        <span class="ctag ctag-free">Free admission</span>
+        <span class="ctag ctag-new">Sound bath included</span>
+      </div>
+      <div class="instructor-line">
+        <div class="instructor-av">BD</div>
+        <span>Britt Dupree Daniels</span>
+        <span style="color:var(--border2)">+</span>
+        <span>Sound Bath Artist TBA</span>
+      </div>
+    </div>
+    <div class="class-cta">
+      <a class="btn-register" href="#">RSVP free →</a>
+      <div class="spots-left spots-free">Free · Open to all</div>
+    </div>
+  </a>
+
+  <a class="class-card" href="#" data-type="free">
+    <div class="date-block">
+      <div class="date-day">19</div>
+      <div class="date-month">Jul</div>
+      <div class="date-dow">Sunday</div>
+    </div>
+    <div class="class-info">
+      <div class="class-type">
+        <span style="color:var(--green)">●</span>
+        <span style="color:var(--green)">Free Community</span>
+      </div>
+      <div class="class-name">Power Yoga — Franklin Park</div>
+      <div class="class-meta">
+        <span>10:00 AM</span><span class="class-meta-sep">·</span>
+        <span>Franklin Park, NW DC</span><span class="class-meta-sep">·</span>
+        <span>60 min</span>
+      </div>
+      <div class="class-tags">
+        <span class="ctag ctag-free">Free admission</span>
+      </div>
+      <div class="instructor-line">
+        <div class="instructor-av">JH</div>
+        <span>Jordan Hicks</span>
+        <span style="font-size:11px;color:var(--muted)">(guest instructor)</span>
+      </div>
+    </div>
+    <div class="class-cta">
+      <a class="btn-register" href="#">RSVP free →</a>
+      <div class="spots-left spots-free">Free · Open to all</div>
+    </div>
+  </a>
+
+  <!-- AUGUST -->
+  <div class="month-header" data-month="aug">
+    <span>August 2026</span>
+    <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)">2 classes</span>
+  </div>
+
+  <a class="class-card" href="#" data-type="free">
+    <div class="date-block">
+      <div class="date-day">30</div>
+      <div class="date-month">Aug</div>
+      <div class="date-dow">Sunday</div>
+    </div>
+    <div class="class-info">
+      <div class="class-type">
+        <span style="color:var(--green)">●</span>
+        <span style="color:var(--green)">Free Community</span>
+        <span style="font-size:10px;color:var(--muted)">· Summer finale</span>
+      </div>
+      <div class="class-name">Trap Yoga Finale — Franklin Park</div>
+      <div class="class-meta">
+        <span>10:00 AM</span><span class="class-meta-sep">·</span>
+        <span>Franklin Park, NW DC</span><span class="class-meta-sep">·</span>
+        <span>90 min</span>
+      </div>
+      <div class="class-tags">
+        <span class="ctag ctag-free">Free admission</span>
+        <span class="ctag ctag-new">Summer finale</span>
+        <span class="ctag ctag-ty">Trap Yoga</span>
+      </div>
+      <div class="instructor-line">
+        <div class="instructor-av">BD</div>
+        <span>Britt Dupree Daniels</span>
+        <span style="font-size:11px;color:var(--muted)">· DC Govt invited · Press welcome</span>
+      </div>
+    </div>
+    <div class="class-cta">
+      <a class="btn-register" href="#">RSVP free →</a>
+      <div class="spots-left spots-free">Free · Open to all</div>
+    </div>
+  </a>
+
+  <!-- PRIVATE COACHING CTA -->
+  <div style="background:var(--faint2);border:0.5px solid var(--border2);border-radius:16px;padding:2rem;margin-top:2rem;display:grid;grid-template-columns:1fr auto;gap:1.5rem;align-items:center">
+    <div>
+      <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:500;color:var(--cream);margin-bottom:.5rem">Private coaching with Britt</div>
+      <div style="font-size:13px;font-weight:300;color:var(--muted);line-height:1.6">1:1 sessions tailored to your goals — strength, weight loss, marathon prep, or just moving better. Limited slots available.</div>
+    </div>
+    <a class="btn-register" href="#">Inquire →</a>
+  </div>
+
+</div>
+
+<!-- EMAIL CAPTURE -->
+<div class="email-strip">
+  <h2>Never miss a class.</h2>
+  <p>Get notified when new classes drop, when Trap Yoga tickets go on sale, and when free DC Government sessions are announced.</p>
+  <div class="email-form">
+    <input type="email" placeholder="your@email.com" id="email-input">
+    <button onclick="submitEmail()">Notify me</button>
+  </div>
+  <div class="email-note" id="email-note">No spam. Unsubscribe any time. Usually 1–2 emails per month.</div>
+</div>
+
+<footer>
+  <span>BRITT DUPREE DANIELS · WASHINGTON D.C. · PROPHET FITNESS LLC</span>
+  <div class="footer-links">
+    <a href="bdd_checkin.html">Check in</a>
+    <a href="#">Instagram</a>
+    <a href="#">Corporate</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+function filterClasses(type, btn){
+  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.class-card').forEach(card=>{
+    if(type==='all'){card.style.display='grid';return}
+    if(type==='free'){card.style.display=card.dataset.type==='free'?'grid':'none';return}
+    card.style.display=card.dataset.type===type?'grid':'none';
+  });
+  // Hide empty month headers
+  document.querySelectorAll('.month-header').forEach(h=>{
+    const next=h.nextElementSibling;
+    const hasVisible=Array.from(h.parentElement.querySelectorAll('.class-card'))
+      .filter(c=>{
+        let el=c.previousElementSibling;
+        while(el&&!el.classList.contains('month-header'))el=el.previousElementSibling;
+        return el===h;
+      })
+      .some(c=>c.style.display!=='none');
+    h.style.display=hasVisible?'':'none';
+  });
+}
+
+function submitEmail(){
+  const v=document.getElementById('email-input').value.trim();
+  if(!v||!v.includes('@')){alert('Please enter a valid email.');return}
+  document.getElementById('email-note').textContent="✓ You're on the list! We'll be in touch.";
+  document.getElementById('email-note').style.color='var(--green)';
+  document.getElementById('email-input').value='';
+}
+</script>
+</body>
+</html>
