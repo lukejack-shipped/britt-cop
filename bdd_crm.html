@@ -56,12 +56,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .stat-val{font-size:20px;font-weight:500;margin-top:3px}
 .stat-sub{font-size:11px;color:var(--text3);margin-top:1px}
 
-/* Tabs */
-.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--border);margin-bottom:1.25rem;overflow-x:auto}
-.tab{padding:8px 14px;font-size:13px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap;font-family:inherit}
-.tab.active{color:var(--text);border-bottom-color:var(--text);font-weight:500}
-.tab:hover:not(.active){color:var(--text)}
+/* Grouped nav */
+.grouped-nav{display:flex;gap:0;border-bottom:0.5px solid var(--border);margin-bottom:1.25rem;overflow-x:auto;background:var(--bg)}
+.nav-group{display:flex;flex-direction:column;border-right:0.5px solid var(--border);flex-shrink:0}
+.nav-group:last-child{border-right:none}
+.nav-group-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:6px 10px 3px;background:var(--bg2);border-bottom:0.5px solid var(--border)}
+.nav-group-tabs{display:flex;gap:0}
+.tab{padding:7px 13px;font-size:12px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap;font-family:inherit;border-right:0.5px solid var(--border)}
+.tab:last-child{border-right:none}
+.tab.active{color:var(--text);border-bottom-color:var(--text);font-weight:500;background:var(--bg)}
+.tab:hover:not(.active){color:var(--text);background:var(--bg2)}
 .panel{display:none}.panel.active{display:block}
+/* Brand as home link */
+.brand-link{text-decoration:none;color:inherit;display:flex;align-items:center;gap:10px;cursor:pointer}
+.brand-link:hover .brand-mark{opacity:.8}
 
 /* Toolbar */
 .toolbar{display:flex;gap:8px;margin-bottom:1rem;align-items:center;flex-wrap:wrap}
@@ -239,13 +247,13 @@ tr:hover td{background:var(--bg2)}
 
   <!-- TOP BAR -->
   <div class="topbar">
-    <div class="brand">
+    <a class="brand-link" href="index.html">
       <div class="brand-mark">BDD</div>
       <div>
         <div class="brand-name">Britt Dupree Daniels</div>
         <div class="brand-sub">Wellness Architect · Washington D.C.</div>
       </div>
-    </div>
+    </a>
     <div style="display:flex;gap:8px">
       <button class="btn" onclick="switchTab('tasks')"><i class="ti ti-checklist"></i> Tasks <span id="task-badge" style="background:var(--coral);color:#fff;border-radius:20px;padding:0 6px;font-size:11px;margin-left:2px"></span></button>
       <button class="btn primary" onclick="openAddContact()"><i class="ti ti-plus"></i> Add contact</button>
@@ -281,30 +289,65 @@ tr:hover td{background:var(--bg2)}
     </div>
   </div>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('contacts')">Contacts</button>
-    <button class="tab" onclick="switchTab('orgs')">Organizations</button>
-    <button class="tab" onclick="switchTab('pipeline')">Pipeline</button>
-    <button class="tab" onclick="switchTab('contracts')">Contracts</button>
-    <button class="tab" onclick="switchTab('dcgov')">DC Gov / Franklin Park</button>
-    <button class="tab" onclick="switchTab('events')">Trap Yoga</button>
-    <button class="tab" onclick="switchTab('classes')">Classes & Check-in</button>
-    <button class="tab" onclick="switchTab('tasks')">Tasks</button>
-    <button class="tab" onclick="switchTab('revenue')">Revenue</button>
-    <button class="tab" onclick="switchTab('pnl')">P&amp;L</button>
-    <button class="tab" onclick="switchTab('renewal')">Renewal Radar</button>
-    <button class="tab" onclick="switchTab('proposals')">Proposals</button>
-    <button class="tab" onclick="switchTab('ambassador')">Ambassadors</button>
-    <button class="tab" onclick="switchTab('waitlist')">Waitlist</button>
-    <button class="tab" onclick="switchTab('campaigns')">Campaigns</button>
-    <button class="tab" onclick="switchTab('speakerkit')">Speaker Kit</button>
-    <button class="tab" onclick="switchTab('press')">Press</button>
-    <button class="tab" onclick="switchTab('sponsorship')">Sponsorships</button>
-    <button class="tab" onclick="switchTab('expansion')">Expansion</button>
-    <button class="tab" onclick="switchTab('network')">Network</button>
-    <button class="tab" onclick="switchTab('ai')">AI assistant</button>
-    <button class="tab" onclick="switchTab('strategy')">Data strategy</button>
+  <!-- GROUPED NAV -->
+  <div class="grouped-nav">
+    <div class="nav-group">
+      <div class="nav-group-label">People</div>
+      <div class="nav-group-tabs">
+        <button class="tab active" onclick="switchTab('contacts')">Contacts</button>
+        <button class="tab" onclick="switchTab('orgs')">Organizations</button>
+        <button class="tab" onclick="switchTab('network')">Network</button>
+      </div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Business</div>
+      <div class="nav-group-tabs">
+        <button class="tab" onclick="switchTab('pipeline')">Pipeline</button>
+        <button class="tab" onclick="switchTab('tasks')">Tasks</button>
+        <button class="tab" onclick="switchTab('proposals')">Proposals</button>
+      </div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Delivery</div>
+      <div class="nav-group-tabs">
+        <button class="tab" onclick="switchTab('contracts')">Contracts</button>
+        <button class="tab" onclick="switchTab('dcgov')">DC Gov</button>
+        <button class="tab" onclick="switchTab('classes')">Classes</button>
+      </div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Community</div>
+      <div class="nav-group-tabs">
+        <button class="tab" onclick="switchTab('events')">Trap Yoga</button>
+        <button class="tab" onclick="switchTab('ambassador')">Ambassadors</button>
+        <button class="tab" onclick="switchTab('waitlist')">Waitlist</button>
+        <button class="tab" onclick="switchTab('campaigns')">Campaigns</button>
+      </div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Intelligence</div>
+      <div class="nav-group-tabs">
+        <button class="tab" onclick="switchTab('revenue')">Revenue</button>
+        <button class="tab" onclick="switchTab('pnl')">P&amp;L</button>
+        <button class="tab" onclick="switchTab('renewal')">Renewal Radar</button>
+      </div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Growth</div>
+      <div class="nav-group-tabs">
+        <button class="tab" onclick="switchTab('speakerkit')">Speaker Kit</button>
+        <button class="tab" onclick="switchTab('press')">Press</button>
+        <button class="tab" onclick="switchTab('sponsorship')">Sponsorships</button>
+        <button class="tab" onclick="switchTab('expansion')">Expansion</button>
+      </div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Tools</div>
+      <div class="nav-group-tabs">
+        <button class="tab" onclick="switchTab('ai')">AI assistant</button>
+        <button class="tab" onclick="switchTab('strategy')">Data strategy</button>
+      </div>
+    </div>
   </div>
 
   <!-- CONTACTS -->
@@ -486,7 +529,7 @@ tr:hover td{background:var(--bg2)}
         <option value="negotiation">Negotiation</option>
         <option value="completed">Completed</option>
       </select>
-      <button class="btn primary" onclick="alert('Add contract — Phase 2 build')"><i class="ti ti-plus"></i> New contract</button>
+      <button class="btn primary" onclick="document.getElementById('modal-deal').style.display='flex'"><i class="ti ti-plus"></i> New contract</button>
       <div style="margin-left:auto;font-size:13px;color:var(--text2)">Active contract value: <strong id="contract-total" style="color:var(--text)">$0</strong></div>
     </div>
     <div id="contracts-list"></div>
@@ -563,7 +606,7 @@ tr:hover td{background:var(--bg2)}
         <option value="upcoming">Upcoming</option>
         <option value="completed">Completed</option>
       </select>
-      <button class="btn primary" onclick="alert('Add class — Phase 2 build')"><i class="ti ti-plus"></i> Schedule class</button>
+      <button class="btn primary" onclick="document.getElementById('modal-task').style.display='flex'"><i class="ti ti-plus"></i> Schedule class</button>
       <div style="margin-left:auto">
         <span style="font-size:12px;color:var(--text2)">Share check-in link: </span>
         <span class="checkin-pill"><i class="ti ti-link"></i> bdd.link/checkin</span>
@@ -598,7 +641,7 @@ tr:hover td{background:var(--bg2)}
       <p style="font-size:13px;color:var(--text2);margin-bottom:10px">Attendees scan a QR code or follow a link to check in, rate the class, and see upcoming sessions. Requires name + email — automatically builds the contact database.</p>
       <div style="display:flex;gap:8px">
         <button class="btn primary" onclick="openCheckinPreview()"><i class="ti ti-external-link"></i> Preview check-in page</button>
-        <button class="btn" onclick="alert('QR code download — Phase 2 build')"><i class="ti ti-qrcode"></i> Download QR code</button>
+        <button class="btn" onclick="showQR()"><i class="ti ti-qrcode"></i> Download QR code</button>
         <button class="btn" onclick="exportCheckinData()"><i class="ti ti-download"></i> Export check-in data</button>
       </div>
     </div>
@@ -848,7 +891,7 @@ tr:hover td{background:var(--bg2)}
   <div id="panel-speakerkit" class="panel">
     <div class="toolbar">
       <div style="font-size:13px;color:var(--text2)">One-click PDF speaker kit — bio, topics, fees, and media. Ready to send to any booker in seconds.</div>
-      <button class="btn primary" onclick="alert('PDF generation — downloads bdd_speaker_kit.pdf')"><i class="ti ti-download"></i> Download speaker kit PDF</button>
+      <button class="btn primary" onclick="showSpeakerKitPreview()"><i class="ti ti-download"></i> Download speaker kit PDF</button>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
       <div class="card padded">
@@ -908,7 +951,7 @@ tr:hover td{background:var(--bg2)}
     <div class="toolbar">
       <div style="font-size:13px;color:var(--text2)">Every media appearance, feature, and quote in one place. Pull a media kit in minutes.</div>
       <button class="btn primary"><i class="ti ti-plus"></i> Log appearance</button>
-      <button class="btn" onclick="alert('Media kit PDF download — Phase 2')"><i class="ti ti-download"></i> Download media kit</button>
+      <button class="btn" onclick="showMediaKit()"><i class="ti ti-download"></i> Download media kit</button>
     </div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem">
       <div class="stat"><div class="stat-label">Total appearances</div><div class="stat-val">14</div></div>
@@ -1254,10 +1297,12 @@ function updateStats(){
 // TABS
 // ══════════════════════════════════════════════
 function switchTab(t){
-  const tabNames=['contacts','orgs','pipeline','contracts','dcgov','events','classes','tasks','revenue','pnl','renewal','proposals','ambassador','waitlist','campaigns','speakerkit','press','sponsorship','expansion','network','ai','strategy'];
-  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',tabNames[i]===t));
+  document.querySelectorAll('.tab').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('onclick')===`switchTab('${t}')`);
+  });
   document.querySelectorAll('.panel').forEach(el=>el.classList.remove('active'));
-  document.getElementById('panel-'+t).classList.add('active');
+  const panel = document.getElementById('panel-'+t);
+  if(panel) panel.classList.add('active');
   if(t==='network')setTimeout(initGraph,50);
   if(t==='revenue')renderRevChart();
   if(t==='pipeline')renderPipeline();
@@ -1862,7 +1907,7 @@ function renderClasses(){
       <td><span class="checkin-stat" style="${!c.checkins?'background:var(--bg2);color:var(--text3)':''}">${c.checkins||'—'}</span></td>
       <td>${c.rating?`<span class="rating-stars">${c.rating}⭐</span>`:'<span style="color:var(--text3)">—</span>'}</td>
       <td><span class="badge ${statusB}">${c.status}</span></td>
-      <td><button class="btn sm" onclick="alert('Class detail view — Phase 2')"><i class="ti ti-arrow-right"></i></button></td>
+      <td><button class="btn sm" onclick="switchTab('classes')"><i class="ti ti-arrow-right"></i></button></td>
     </tr>`;
   }).join('');
 
@@ -1905,6 +1950,64 @@ function exportCheckinData(){
   const rows=recentFeedback.map(f=>[f.name,'(email captured)',f.class,'2026-04-26',f.rating,f.comment].map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`));
   const csv=[hdr,...rows].map(r=>r.join(',')).join('\n');
   const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='bdd_checkins.csv';a.click();
+}
+
+// ══════════════════════════════════════════════
+// MISC HELPERS
+// ══════════════════════════════════════════════
+function showQR(){
+  // In production: generate a real QR code linking to bdd_checkin.html
+  const modal = document.createElement('div');
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:300';
+  modal.innerHTML=`<div style="background:var(--bg);border-radius:16px;padding:2rem;max-width:340px;text-align:center">
+    <div style="font-size:80px;margin-bottom:1rem">▣</div>
+    <div style="font-weight:500;font-size:15px;margin-bottom:8px">QR Code — bdd.link/checkin</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1.25rem">In production, this QR code links to your attendee check-in page. Print it and display at every class.</div>
+    <a href="bdd_checkin.html" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:var(--text);color:var(--bg);padding:10px 20px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:500;margin-bottom:10px">Open check-in page →</a>
+    <div><button onclick="this.closest('div[style]').remove()" style="background:none;border:none;color:var(--text2);font-size:13px;cursor:pointer;margin-top:8px">Close</button></div>
+  </div>`;
+  document.body.appendChild(modal);
+  modal.addEventListener('click', e=>{ if(e.target===modal) modal.remove(); });
+}
+
+function showSpeakerKitPreview(){
+  const modal = document.createElement('div');
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:300';
+  modal.innerHTML=`<div style="background:var(--bg);border-radius:16px;padding:2rem;max-width:420px">
+    <div style="font-weight:500;font-size:15px;margin-bottom:12px">🎤 Speaker Kit</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;line-height:1.6">In production, this generates a polished PDF containing Britt's bio, keynote topics, fee schedule, testimonials, and media logos. Sent to bookers as a professional one-pager.</div>
+    <div style="background:var(--bg2);border-radius:8px;padding:12px;font-size:12px;color:var(--text2);font-family:monospace;margin-bottom:1rem">
+      bdd_speaker_kit_2026.pdf<br>
+      → Bio (200 words)<br>
+      → 3 keynote topics<br>
+      → Fee: $6,000–$12,000<br>
+      → Media logos: Fox 5, Ebony, DC Mag<br>
+      → Client list: Google, Salesforce, Cigna
+    </div>
+    <button onclick="this.closest('div[style]').remove()" style="background:var(--text);color:var(--bg);border:none;border-radius:8px;padding:10px 20px;font-size:14px;cursor:pointer;font-family:inherit">Got it</button>
+  </div>`;
+  document.body.appendChild(modal);
+  modal.addEventListener('click', e=>{ if(e.target===modal) modal.remove(); });
+}
+
+function showMediaKit(){
+  const modal = document.createElement('div');
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:300';
+  modal.innerHTML=`<div style="background:var(--bg);border-radius:16px;padding:2rem;max-width:420px">
+    <div style="font-weight:500;font-size:15px;margin-bottom:12px">📰 Media Kit</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;line-height:1.6">In production, this generates a PDF media kit including all press appearances, quotes, outlet logos, estimated reach, and headshots — ready to send to journalists, bookers, and brand partners.</div>
+    <div style="background:var(--bg2);border-radius:8px;padding:12px;font-size:12px;color:var(--text2);font-family:monospace;margin-bottom:1rem">
+      bdd_media_kit_2026.pdf<br>
+      → 14 appearances · 8 outlets<br>
+      → Est. total reach: 2.4M<br>
+      → Featured: Fox 5, Ebony, Washington Post<br>
+      → Headshots (3 options)<br>
+      → Quote bank
+    </div>
+    <button onclick="this.closest('div[style]').remove()" style="background:var(--text);color:var(--bg);border:none;border-radius:8px;padding:10px 20px;font-size:14px;cursor:pointer;font-family:inherit">Got it</button>
+  </div>`;
+  document.body.appendChild(modal);
+  modal.addEventListener('click', e=>{ if(e.target===modal) modal.remove(); });
 }
 
 // ══════════════════════════════════════════════
