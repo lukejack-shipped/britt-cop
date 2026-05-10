@@ -56,18 +56,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .stat-val{font-size:20px;font-weight:500;margin-top:3px}
 .stat-sub{font-size:11px;color:var(--text3);margin-top:1px}
 
-/* Grouped nav */
-.grouped-nav{display:flex;gap:0;border-bottom:0.5px solid var(--border);margin-bottom:1.25rem;overflow-x:auto;background:var(--bg)}
-.nav-group{display:flex;flex-direction:column;border-right:0.5px solid var(--border);flex-shrink:0}
-.nav-group:last-child{border-right:none}
-.nav-group-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:6px 10px 3px;background:var(--bg2);border-bottom:0.5px solid var(--border)}
-.nav-group-tabs{display:flex;gap:0}
-.tab{padding:7px 13px;font-size:12px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap;font-family:inherit;border-right:0.5px solid var(--border)}
-.tab:last-child{border-right:none}
-.tab.active{color:var(--text);border-bottom-color:var(--text);font-weight:500;background:var(--bg)}
-.tab:hover:not(.active){color:var(--text);background:var(--bg2)}
+/* Two-level nav */
+.nav-groups{display:flex;gap:6px;padding:0 0 0 0;margin-bottom:0;flex-wrap:wrap}
+.nav-group-btn{padding:7px 16px;font-size:13px;background:var(--bg2);border:0.5px solid var(--border);border-radius:20px;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap;font-family:inherit;font-weight:400}
+.nav-group-btn:hover{background:var(--bg3);color:var(--text)}
+.nav-group-btn.active{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:500}
+.nav-subtabs{display:none;gap:2px;border-bottom:0.5px solid var(--border);margin-top:10px;padding-bottom:0;overflow-x:auto}
+.nav-subtabs.active{display:flex}
+.tab{padding:8px 16px;font-size:13px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text2);cursor:pointer;transition:all .15s;white-space:nowrap;font-family:inherit}
+.tab.active{color:var(--text);border-bottom-color:var(--text);font-weight:500}
+.tab:hover:not(.active){color:var(--text)}
 .panel{display:none}.panel.active{display:block}
-/* Brand as home link */
 .brand-link{text-decoration:none;color:inherit;display:flex;align-items:center;gap:10px;cursor:pointer}
 .brand-link:hover .brand-mark{opacity:.8}
 
@@ -289,64 +288,52 @@ tr:hover td{background:var(--bg2)}
     </div>
   </div>
 
-  <!-- GROUPED NAV -->
-  <div class="grouped-nav">
-    <div class="nav-group">
-      <div class="nav-group-label">People</div>
-      <div class="nav-group-tabs">
-        <button class="tab active" onclick="switchTab('contacts')">Contacts</button>
-        <button class="tab" onclick="switchTab('orgs')">Organizations</button>
-        <button class="tab" onclick="switchTab('network')">Network</button>
-      </div>
+  <!-- TWO-LEVEL NAV -->
+  <div style="margin-bottom:1.25rem">
+    <div class="nav-groups">
+      <button class="nav-group-btn active" onclick="selectGroup('people')">People</button>
+      <button class="nav-group-btn" onclick="selectGroup('business')">Business</button>
+      <button class="nav-group-btn" onclick="selectGroup('delivery')">Delivery</button>
+      <button class="nav-group-btn" onclick="selectGroup('community')">Community</button>
+      <button class="nav-group-btn" onclick="selectGroup('intelligence')">Intelligence</button>
+      <button class="nav-group-btn" onclick="selectGroup('growth')">Growth</button>
+      <button class="nav-group-btn" onclick="selectGroup('tools')">Tools</button>
     </div>
-    <div class="nav-group">
-      <div class="nav-group-label">Business</div>
-      <div class="nav-group-tabs">
-        <button class="tab" onclick="switchTab('pipeline')">Pipeline</button>
-        <button class="tab" onclick="switchTab('tasks')">Tasks</button>
-        <button class="tab" onclick="switchTab('proposals')">Proposals</button>
-      </div>
+    <div class="nav-subtabs active" id="sub-people">
+      <button class="tab active" onclick="switchTab('contacts')">Contacts</button>
+      <button class="tab" onclick="switchTab('orgs')">Organizations</button>
+      <button class="tab" onclick="switchTab('network')">Network</button>
     </div>
-    <div class="nav-group">
-      <div class="nav-group-label">Delivery</div>
-      <div class="nav-group-tabs">
-        <button class="tab" onclick="switchTab('contracts')">Contracts</button>
-        <button class="tab" onclick="switchTab('dcgov')">DC Gov</button>
-        <button class="tab" onclick="switchTab('classes')">Classes</button>
-      </div>
+    <div class="nav-subtabs" id="sub-business">
+      <button class="tab" onclick="switchTab('pipeline')">Pipeline</button>
+      <button class="tab" onclick="switchTab('tasks')">Tasks</button>
+      <button class="tab" onclick="switchTab('proposals')">Proposals</button>
     </div>
-    <div class="nav-group">
-      <div class="nav-group-label">Community</div>
-      <div class="nav-group-tabs">
-        <button class="tab" onclick="switchTab('events')">Trap Yoga</button>
-        <button class="tab" onclick="switchTab('ambassador')">Ambassadors</button>
-        <button class="tab" onclick="switchTab('waitlist')">Waitlist</button>
-        <button class="tab" onclick="switchTab('campaigns')">Campaigns</button>
-      </div>
+    <div class="nav-subtabs" id="sub-delivery">
+      <button class="tab" onclick="switchTab('contracts')">Contracts</button>
+      <button class="tab" onclick="switchTab('dcgov')">DC Gov / Franklin Park</button>
+      <button class="tab" onclick="switchTab('classes')">Classes &amp; Check-in</button>
     </div>
-    <div class="nav-group">
-      <div class="nav-group-label">Intelligence</div>
-      <div class="nav-group-tabs">
-        <button class="tab" onclick="switchTab('revenue')">Revenue</button>
-        <button class="tab" onclick="switchTab('pnl')">P&amp;L</button>
-        <button class="tab" onclick="switchTab('renewal')">Renewal Radar</button>
-      </div>
+    <div class="nav-subtabs" id="sub-community">
+      <button class="tab" onclick="switchTab('events')">Trap Yoga Events</button>
+      <button class="tab" onclick="switchTab('ambassador')">Ambassadors</button>
+      <button class="tab" onclick="switchTab('waitlist')">Waitlist</button>
+      <button class="tab" onclick="switchTab('campaigns')">Email Campaigns</button>
     </div>
-    <div class="nav-group">
-      <div class="nav-group-label">Growth</div>
-      <div class="nav-group-tabs">
-        <button class="tab" onclick="switchTab('speakerkit')">Speaker Kit</button>
-        <button class="tab" onclick="switchTab('press')">Press</button>
-        <button class="tab" onclick="switchTab('sponsorship')">Sponsorships</button>
-        <button class="tab" onclick="switchTab('expansion')">Expansion</button>
-      </div>
+    <div class="nav-subtabs" id="sub-intelligence">
+      <button class="tab" onclick="switchTab('revenue')">Revenue</button>
+      <button class="tab" onclick="switchTab('pnl')">P&amp;L</button>
+      <button class="tab" onclick="switchTab('renewal')">Renewal Radar</button>
     </div>
-    <div class="nav-group">
-      <div class="nav-group-label">Tools</div>
-      <div class="nav-group-tabs">
-        <button class="tab" onclick="switchTab('ai')">AI assistant</button>
-        <button class="tab" onclick="switchTab('strategy')">Data strategy</button>
-      </div>
+    <div class="nav-subtabs" id="sub-growth">
+      <button class="tab" onclick="switchTab('speakerkit')">Speaker Kit</button>
+      <button class="tab" onclick="switchTab('press')">Press &amp; Media</button>
+      <button class="tab" onclick="switchTab('sponsorship')">Sponsorships</button>
+      <button class="tab" onclick="switchTab('expansion')">Expansion</button>
+    </div>
+    <div class="nav-subtabs" id="sub-tools">
+      <button class="tab" onclick="switchTab('ai')">AI Assistant</button>
+      <button class="tab" onclick="switchTab('strategy')">Data Strategy</button>
     </div>
   </div>
 
@@ -1294,6 +1281,31 @@ function updateStats(){
 }
 
 // ══════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════
+const groupMap = {
+  people:['contacts','orgs','network'],
+  business:['pipeline','tasks','proposals'],
+  delivery:['contracts','dcgov','classes'],
+  community:['events','ambassador','waitlist','campaigns'],
+  intelligence:['revenue','pnl','renewal'],
+  growth:['speakerkit','press','sponsorship','expansion'],
+  tools:['ai','strategy']
+};
+
+function selectGroup(group){
+  // Update group buttons
+  document.querySelectorAll('.nav-group-btn').forEach(btn=>{
+    btn.classList.toggle('active', btn.getAttribute('onclick')===`selectGroup('${group}')`);
+  });
+  // Show/hide subtab rows
+  document.querySelectorAll('.nav-subtabs').forEach(el=>el.classList.remove('active'));
+  document.getElementById('sub-'+group).classList.add('active');
+  // Switch to first tab in the group
+  switchTab(groupMap[group][0]);
+}
+
+// ══════════════════════════════════════════════
 // TABS
 // ══════════════════════════════════════════════
 function switchTab(t){
@@ -2081,9 +2093,14 @@ renderTasks();
 // Hash-based tab routing — allows bdd_crm.html#pipeline deep links from the map
 (function(){
   const hash = window.location.hash.replace('#','');
-  const valid = ['contacts','orgs','pipeline','contracts','dcgov','events','classes','tasks','revenue','pnl','renewal','proposals','ambassador','waitlist','campaigns','speakerkit','press','sponsorship','expansion','network','ai','strategy'];
   const tabHash = hash === 'contracts-sign' ? 'contracts' : hash;
-  if(tabHash && valid.includes(tabHash)) switchTab(tabHash);
+  const valid = ['contacts','orgs','pipeline','contracts','dcgov','events','classes','tasks','revenue','pnl','renewal','proposals','ambassador','waitlist','campaigns','speakerkit','press','sponsorship','expansion','network','ai','strategy'];
+  if(tabHash && valid.includes(tabHash)){
+    // Find which group this tab belongs to and open it
+    const group = Object.entries(groupMap).find(([,tabs])=>tabs.includes(tabHash))?.[0];
+    if(group) selectGroup(group);
+    switchTab(tabHash);
+  }
 })();
 </script>
 </body>
